@@ -4,7 +4,20 @@
 
 ![Workflow](docs/imgs/workflow.png)
 
-Taking a JavaScript input file we can obtain the abstract syntax tree (AST) for it. 
+Taking a JavaScript input file we can obtain the abstract syntax tree (AST) for it. Babel parser output an AST structure base on () spec. Basically, this tool extends those nodes with extra information. First, we analyze the static information from the JavaScript code like literal numbers, strings, booleans, etc. After that, we evaluate an instrumented version of the input code with some provided code to explore the script execution, resolving types in nodes evaluation. Later, the subtrees that can be translated to a Web Assembly Text (**WAT**) function are detected. The final step is to generate Web assembly binary code (**WASM**) and validate it.
+
+The final output is a JavaScript file with its WASM complement.
+
+Also, we implement a "sandbox" wrapper to test the generated code in a browser or node with some workload with the two implementations: the original one and the mutated one.
+
+Basically, we have three inputs for the tool:
+1. The file to be mutated
+2. The coverage script to evaluate de input script finding the maximum coverage
+3. The workload script to evaluate the mutation against the original one.
+
+And two outputs:
+1. The mutated javascript code who calls WASM code to complement it
+2. The complement WASM code
 
 ## Stones on the road
 
