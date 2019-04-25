@@ -14,9 +14,6 @@
   - Generating large random name for registry variable name in instrumentation execution
 
 
-- TODOS:
-  - Implement Browser sandbox
-
 - Profilers
-  - NodeJS
-  - Browser profilers
+  - NodeJS (TODO)
+  - Browser profilers (DONE)
