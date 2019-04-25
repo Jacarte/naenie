@@ -4,9 +4,9 @@
 
 ![Workflow](docs/imgs/workflow.png)
 
-- TODO Speak about workflow
+Taking a JavaScript input file we can obtain the abstract syntax tree (AST) for it. 
 
-## Stones in the road
+## Stones on the road
 
 - TODO: Write about javascript hard to analyse, mention core javascript semantic paper
 
@@ -61,7 +61,10 @@
 - Node with perf in linux
 
 ## Results
-
+- Test subjects
+  - Mandelbrot
+  - Jquery
+  - ...
 - Mutation output
   - Garbage collection calls as noise
 - Mutated candidate performance and overhead

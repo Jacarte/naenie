@@ -4,43 +4,7 @@
     We can use the Chrome debugging protocol and go directly to how Chrome's JS sampling profiler interacts with V8. So much power here, so we'll use chrome-remote-interface as a nice client in front of the protocol:
 
     Protocols:
-    - CPU profiling
-        ```js
-        {
-            nodes: {
-              id: number,
-                callFrame: {
-                    functionName: string,
-                    scriptId: string,
-                    url: string,
-                    lineNumber: number,
-                    columnNumber: number
-                },
-                hitCount: number,
-                children: number[],
-                positionTicks?: {
-                    line: number,
-                    ticks: number
-                }[]
-            }[],
-
-            startTime: number,
-            endTime: number,
-            samples: number[],
-            timeDeltas: number[]
-        }
-        ```
-    - Trace summary:
-    ```js
-    {
-        [id:string]:{
-            sum: number,
-            count: number,
-            min: number,
-            max: number
-        }
-    }[]
-    ```
+    
 - V8:
   ```bash
   ./chrome --no-sandbox --js-flags="--prof --log-timer-events" mail.google.com & sleep 10; kill $!
