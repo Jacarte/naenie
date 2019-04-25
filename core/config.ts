@@ -19,7 +19,7 @@ export const AppContext: IAppContext = {
     watName: 'module.wat',
     wasmName: 'module.wasm',
     sandBoxName: 'sandbox.js',
-    minSize: 5,
+    minSize: 9,
     maxSize: 20,
     mutationThreshold: 1
 }

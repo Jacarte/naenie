@@ -19,6 +19,8 @@ And two outputs:
 1. The mutated javascript code who calls WASM code to complement it
 2. The complement WASM code
 
+![Example](docs/imgs/result.png)
+
 ## Stones on the road
 
 - TODO: Write about javascript hard to analyse, mention core javascript semantic paper

@@ -31,7 +31,8 @@ export function getType(value):ReturningType{
             result.priority = 2;
         }
         
-        if(value > 2**32 - 1){
+        // https://github.com/dcodeIO/webassembly/issues/26 
+        if(value > 2**32 - 1 && type !== 'number'){
             type = "l" + type;
             result.priority++;
         }
