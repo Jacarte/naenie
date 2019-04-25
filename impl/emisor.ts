@@ -27,12 +27,12 @@ export const ConvertionMap = {
     'float': {
         'number': 'convert_s/i32',
         'lnumber': 'convert_s/i64',
-        'lfloat': 'demote_s/f64'
+        'lfloat': 'demote_f64'
     },
     'lfloat': {
         'number': 'convert_s/i32',
         'lnumber': 'convert_s/i64',
-        'float': 'promote_s/f32'
+        'float': 'promote_f32'
     }
 
 }
@@ -119,6 +119,7 @@ export abstract class BaseEmisor{
     writeComment(val){
         this.write(`${this.writeIndent()};;${val}${this.writeIndent()}`);
     }
+
 
     writeInstruction(opcode, ...parameters: any[]){
         this.write(`${opcode}`);

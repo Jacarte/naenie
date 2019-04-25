@@ -11,6 +11,7 @@ export type IAppContext = {
     minSize: number;
     maxSize: number;
     mutationThreshold: number;
+    returnWASMCallbackName:string;
 }
 
 export const AppContext: IAppContext = {
@@ -19,7 +20,8 @@ export const AppContext: IAppContext = {
     watName: 'module.wat',
     wasmName: 'module.wasm',
     sandBoxName: 'sandbox.js',
-    minSize: 9,
+    returnWASMCallbackName: 'Fuxuhuuooi',
+    minSize: 5,
     maxSize: 20,
     mutationThreshold: 1
 }

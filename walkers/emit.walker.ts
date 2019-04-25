@@ -62,8 +62,7 @@ export default class TagsWalker implements IWalker<BaseNode, void>{
         const functionName = generateRandomWASMWrapperName();
         this.emisor.writeComment(node.repr);
         this.emisor.writeComment(`Subtree size ${node.size}`);
-        this.emisor.openFunction(functionName);
-
+        
 
         // Writing parameters, TODO improve this code
 
@@ -78,10 +77,12 @@ export default class TagsWalker implements IWalker<BaseNode, void>{
                             type: ins.returningType,
                         }
                         nodes.push(ins.node);
+        
                     }
                     break
             }
         }
+        this.emisor.openFunction(functionName);
         for(var k in parameters){
             const mostRepresentative = sortTypes(parameters[k].type);
 

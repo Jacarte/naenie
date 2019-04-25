@@ -1,124 +1,157 @@
 (module 
 	
-	;;w[i - 16] + s0 + w[i - 7] + s1
+	;;ascii[lengthProperty]%64 - 56
 	
-	;;Subtree size 15
+	;;Subtree size 7
 	
-	(func $Bijipnaqoea (param  i32) (param  i32) (param  i32) (param  i32) (result i32) 
+	(func $Uaeoieeioi (param  i32) (result i32) 
 		
-		;;w[i - 16]
+		;;ascii[lengthProperty]
 		get_local 0
-		
-		;;s0
-		get_local 1
-		i32.add
-		
-		;;w[i - 7]
-		get_local 2
-		i32.add
-		
-		;;s1
-		get_local 3
-		i32.add
+		i32.const 64
+		i32.rem_s
+		i32.const 56
+		i32.sub
 		
 	)
-	(export "Bijipnaqoea" (func $Bijipnaqoea))
-	;;rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25)
+	(export "Uaeoieeioi" (func $Uaeoieeioi))
+	;;(value>>>amount) | (value<<(32 - amount))
 	
-	;;Subtree size 14
+	;;Subtree size 9
 	
-	(func $Liumroiduaw (param  i32) (param  i32) (param  i32) (result i32) 
+	(func $Oxoiodaeur (param  i32) (param  i32) (result i32) 
 		
-		;;rotr(e, 6)
+		;;value
 		get_local 0
 		
-		;;rotr(e, 11)
+		;;amount
 		get_local 1
-		i32.xor
+		i32.shr_u
 		
-		;;rotr(e, 25)
-		get_local 2
-		i32.xor
+		;;value
+		get_local 0
+		i32.const 32
+		
+		;;amount
+		get_local 1
+		i32.sub
+		i32.shl
+		i32.or
 		
 	)
-	(export "Liumroiduaw" (func $Liumroiduaw))
-	;;h + S1 + ch + k[i] + w[i] | 0
+	(export "Oxoiodaeur" (func $Oxoiodaeur))
+	;;j << ((3 - i)%4)*8
 	
-	;;Subtree size 15
+	;;Subtree size 9
 	
-	(func $Skoheaoobraj (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (result i32) 
+	(func $Ebaciajaeu (param  i32) (param  i32) (result i32) 
 		
-		;;h
+		;;j
+		get_local 0
+		i32.const 3
+		
+		;;i
+		get_local 1
+		i32.sub
+		i32.const 4
+		i32.rem_s
+		i32.const 8
+		i32.mul
+		i32.shl
+		
+	)
+	(export "Ebaciajaeu" (func $Ebaciajaeu))
+	;;(mathPow(candidate, .5)*maxWord)|0
+	
+	;;Subtree size 8
+	
+	(func $Faiiuuiaui (param  f32) (param  i32) (result i32) 
+		
+		;;mathPow(candidate, .5)
+		get_local 0
+		f64.promote_f32
+		
+		;;maxWord
+		get_local 1
+		f64.convert_s/i32
+		f64.mul
+		i32.trunc_s/f64
+		i32.const 0
+		i32.or
+		
+	)
+	(export "Faiiuuiaui" (func $Faiiuuiaui))
+	;;(mathPow(candidate, 1/3)*maxWord)|0
+	
+	;;Subtree size 10
+	
+	(func $Ooloeiaephe (param  f32) (param  i32) (result i32) 
+		
+		;;mathPow(candidate, 1/3)
+		get_local 0
+		f64.promote_f32
+		
+		;;maxWord
+		get_local 1
+		f64.convert_s/i32
+		f64.mul
+		i32.trunc_s/f64
+		i32.const 0
+		i32.or
+		
+	)
+	(export "Ooloeiaephe" (func $Ooloeiaephe))
+	;;(hash[4] + temp1)|0
+	
+	;;Subtree size 7
+	
+	(func $Eaxoqakweea (param  i32) (param  i32) (result i32) 
+		
+		;;hash[4]
 		get_local 0
 		
-		;;S1
+		;;temp1
 		get_local 1
-		i32.add
-		
-		;;ch
-		get_local 2
-		i32.add
-		
-		;;k[i]
-		get_local 3
-		i32.add
-		
-		;;w[i]
-		get_local 4
 		i32.add
 		i32.const 0
 		i32.or
 		
 	)
-	(export "Skoheaoobraj" (func $Skoheaoobraj))
-	;;rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22)
+	(export "Eaxoqakweea" (func $Eaxoqakweea))
+	;;(hash[i] + oldHash[i])|0
 	
-	;;Subtree size 14
+	;;Subtree size 9
 	
-	(func $Aueufreoaaa (param  i32) (param  i32) (param  i32) (result i32) 
+	(func $Pnaaiavabloo (param  i32) (param  i32) (result i32) 
 		
-		;;rotr(a, 2)
+		;;hash[i]
 		get_local 0
 		
-		;;rotr(a, 13)
+		;;oldHash[i]
 		get_local 1
-		i32.xor
-		
-		;;rotr(a, 22)
-		get_local 2
-		i32.xor
+		i32.add
+		i32.const 0
+		i32.or
 		
 	)
-	(export "Aueufreoaaa" (func $Aueufreoaaa))
-	;;a & b ^ a & c ^ b & c
+	(export "Pnaaiavabloo" (func $Pnaaiavabloo))
+	;;(hash[i]>>(j*8))&255
 	
-	;;Subtree size 11
+	;;Subtree size 9
 	
-	(func $Whauatreleiq (param  i32) (param  i32) (param  i32) (result i32) 
+	(func $Whaeakweoinu (param  i32) (param  i32) (result i32) 
 		
-		;;a
+		;;hash[i]
 		get_local 0
 		
-		;;b
+		;;j
 		get_local 1
+		i32.const 8
+		i32.mul
+		i32.shr_u
+		i32.const 255
 		i32.and
-		
-		;;a
-		get_local 0
-		
-		;;c
-		get_local 2
-		i32.and
-		i32.xor
-		
-		;;b
-		get_local 1
-		
-		;;c
-		get_local 2
-		i32.and
-		i32.xor
 		
 	)
-	(export "Whauatreleiq" (func $Whauatreleiq))
+	(export "Whaeakweoinu" (func $Whaeakweoinu))
 )

@@ -21,7 +21,8 @@ export default class BrowserSandbox extends SanboxExecutor{
             wasmfile:this.appContext.wasmName,
             wlcode: this.context.wlCode,
             mutatedCode,
-            original: this.context.code
+            original: this.context.code,
+            wasmCBName: this.appContext.returnWASMCallbackName
         }
 
         
@@ -65,7 +66,7 @@ export default class BrowserSandbox extends SanboxExecutor{
             response.arrayBuffer()
         ).then(bytes =>
             WebAssembly.instantiate(bytes)
-        ).then(results => {
+        ).then(function {{{wasmCBName}}}(results){
 
             const ww = results.instance.exports;
 
