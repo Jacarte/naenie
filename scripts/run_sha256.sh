@@ -1,0 +1,1 @@
+npm run ts scripts/main.ts tests/cases/sha256/sha256.js tests/cases/sha256/sha256.cv.js tests/cases/sha256/sha256.wl.js

@@ -17,12 +17,12 @@ export const ConvertionMap = {
     'number': {
         'float': 'trunc_s/f32',
         'lfloat': 'trunc_s/f64',
-        'lnumber': 'expand_s/i64'
+        'lnumber': 'wrap_i64'
     },
     'lnumber': {
         'float': 'trunc_s/f32',
         'lfloat': 'trunc_s/f64',
-        'number': 'extend_s/i32'
+        'number': 'extend_i32_s'
     },
     'float': {
         'number': 'convert_s/i32',
@@ -49,6 +49,7 @@ export const OpsMap = {
 
     '<<': 'shl',
     '>>': 'shr_u',
+    '>>>': 'shr_u',
     '|': 'or',
     '&': 'and',
     '^': 'xor',

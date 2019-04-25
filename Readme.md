@@ -1,6 +1,6 @@
-# JS to WASM diversification machine (Naenie)
+# JS to WASM diversification machine (Naenie proof of concept)
 
-## Architecture words
+Naenie (*Many* in high valyrian words) tries to generate valid code mutations for JavaScript code using calls between WASM and JS as the mutation operator.
 
 ![Workflow](docs/imgs/workflow.png)
 
