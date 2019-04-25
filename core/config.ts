@@ -21,5 +21,5 @@ export const AppContext: IAppContext = {
     sandBoxName: 'sandbox.js',
     minSize: 5,
     maxSize: 20,
-    mutationThreshold: 0.5
+    mutationThreshold: 1
 }
