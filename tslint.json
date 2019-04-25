@@ -1,0 +1,10 @@
+{
+    "extends": "tslint:recommended",
+    "rules": {
+      "no-console": true,
+      "jsdoc-format": false,
+      "interface-name": false,
+      "object-literal-sort-keys": false,
+      "no-bitwise": false
+    }
+  }

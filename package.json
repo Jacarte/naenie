@@ -1,0 +1,33 @@
+{
+  "name": "wjmachine",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "ts-node scripts/test.ts",
+    "test-wt": "ts-node tests/treewalker.test.ts",
+    "ts": "ts-node"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@babel/generator": "^7.4.0",
+    "@babel/parser": "^7.4.3",
+    "@babel/template": "^7.4.0",
+    "@babel/traverse": "^7.4.3",
+    "@babel/types": "^7.4.0",
+    "@types/babel-types": "^7.0.6",
+    "@types/mustache": "^0.8.32",
+    "@types/reflect-metadata": "^0.1.0",
+    "inversify": "^5.0.1",
+    "mustache": "^3.0.1",
+    "reflect-metadata": "^0.1.13"
+  },
+  "devDependencies": {
+    "@types/babel-traverse": "^6.25.5",
+    "@types/inversify": "^2.0.33",
+    "@types/node": "^11.13.4",
+    "ts-node": "^8.1.0",
+    "typescript": "^3.4.3"
+  }
+}

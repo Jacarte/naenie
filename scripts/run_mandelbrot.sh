@@ -1,0 +1,1 @@
+npm run ts scripts/main.ts tests/cases/mandelbrot/mandelbrot.js tests/cases/mandelbrot/mandelbrot.cv.js tests/cases/mandelbrot/mandelbrot.wl.js
