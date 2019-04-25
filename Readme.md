@@ -19,12 +19,12 @@ And two outputs:
 1. The mutated javascript code who calls WASM code to complement it
 2. The complement WASM code
 
-![Example](docs/imgs/result.png)
+![Example](docs/imgs/result2.png)
 
 ## Stones on the road
 
 - TODO: Write about javascript hard to analyse, mention core javascript semantic paper
-
+- //https://github.com/dcodeIO/webassembly/issues/26 Javascript does not support int64 function signature for wasm
 - Shortcuts
 - Statical analysis
 - Runtime analysis

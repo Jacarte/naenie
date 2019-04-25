@@ -4,32 +4,30 @@
 	
 	;;Subtree size 15
 	
-	(func $Faluflaoxikn (param  i64) (param  i32) (param  i64) (param  i32) (result i64) 
+	(func $Bijipnaqoea (param  i32) (param  i32) (param  i32) (param  i32) (result i32) 
 		
 		;;w[i - 16]
 		get_local 0
 		
 		;;s0
 		get_local 1
-		i64.extend_i32_s
-		i64.add
+		i32.add
 		
 		;;w[i - 7]
 		get_local 2
-		i64.add
+		i32.add
 		
 		;;s1
 		get_local 3
-		i64.extend_i32_s
-		i64.add
+		i32.add
 		
 	)
-	(export "Faluflaoxikn" (func $Faluflaoxikn))
+	(export "Bijipnaqoea" (func $Bijipnaqoea))
 	;;rotr(e, 6) ^ rotr(e, 11) ^ rotr(e, 25)
 	
 	;;Subtree size 14
 	
-	(func $Nouapleaooe (param  i32) (param  i32) (param  i32) (result i32) 
+	(func $Liumroiduaw (param  i32) (param  i32) (param  i32) (result i32) 
 		
 		;;rotr(e, 6)
 		get_local 0
@@ -43,12 +41,12 @@
 		i32.xor
 		
 	)
-	(export "Nouapleaooe" (func $Nouapleaooe))
+	(export "Liumroiduaw" (func $Liumroiduaw))
 	;;h + S1 + ch + k[i] + w[i] | 0
 	
 	;;Subtree size 15
 	
-	(func $Baaapleaeli (param  i32) (param  i32) (param  i32) (param  i32) (param  i64) (result i32) 
+	(func $Skoheaoobraj (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (result i32) 
 		
 		;;h
 		get_local 0
@@ -60,27 +58,24 @@
 		;;ch
 		get_local 2
 		i32.add
-		i64.extend_i32_s
 		
 		;;k[i]
 		get_local 3
-		i64.extend_i32_s
-		i64.add
+		i32.add
 		
 		;;w[i]
 		get_local 4
-		i64.add
-		i32.wrap_i64
+		i32.add
 		i32.const 0
 		i32.or
 		
 	)
-	(export "Baaapleaeli" (func $Baaapleaeli))
+	(export "Skoheaoobraj" (func $Skoheaoobraj))
 	;;rotr(a, 2) ^ rotr(a, 13) ^ rotr(a, 22)
 	
 	;;Subtree size 14
 	
-	(func $Cieuauoeee (param  i32) (param  i32) (param  i32) (result i32) 
+	(func $Aueufreoaaa (param  i32) (param  i32) (param  i32) (result i32) 
 		
 		;;rotr(a, 2)
 		get_local 0
@@ -94,12 +89,12 @@
 		i32.xor
 		
 	)
-	(export "Cieuauoeee" (func $Cieuauoeee))
+	(export "Aueufreoaaa" (func $Aueufreoaaa))
 	;;a & b ^ a & c ^ b & c
 	
 	;;Subtree size 11
 	
-	(func $Eiikokuuai (param  i32) (param  i32) (param  i32) (result i32) 
+	(func $Whauatreleiq (param  i32) (param  i32) (param  i32) (result i32) 
 		
 		;;a
 		get_local 0
@@ -125,5 +120,5 @@
 		i32.xor
 		
 	)
-	(export "Eiikokuuai" (func $Eiikokuuai))
+	(export "Whauatreleiq" (func $Whauatreleiq))
 )

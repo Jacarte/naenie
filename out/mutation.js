@@ -64,7 +64,7 @@ function sha256() {
     for (i = 16; i < 64; i++) {
       s0 = rotr(w[i - 15], 7) ^ rotr(w[i - 15], 18) ^ w[i - 15] >>> 3;
       s1 = rotr(w[i - 2], 17) ^ rotr(w[i - 2], 19) ^ w[i - 2] >>> 10;
-      w[i] = ww.Faluflaoxikn(w[i - 16], s0, w[i - 7], s1);
+      w[i] = ww.Bijipnaqoea(w[i - 16], s0, w[i - 7], s1);
     } // Working variables
 
 
@@ -78,11 +78,11 @@ function sha256() {
     h = H[7];
 
     for (i = 0; i < 64; i++) {
-      S1 = ww.Nouapleaooe(rotr(e, 6), rotr(e, 11), rotr(e, 25));
+      S1 = ww.Liumroiduaw(rotr(e, 6), rotr(e, 11), rotr(e, 25));
       ch = e & f ^ ~e & g;
-      temp1 = ww.Baaapleaeli(h, S1, ch, k[i], w[i]);
-      S0 = ww.Cieuauoeee(rotr(a, 2), rotr(a, 13), rotr(a, 22));
-      maj = ww.Eiikokuuai(a, b, c);
+      temp1 = ww.Skoheaoobraj(h, S1, ch, k[i], w[i]);
+      S0 = ww.Aueufreoaaa(rotr(a, 2), rotr(a, 13), rotr(a, 22));
+      maj = ww.Whauatreleiq(a, b, c);
       temp2 = S0 + maj | 0;
       h = g;
       g = f;
