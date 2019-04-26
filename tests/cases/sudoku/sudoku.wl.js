@@ -1,0 +1,1 @@
+main.sudoku.solve(main.sudoku.generate("easy", false))

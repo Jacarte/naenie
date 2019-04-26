@@ -75,6 +75,8 @@ const context: Context = {
 }
 
 
+
+
 Container.bind<Context>("Context")
 .toConstantValue(context);
 
@@ -84,6 +86,8 @@ Container.bind<IAppContext>("IAppContext").toConstantValue(AppContext);
 
 
 const machine = Container.resolve(DMachine);
+
+console.log("Analysing...", program.target)
 
 machine.process(context)
 

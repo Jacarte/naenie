@@ -4,7 +4,7 @@
 	
 	;;Subtree size 7
 	
-	(func $Anedoxaicu (param  i32) (result i32) 
+	(func $Koiaueasvou (param  i32) (result i32) 
 		
 		;;ascii[lengthProperty]
 		get_local 0
@@ -14,12 +14,12 @@
 		i32.sub
 		
 	)
-	(export "Anedoxaicu" (func $Anedoxaicu))
+	(export "Koiaueasvou" (func $Koiaueasvou))
 	;;i < ascii[lengthProperty]
 	
 	;;Subtree size 5
 	
-	(func $Braepsaioiae (param  i32) (param  i32) (result i32) 
+	(func $Taawiaaeom (param  i32) (param  i32) (result i32) 
 		
 		;;i
 		get_local 0
@@ -29,12 +29,12 @@
 		i32.lt_u
 		
 	)
-	(export "Braepsaioiae" (func $Braepsaioiae))
+	(export "Taawiaaeom" (func $Taawiaaeom))
 	;;j < words[lengthProperty]
 	
 	;;Subtree size 5
 	
-	(func $Sosuuyause (param  i32) (param  i32) (result i32) 
+	(func $Svuaoiohunu (param  i32) (param  i32) (result i32) 
 		
 		;;j
 		get_local 0
@@ -44,12 +44,12 @@
 		i32.lt_u
 		
 	)
-	(export "Sosuuyause" (func $Sosuuyause))
+	(export "Svuaoiohunu" (func $Svuaoiohunu))
 	;;ascii[lengthProperty]*8
 	
 	;;Subtree size 5
 	
-	(func $Abeuaizooe (param  i32) (result i32) 
+	(func $Ueiiuauiiy (param  i32) (result i32) 
 		
 		;;ascii[lengthProperty]
 		get_local 0
@@ -57,12 +57,12 @@
 		i32.mul
 		
 	)
-	(export "Abeuaizooe" (func $Abeuaizooe))
+	(export "Ueiiuauiiy" (func $Ueiiuauiiy))
 	;;(asciiBitLength/maxWord)|0
 	
 	;;Subtree size 5
 	
-	(func $Rekaneumai (param  i32) (param  i32) (result i32) 
+	(func $Vesnunoouii (param  i32) (param  i32) (result i32) 
 		
 		;;asciiBitLength
 		get_local 0
@@ -77,12 +77,12 @@
 		i32.or
 		
 	)
-	(export "Rekaneumai" (func $Rekaneumai))
+	(export "Vesnunoouii" (func $Vesnunoouii))
 	;;(value>>>amount) | (value<<(32 - amount))
 	
 	;;Subtree size 9
 	
-	(func $Houioxadoo (param  i32) (param  i32) (result i32) 
+	(func $Yiuisvojacre (param  i32) (param  i32) (result i32) 
 		
 		;;value
 		get_local 0
@@ -102,12 +102,12 @@
 		i32.or
 		
 	)
-	(export "Houioxadoo" (func $Houioxadoo))
+	(export "Yiuisvojacre" (func $Yiuisvojacre))
 	;;j << ((3 - i)%4)*8
 	
 	;;Subtree size 9
 	
-	(func $Spauskuoawea (param  i32) (param  i32) (result i32) 
+	(func $Pnookesatus (param  i32) (param  i32) (result i32) 
 		
 		;;j
 		get_local 0
@@ -123,12 +123,12 @@
 		i32.shl
 		
 	)
-	(export "Spauskuoawea" (func $Spauskuoawea))
+	(export "Pnookesatus" (func $Pnookesatus))
 	;;(mathPow(candidate, .5)*maxWord)|0
 	
 	;;Subtree size 8
 	
-	(func $Yoayaeuaoi (param  f32) (param  i32) (result i32) 
+	(func $Xeiiuweeeo (param  f32) (param  i32) (result i32) 
 		
 		;;mathPow(candidate, .5)
 		get_local 0
@@ -143,12 +143,12 @@
 		i32.or
 		
 	)
-	(export "Yoayaeuaoi" (func $Yoayaeuaoi))
+	(export "Xeiiuweeeo" (func $Xeiiuweeeo))
 	;;(mathPow(candidate, 1/3)*maxWord)|0
 	
 	;;Subtree size 10
 	
-	(func $Uuotioiiaa (param  f32) (param  i32) (result i32) 
+	(func $Jeivuueeoa (param  f32) (param  i32) (result i32) 
 		
 		;;mathPow(candidate, 1/3)
 		get_local 0
@@ -163,12 +163,12 @@
 		i32.or
 		
 	)
-	(export "Uuotioiiaa" (func $Uuotioiiaa))
+	(export "Jeivuueeoa" (func $Jeivuueeoa))
 	;;hash[7] 				+ (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) // S1 				+ ((e&hash[5])^((~e)&hash[6])) // ch 				+ k[i] 				// Expand the message schedule if needed 				+ (w[i] = (i < 16) ? w[i] : ( 						w[i - 16] 						+ (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15>>>3)) // s0 						+ w[i - 7] 						+ (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2>>>10)) // s1 					)|0 				)
 	
 	;;Subtree size 88
 	
-	(func $Piialiuaev (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (result i32) 
+	(func $Hoodooeiup (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (result i32) 
 		
 		;;hash[7]
 		get_local 0
@@ -210,12 +210,12 @@
 		i32.add
 		
 	)
-	(export "Piialiuaev" (func $Piialiuaev))
+	(export "Hoodooeiup" (func $Hoodooeiup))
 	;;(rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) // S0 				+ ((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]))
 	
 	;;Subtree size 34
 	
-	(func $Aaiuayokrud (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (result i32) 
+	(func $Ushuebiumea (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (result i32) 
 		
 		;;rightRotate(a, 2)
 		get_local 0
@@ -253,12 +253,12 @@
 		i32.add
 		
 	)
-	(export "Aaiuayokrud" (func $Aaiuayokrud))
+	(export "Ushuebiumea" (func $Ushuebiumea))
 	;;(hash[4] + temp1)|0
 	
 	;;Subtree size 7
 	
-	(func $Eruiuuuswep (param  i32) (param  i32) (result i32) 
+	(func $Xueaujacew (param  i32) (param  i32) (result i32) 
 		
 		;;hash[4]
 		get_local 0
@@ -270,12 +270,12 @@
 		i32.or
 		
 	)
-	(export "Eruiuuuswep" (func $Eruiuuuswep))
+	(export "Xueaujacew" (func $Xueaujacew))
 	;;(hash[i] + oldHash[i])|0
 	
 	;;Subtree size 9
 	
-	(func $Tuubroapoesh (param  i32) (param  i32) (result i32) 
+	(func $Shaiodwuoiui (param  i32) (param  i32) (result i32) 
 		
 		;;hash[i]
 		get_local 0
@@ -287,12 +287,12 @@
 		i32.or
 		
 	)
-	(export "Tuubroapoesh" (func $Tuubroapoesh))
+	(export "Shaiodwuoiui" (func $Shaiodwuoiui))
 	;;(hash[i]>>(j*8))&255
 	
 	;;Subtree size 9
 	
-	(func $Ayuliauaxo (param  i32) (param  i32) (result i32) 
+	(func $Ioaeusloeou (param  i32) (param  i32) (result i32) 
 		
 		;;hash[i]
 		get_local 0
@@ -306,12 +306,12 @@
 		i32.and
 		
 	)
-	(export "Ayuliauaxo" (func $Ayuliauaxo))
+	(export "Ioaeusloeou" (func $Ioaeusloeou))
 	;;(temp1 + temp2)|0
 	
 	;;Subtree size 5
 	
-	(func $Poegwaakatru (param  i32) (param  i32) (result i32) 
+	(func $Hodiislaesa (param  i32) (param  i32) (result i32) 
 		
 		;;temp1
 		get_local 0
@@ -323,5 +323,5 @@
 		i32.or
 		
 	)
-	(export "Poegwaakatru" (func $Poegwaakatru))
+	(export "Hodiislaesa" (func $Hodiislaesa))
 )

@@ -100,9 +100,9 @@ You can use two options to run the mutator:
 
 ## Results
 - Test subjects
-  - quicksort
-  - zip 
-  - sudoku
+  - quicksort (DONE)
+  - zip  (DONE)
+  - sudoku (DONE)
   - md5
   - rsa
   - rc4
@@ -111,7 +111,7 @@ You can use two options to run the mutator:
   - laguerre
   - linreg
   - mandelbrot
-  - sha256
+  - sha256 (DONE)
   
 - Mutation output
   - Garbage collection calls as noise

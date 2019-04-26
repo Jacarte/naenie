@@ -9,6 +9,7 @@ def main():
 
 
     cases = [
+        'sudoku',
         'zip',
         'mandelbrot',
         'nested',
