@@ -21,6 +21,10 @@ And two outputs:
 
 ![Example](docs/imgs/result2.png)
 
+## How to use it?
+
+
+
 ## Stones on the road
 
 - TODO: Write about javascript hard to analyse, mention core javascript semantic paper
@@ -77,9 +81,19 @@ And two outputs:
 
 ## Results
 - Test subjects
-  - Mandelbrot
-  - Jquery
-  - ...
+  - quicksort
+  - zip 
+  - sudoku
+  - md5
+  - rsa
+  - rc4
+  - canny
+  - lcs
+  - laguerre
+  - linreg
+  - mandelbrot
+  - sha256
+  
 - Mutation output
   - Garbage collection calls as noise
 - Mutated candidate performance and overhead

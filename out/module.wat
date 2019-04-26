@@ -4,7 +4,7 @@
 	
 	;;Subtree size 7
 	
-	(func $Husuwhieeau (param  i32) (result i32) 
+	(func $Jiouepieeo (param  i32) (result i32) 
 		
 		;;ascii[lengthProperty]
 		get_local 0
@@ -14,12 +14,12 @@
 		i32.sub
 		
 	)
-	(export "Husuwhieeau" (func $Husuwhieeau))
+	(export "Jiouepieeo" (func $Jiouepieeo))
 	;;i < ascii[lengthProperty]
 	
 	;;Subtree size 5
 	
-	(func $Xetuonootso (param  i32) (param  i32) (result i32) 
+	(func $Seeaicitusn (param  i32) (param  i32) (result i32) 
 		
 		;;i
 		get_local 0
@@ -29,12 +29,12 @@
 		i32.lt_u
 		
 	)
-	(export "Xetuonootso" (func $Xetuonootso))
+	(export "Seeaicitusn" (func $Seeaicitusn))
 	;;j < words[lengthProperty]
 	
 	;;Subtree size 5
 	
-	(func $Eauueixuuv (param  i32) (param  i32) (result i32) 
+	(func $Xugiiyagif (param  i32) (param  i32) (result i32) 
 		
 		;;j
 		get_local 0
@@ -44,12 +44,12 @@
 		i32.lt_u
 		
 	)
-	(export "Eauueixuuv" (func $Eauueixuuv))
+	(export "Xugiiyagif" (func $Xugiiyagif))
 	;;ascii[lengthProperty]*8
 	
 	;;Subtree size 5
 	
-	(func $Uouoiinuoi (param  i32) (result i32) 
+	(func $Bogiugusvoe (param  i32) (result i32) 
 		
 		;;ascii[lengthProperty]
 		get_local 0
@@ -57,12 +57,12 @@
 		i32.mul
 		
 	)
-	(export "Uouoiinuoi" (func $Uouoiinuoi))
+	(export "Bogiugusvoe" (func $Bogiugusvoe))
 	;;(asciiBitLength/maxWord)|0
 	
 	;;Subtree size 5
 	
-	(func $Wemiiuploed (param  i32) (param  i32) (result i32) 
+	(func $Xeuuizaoui (param  i32) (param  i32) (result i32) 
 		
 		;;asciiBitLength
 		get_local 0
@@ -77,12 +77,12 @@
 		i32.or
 		
 	)
-	(export "Wemiiuploed" (func $Wemiiuploed))
+	(export "Xeuuizaoui" (func $Xeuuizaoui))
 	;;(value>>>amount) | (value<<(32 - amount))
 	
 	;;Subtree size 9
 	
-	(func $Wikooewauu (param  i32) (param  i32) (result i32) 
+	(func $Zauoralaci (param  i32) (param  i32) (result i32) 
 		
 		;;value
 		get_local 0
@@ -102,12 +102,12 @@
 		i32.or
 		
 	)
-	(export "Wikooewauu" (func $Wikooewauu))
+	(export "Zauoralaci" (func $Zauoralaci))
 	;;j << ((3 - i)%4)*8
 	
 	;;Subtree size 9
 	
-	(func $Zetueouuec (param  i32) (param  i32) (result i32) 
+	(func $Hioaveagai (param  i32) (param  i32) (result i32) 
 		
 		;;j
 		get_local 0
@@ -123,12 +123,12 @@
 		i32.shl
 		
 	)
-	(export "Zetueouuec" (func $Zetueouuec))
+	(export "Hioaveagai" (func $Hioaveagai))
 	;;(mathPow(candidate, .5)*maxWord)|0
 	
 	;;Subtree size 8
 	
-	(func $Abeaaeiudru (param  f32) (param  i32) (result i32) 
+	(func $Aaahuikreov (param  f32) (param  i32) (result i32) 
 		
 		;;mathPow(candidate, .5)
 		get_local 0
@@ -143,12 +143,12 @@
 		i32.or
 		
 	)
-	(export "Abeaaeiudru" (func $Abeaaeiudru))
+	(export "Aaahuikreov" (func $Aaahuikreov))
 	;;(mathPow(candidate, 1/3)*maxWord)|0
 	
 	;;Subtree size 10
 	
-	(func $Pnuaupiiknotr (param  f32) (param  i32) (result i32) 
+	(func $Uouoizaruu (param  f32) (param  i32) (result i32) 
 		
 		;;mathPow(candidate, 1/3)
 		get_local 0
@@ -163,12 +163,12 @@
 		i32.or
 		
 	)
-	(export "Pnuaupiiknotr" (func $Pnuaupiiknotr))
+	(export "Uouoizaruu" (func $Uouoizaruu))
 	;;(hash[4] + temp1)|0
 	
 	;;Subtree size 7
 	
-	(func $Snoveeuauua (param  i32) (param  i32) (result i32) 
+	(func $Quvuoouroa (param  i32) (param  i32) (result i32) 
 		
 		;;hash[4]
 		get_local 0
@@ -180,12 +180,12 @@
 		i32.or
 		
 	)
-	(export "Snoveeuauua" (func $Snoveeuauua))
+	(export "Quvuoouroa" (func $Quvuoouroa))
 	;;(hash[i] + oldHash[i])|0
 	
 	;;Subtree size 9
 	
-	(func $Vuouocroaro (param  i32) (param  i32) (result i32) 
+	(func $Slaiicroxiii (param  i32) (param  i32) (result i32) 
 		
 		;;hash[i]
 		get_local 0
@@ -197,12 +197,12 @@
 		i32.or
 		
 	)
-	(export "Vuouocroaro" (func $Vuouocroaro))
+	(export "Slaiicroxiii" (func $Slaiicroxiii))
 	;;(hash[i]>>(j*8))&255
 	
 	;;Subtree size 9
 	
-	(func $Ojaaioeaec (param  i32) (param  i32) (result i32) 
+	(func $Ueasmaoeslue (param  i32) (param  i32) (result i32) 
 		
 		;;hash[i]
 		get_local 0
@@ -216,12 +216,12 @@
 		i32.and
 		
 	)
-	(export "Ojaaioeaec" (func $Ojaaioeaec))
+	(export "Ueasmaoeslue" (func $Ueasmaoeslue))
 	;;(temp1 + temp2)|0
 	
 	;;Subtree size 5
 	
-	(func $Uprajomaekna (param  i32) (param  i32) (result i32) 
+	(func $Jozedroprouu (param  i32) (param  i32) (result i32) 
 		
 		;;temp1
 		get_local 0
@@ -233,5 +233,5 @@
 		i32.or
 		
 	)
-	(export "Uprajomaekna" (func $Uprajomaekna))
+	(export "Jozedroprouu" (func $Jozedroprouu))
 )

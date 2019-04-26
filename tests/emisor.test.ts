@@ -1,4 +1,4 @@
-import { FileEmisor } from '../impl/emisor';
+import { FileEmisor } from '../src/impl/emisor';
 
 
 const emisor = new FileEmisor();

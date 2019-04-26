@@ -1,5 +1,6 @@
 import { IWalker } from '../core/walker';
 import { BaseNode, NumericLiteral, returnStatement, CallExpression, cloneDeep, identifier, callExpression, UpdateExpression, Node, ReturnStatement, stringLiteral, LogicalExpression, binaryExpression, logicalExpression } from '@babel/types';
+/// <reference path="../../node_modules/inversify/dts/inversify.d.ts"/>
 import { injectable, inject } from 'inversify';
 import { ILogger } from '../core/logger';
 import { ExtendedNode } from '../core/types';

@@ -6,7 +6,9 @@
   "scripts": {
     "test": "ts-node scripts/test.ts",
     "test-wt": "ts-node tests/treewalker.test.ts",
-    "ts": "ts-node"
+    "ts": "ts-node",
+    "clean": "rm -rf _bundles lib lib-esm",
+    "compile": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && webpack"
   },
   "author": "",
   "license": "ISC",
@@ -16,18 +18,22 @@
     "@babel/template": "^7.4.0",
     "@babel/traverse": "^7.4.3",
     "@babel/types": "^7.4.0",
-    "@types/babel-types": "^7.0.6",
-    "@types/mustache": "^0.8.32",
-    "@types/reflect-metadata": "^0.1.0",
+    "commander": "^2.20.0",
     "inversify": "^5.0.1",
     "mustache": "^3.0.1",
     "reflect-metadata": "^0.1.13"
   },
   "devDependencies": {
     "@types/babel-traverse": "^6.25.5",
+    "@types/babel-types": "^7.0.6",
     "@types/inversify": "^2.0.33",
+    "@types/mustache": "^0.8.32",
     "@types/node": "^11.13.4",
+    "@types/reflect-metadata": "^0.1.0",
+    "ts-loader": "^5.4.3",
     "ts-node": "^8.1.0",
-    "typescript": "^3.4.3"
+    "typescript": "^3.4.3",
+    "webpack": "^4.30.0",
+    "webpack-cli": "^3.3.1"
   }
 }
