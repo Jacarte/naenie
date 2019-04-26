@@ -17,7 +17,7 @@ def main():
     ]
 
 
-    outDir = '../tests/out'
+    outDir = 'tests/out'
 
     # build if dist does not exists
 
