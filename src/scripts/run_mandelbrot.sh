@@ -1,1 +1,1 @@
-npm run ts src/main.ts tests/cases/mandelbrot/mandelbrot.js tests/cases/mandelbrot/mandelbrot.cv.js tests/cases/mandelbrot/mandelbrot.wl.js
+node dist/naenie.js -t tests/cases/mandelbrot/mandelbrot.js -c tests/cases/mandelbrot/mandelbrot.cv.js -w tests/cases/mandelbrot/mandelbrot.wl.js -s node

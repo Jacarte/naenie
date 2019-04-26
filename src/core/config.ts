@@ -21,7 +21,7 @@ export const AppContext: IAppContext = {
     wasmName: 'module.wasm',
     sandBoxName: 'sandbox.js',
     returnWASMCallbackName: 'Fuxuhuuooi',
-    minSize: 3,
+    minSize: 5,
     maxSize: 10000, // +oo
     mutationThreshold: 1
 }

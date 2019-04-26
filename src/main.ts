@@ -1,4 +1,5 @@
 import * as fs from 'fs'
+import * as path from 'path';
 import { Context } from './walkers/context.walker';
 import Container from './impl/startup';
 import DMachine from './impl/machine';
@@ -14,6 +15,11 @@ const sandboxTypes =
     'node': NodeSandbox,
     'browser': BrowserSandbox
 };
+
+function absolute(dir){
+    return path.join(process.cwd(), dir);
+}
+
 
 program
   .version('0.0.1', '-v', '--version')
@@ -42,7 +48,7 @@ AppContext.maxSize = program.maximum || AppContext.maxSize;
 AppContext.mutationThreshold = program.threshold || AppContext.mutationThreshold;
 
 if(program.sandbox){
-    if(!(program.sandobx in sandboxTypes)){
+    if(!(program.sandbox in sandboxTypes)){
         throw new Error("Unknown sandbox type. Please provide a valid sandbox name: 'node' 'browser'")
     }
 
@@ -52,20 +58,20 @@ else{
     Container.bind<SanboxExecutor>("Sandbox").to(BrowserSandbox).inSingletonScope();
 }
 
-const code = fs.readFileSync(program.target).toString();
-const cv = fs.readFileSync(program.coverage).toString();
-const wl = fs.readFileSync(program.workload).toString();
+const code = fs.readFileSync(absolute(program.target)).toString();
+const cv = fs.readFileSync(absolute(program.coverage)).toString();
+const wl = fs.readFileSync(absolute(program.workload)).toString();
 
 // arguments minimum, maximum and threshold 
 
 
 const context: Context = {
-    path: process.argv[2],
+    path: program.target,
     code,
-    wlPath: process.argv[3],
+    wlPath: program.workload,
     wlCode: wl,
     cvCode: cv,
-    cvPath: process.argv[4]
+    cvPath: program.coverage
 }
 
 

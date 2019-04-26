@@ -21,9 +21,6 @@ And two outputs:
 
 ![Example](docs/imgs/result2.png)
 
-## How to use it?
-
-
 
 ## Stones on the road
 
@@ -57,6 +54,28 @@ And two outputs:
 - TODO: min tree size
 - TODO: max tree size
 - TODO: threshold to translate nodes
+
+# How to use it?
+
+You can use two options to run the mutator:
+1. Using ts-node: ```npm run ts src/main.dev.ts <target> <coverage> <workload>```
+2. Compile the complete library to a ES6 JavaScript library: ```node dist/naenie.js```
+
+**Help output**
+
+```
+-v                          output the version number
+-t --target <target>        Target script
+-c --coverage <coverage>    Coverage script
+-w --workload <workload>    Workload script
+-m --minumum <minimum>      Minimum tree size to translate
+-M --maximum <maximum>      Maximum tree size to translate
+-u --threshold <threshold>  Probability to translate subtree
+-s --sandbox <sandbox>      Sandbox wrapper: 'node' or 'browser'
+-h, --help                  output usage information
+```
+
+
 
 ### Translation
 

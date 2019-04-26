@@ -1,1 +1,1 @@
-npm run ts src/main.ts tests/cases/sha256/sha256.js tests/cases/sha256/sha256.cv.js tests/cases/sha256/sha256.wl.js
+node dist/naenie.js -t tests/cases/sha256/sha256.js -c tests/cases/sha256/sha256.cv.js -w tests/cases/sha256/sha256.wl.js

@@ -1,1 +1,1 @@
-npm run ts src/main.ts tests/cases/qs/qs.js tests/cases/qs/qs.cv.js tests/cases/qs/qs.wl.js
+node dist/naenie.js -t tests/cases/qs/qs.js -c tests/cases/qs/qs.cv.js -w tests/cases/qs/qs.wl.js

@@ -6,6 +6,8 @@ import shutil
 
 
 def main():
+
+
     cases = [
         'mandelbrot',
         'nested',
@@ -14,15 +16,20 @@ def main():
     ]
 
 
-    mainScript = 'src/main.ts'
-    outDir = 'tests/out'
+    outDir = '../tests/out'
+
+    # build if dist does not exists
+
+    if not os.path.exists("dist/naenie.js"):
+        subprocess.call(["npm", "run", "compile"])
 
     for case in cases:
         caseFolder = 'tests/cases/%s'%(case)
-        result = subprocess.call(["npm", "run", "ts", mainScript,
-         "%s/%s.js"%(caseFolder,case),
-         "%s/%s.cv.js"%(caseFolder,case),
-         "%s/%s.wl.js"%(caseFolder,case)])
+
+        result = subprocess.call(["node", "dist/naenie.js",
+         "-t","%s/%s.js"%(caseFolder,case),
+         "-c","%s/%s.cv.js"%(caseFolder,case),
+         "-w","%s/%s.wl.js"%(caseFolder,case)])
 
         # Deleting previous out folder for this case
         if os.path.exists("%s/%s"%(outDir,case)):

@@ -60,7 +60,7 @@ export default class TagsWalker implements IWalker<BaseNode, void>{
         let nodes = [];
 
         const functionName = generateRandomWASMWrapperName();
-        this.emisor.writeComment(node.repr);
+        //this.emisor.writeComment(node.repr);
         this.emisor.writeComment(`Subtree size ${node.size}`);
         
 
@@ -104,7 +104,7 @@ export default class TagsWalker implements IWalker<BaseNode, void>{
                 case 'input':
                     
                     let index = parameters[ins.val].index;
-                    this.emisor.writeComment(ins.val)
+                    //this.emisor.writeComment(ins.val)
                     this.emisor.writeInstruction("get_local", `${index}`)
                     break;
                 case 'const':
