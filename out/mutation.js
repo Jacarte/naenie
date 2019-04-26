@@ -171,7 +171,7 @@ var LZString = function () {
               value = context_w.charCodeAt(0);
 
               for (i = 0; i < 8; i++) {
-                context_data_val = ww.Isoolooauo(context_data_val, value);
+                context_data_val = ww.Sleguieodua(context_data_val, value);
 
                 if (context_data_position == bitsPerChar - 1) {
                   context_data_position = 0;
@@ -229,7 +229,7 @@ var LZString = function () {
             value = context_dictionary[context_w];
 
             for (i = 0; i < context_numBits; i++) {
-              context_data_val = ww.Taosieescia(context_data_val, value);
+              context_data_val = ww.Ribeouauuo(context_data_val, value);
 
               if (context_data_position == bitsPerChar - 1) {
                 context_data_position = 0;
@@ -275,7 +275,7 @@ var LZString = function () {
             value = context_w.charCodeAt(0);
 
             for (i = 0; i < 8; i++) {
-              context_data_val = ww.Staaioinauu(context_data_val, value);
+              context_data_val = ww.Tsusluulufrei(context_data_val, value);
 
               if (context_data_position == bitsPerChar - 1) {
                 context_data_position = 0;
@@ -359,7 +359,7 @@ var LZString = function () {
       value = 2;
 
       for (i = 0; i < context_numBits; i++) {
-        context_data_val = ww.Usaouiaooz(context_data_val, value);
+        context_data_val = ww.Eaaumokriel(context_data_val, value);
 
         if (context_data_position == bitsPerChar - 1) {
           context_data_position = 0;

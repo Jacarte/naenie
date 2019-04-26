@@ -4,7 +4,7 @@
 	
 	;;Subtree size 7
 	
-	(func $Usaouiaooz (param  i32) (param  i32) (result i32) 
+	(func $Eaaumokriel (param  i32) (param  i32) (result i32) 
 		get_local 0
 		i32.const 1
 		i32.shl
@@ -14,12 +14,12 @@
 		i32.or
 		
 	)
-	(export "Usaouiaooz" (func $Usaouiaooz))
+	(export "Eaaumokriel" (func $Eaaumokriel))
 	;;(context_data_val << 1) | (value&1)
 	
 	;;Subtree size 7
 	
-	(func $Taosieescia (param  i32) (param  i32) (result i32) 
+	(func $Ribeouauuo (param  i32) (param  i32) (result i32) 
 		get_local 0
 		i32.const 1
 		i32.shl
@@ -29,12 +29,12 @@
 		i32.or
 		
 	)
-	(export "Taosieescia" (func $Taosieescia))
+	(export "Ribeouauuo" (func $Ribeouauuo))
 	;;(context_data_val << 1) | (value&1)
 	
 	;;Subtree size 7
 	
-	(func $Staaioinauu (param  i32) (param  i32) (result i32) 
+	(func $Tsusluulufrei (param  i32) (param  i32) (result i32) 
 		get_local 0
 		i32.const 1
 		i32.shl
@@ -44,12 +44,12 @@
 		i32.or
 		
 	)
-	(export "Staaioinauu" (func $Staaioinauu))
+	(export "Tsusluulufrei" (func $Tsusluulufrei))
 	;;(context_data_val << 1) | (value&1)
 	
 	;;Subtree size 7
 	
-	(func $Isoolooauo (param  i32) (param  i32) (result i32) 
+	(func $Sleguieodua (param  i32) (param  i32) (result i32) 
 		get_local 0
 		i32.const 1
 		i32.shl
@@ -59,5 +59,5 @@
 		i32.or
 		
 	)
-	(export "Isoolooauo" (func $Isoolooauo))
+	(export "Sleguieodua" (func $Sleguieodua))
 )

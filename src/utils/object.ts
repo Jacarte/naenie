@@ -132,9 +132,13 @@ export class NodeTypes {
         return this.types.length;
     }
 
+    get isHomogeneus(): boolean{ // Check if all returning types are numbers
+        return this.types.map(t => t.base == 'number').reduce((n, c) => n && c);
+    }
+
     insertType(type: ReturningType): void{
 
-        this.basicDict[type.base] = 1;
+        this.basicDict[type.ntype] = 1;
         if(this.types.length == 0 || this.types[0].priority < type.priority){
             this.types.unshift(type);
         }

@@ -5,7 +5,7 @@ import 'reflect-metadata';
 import generate from '@babel/generator';
 import { ILogger } from '../core/logger';
 import ContextWalker from './context.walker';
-import { sortTypes, ReturningType } from '../utils/object';
+import { sortTypes, ReturningType, NodeTypes } from '../utils/object';
 import { TypesMap, ConvertionMap } from '../impl/emisor';
 
 
@@ -92,6 +92,10 @@ export default class MapWalker extends ContextWalker<BaseNode, BaseNode>{
         }
     }
 
+    isBasicLogicalOperator(operator: string){
+        return operator.match(/>|<|>=|<=/)
+    }
+
     public walkAux(ast: any, parent: any | null): BaseNode {
 
 
@@ -107,21 +111,48 @@ export default class MapWalker extends ContextWalker<BaseNode, BaseNode>{
             case 'NumericLiteral':
                 ast.opcode = [{ op: 'const', val: ast.value*1, returningType: ast.returningType }]
                 break;
+            
+            case 'LogicalExpression':
+            /*else{
+                    this.logger.warning("Not evaluated, maybe its a shorcut:", bin.repr, ` ${this.context.path} (${ast.loc.start.line}:${ast.loc.start.column})`, '\n')
+                } */
+                
+                const log = ast as any;
+
+                if(log.returningType.hasType("boolean")
+                && log.returningType.isHomogeneus){
+
+                    if(this.isBasicLogicalOperator(log.operator)){
+                        this.analyzeChild(log.left, log.leftRT);
+
+                        this.analyzeChild(log.right, log.rightRT);
+    
+                        Object.assign(ast, { opcode: 
+                            [
+                                ...log.left.opcode, ...this.getConvertion(log, log.left, true) , 
+                                ...log.right.opcode,...this.getConvertion(log, log.right, false),
+                                { val: ast.operator, op:'ins', returningType: log.returningType }
+                            ] })
+                    }
+                    // Convert to parameter if it has no returningType or returningType is not number nor boolean
+                    
+                }
+                break;
+                break;
 
             case 'BinaryExpression':
             //case 'LogicalExpression':
 
 
-                const bin = ast as any ;//this.as<BinaryExpression>(ast);
+                const bin = ast as any;
                 
                 this.walkAux(bin.left, bin);
                 this.walkAux(bin.right, bin);
 
                 /*if(bin.returningType.length == 0)
                     */
-                
-
-                if(bin.returningType.hasType("number")){
+                if(bin.returningType.hasType("number")
+                && bin.returningType.isHomogeneus){
                     // Convert to parameter if it has no returningType or returningType is not number nor boolean
 
                     this.analyzeChild(bin.left, bin.leftRT);
@@ -134,9 +165,6 @@ export default class MapWalker extends ContextWalker<BaseNode, BaseNode>{
                             ...bin.right.opcode,...this.getConvertion(bin, bin.right, false),
                             { val: ast.operator, op:'ins', returningType: bin.returningType }
                         ] })
-                }
-                else{
-                    this.logger.warning("Not evaluated, maybe its a shorcut:", bin.repr, ` ${this.context.path} (${ast.loc.start.line}:${ast.loc.start.column})`, '\n')
                 }
                 break;
             default:
