@@ -3,6 +3,8 @@ import { Context } from './walkers/context.walker';
 import Container from './impl/startup';
 import DMachine from './impl/machine';
 import { AppContext, IAppContext } from './core/config';
+import SanboxExecutor from './core/sandbox.executor';
+import BrowserSandbox from './core/sandboxes/browser.sandbox';
 
 
 const code = fs.readFileSync(process.argv[2]).toString();
@@ -27,6 +29,7 @@ Container.bind<Context>("Context")
 
 
 
+Container.bind<SanboxExecutor>("Sandbox").to(BrowserSandbox).inSingletonScope();
 Container.bind<IAppContext>("IAppContext").toConstantValue(AppContext);
 
 

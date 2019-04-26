@@ -59,10 +59,10 @@ export default class MapWalker extends ContextWalker<BaseNode, BaseNode>{
         let type = sortTypes(node.returningType)[0];
         let childType = sortTypes(child.returningType)[0];
 
-        if(!childType){
-            if(isLeft)
+        if(!childType){ // PATCH
+            if(isLeft && node.leftRT)
                 childType = sortTypes(node.leftRT)[0];
-            else
+            else if(node.rightRT)
                 childType = sortTypes(node.rightRT)[0];
         }
 
@@ -76,6 +76,20 @@ export default class MapWalker extends ContextWalker<BaseNode, BaseNode>{
         }
 
         return []
+    }
+
+    analyzeChild(node, RT){
+        if(!node.opcode){
+            // Declare as input variable
+
+            const opcode = { op: 'input', val: node.repr, node: identifier(node.repr), 
+            returningType: node.returningType }
+
+            if(RT)
+                opcode.returningType = RT;
+            
+            node.opcode = [opcode]
+        }
     }
 
     public walkAux(ast: any, parent: any | null): BaseNode {
@@ -95,7 +109,7 @@ export default class MapWalker extends ContextWalker<BaseNode, BaseNode>{
                 break;
 
             case 'BinaryExpression':
-            case 'LogicalExpression':
+            //case 'LogicalExpression':
 
 
                 const bin = ast as any ;//this.as<BinaryExpression>(ast);
@@ -104,36 +118,16 @@ export default class MapWalker extends ContextWalker<BaseNode, BaseNode>{
                 this.walkAux(bin.right, bin);
 
                 /*if(bin.returningType.length == 0)
-                    console.log(bin.returningType, bin.repr, bin)
-*/
+                    */
+                
+
                 if(bin.returningType.findIndex(t => t.base == 'number') !== -1 
                 || bin.returningType.findIndex(t => t.base == "boolean") !== -1){
                     // Convert to parameter if it has no returningType or returningType is not number nor boolean
 
-                    if(!bin.left.opcode){
-                        // Declare as input variable
+                    this.analyzeChild(bin.left, bin.leftRT);
 
-                        const opcode = { op: 'input', val: bin.left.repr, node: identifier(bin.left.repr), 
-                        returningType: bin.left.returningType }
-
-                        if(bin.leftRT)
-                            opcode.returningType = bin.leftRT;
-                        
-                        bin.left.opcode = [opcode]
-                    }
-
-                    if(!bin.right.opcode){
-
-                        const opcode = { op: 'input', val: bin.right.repr, node: identifier(bin.right.repr), 
-                        returningType: bin.right.returningType }
-
-                        if(bin.rightRT)
-                            opcode.returningType = bin.rightRT;
-                        
-
-                        bin.right.opcode = [opcode]
-                    }
-
+                    this.analyzeChild(bin.right, bin.rightRT);
 
                     Object.assign(ast, { opcode: 
                         [

@@ -1,0 +1,1 @@
+LZString.compress("mediuma")

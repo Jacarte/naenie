@@ -1,48 +1,85 @@
 (module 
 	
+	;;(context_data_val << 1) | (value&1)
+	
 	;;Subtree size 7
 	
-	(func $Rueoaxuaij (param  i32) (param  i32) (result f32) 
-		i32.const 2
+	(func $Eqiobeprapra (param  i32) (param  i32) (result i32) 
 		get_local 0
-		i32.mul
-		f32.convert_s/i32
-		get_local 1
-		f32.convert_s/i32
-		f32.div
 		i32.const 1
-		f32.convert_s/i32
-		f32.sub
+		i32.shl
+		get_local 1
+		i32.const 1
+		i32.and
+		i32.or
 		
 	)
-	(export "Rueoaxuaij" (func $Rueoaxuaij))
+	(export "Eqiobeprapra" (func $Eqiobeprapra))
+	;;context_w.charCodeAt(0)<256
+	
 	;;Subtree size 7
 	
-	(func $Uoxaiplisea (param  i32) (param  i32) (result f32) 
-		i32.const 2
+	(func $Ooipretareh (param  i32) (result i32) 
 		get_local 0
-		i32.mul
-		f32.convert_s/i32
-		get_local 1
-		f32.convert_s/i32
-		f32.div
-		f32.const 1.5
-		f32.sub
+		i32.const 256
+		i32.lt_u
 		
 	)
-	(export "Uoxaiplisea" (func $Uoxaiplisea))
+	(export "Ooipretareh" (func $Ooipretareh))
+	;;context_w.charCodeAt(0)<256
+	
 	;;Subtree size 7
 	
-	(func $Glauuespuopi (param  f32) (param  f32) (param  f32) (result f32) 
-		i32.const 2
-		f32.convert_s/i32
+	(func $Kajaaiuuxa (param  i32) (result i32) 
 		get_local 0
-		f32.mul
-		get_local 1
-		f32.mul
-		get_local 2
-		f32.add
+		i32.const 256
+		i32.lt_u
 		
 	)
-	(export "Glauuespuopi" (func $Glauuespuopi))
+	(export "Kajaaiuuxa" (func $Kajaaiuuxa))
+	;;(context_data_val << 1) | (value&1)
+	
+	;;Subtree size 7
+	
+	(func $Aoieicixor (param  i32) (param  i32) (result i32) 
+		get_local 0
+		i32.const 1
+		i32.shl
+		get_local 1
+		i32.const 1
+		i32.and
+		i32.or
+		
+	)
+	(export "Aoieicixor" (func $Aoieicixor))
+	;;(context_data_val << 1) | (value&1)
+	
+	;;Subtree size 7
+	
+	(func $Rezacaaeuk (param  i32) (param  i32) (result i32) 
+		get_local 0
+		i32.const 1
+		i32.shl
+		get_local 1
+		i32.const 1
+		i32.and
+		i32.or
+		
+	)
+	(export "Rezacaaeuk" (func $Rezacaaeuk))
+	;;(context_data_val << 1) | (value&1)
+	
+	;;Subtree size 7
+	
+	(func $Qeboiucoye (param  i32) (param  i32) (result i32) 
+		get_local 0
+		i32.const 1
+		i32.shl
+		get_local 1
+		i32.const 1
+		i32.and
+		i32.or
+		
+	)
+	(export "Qeboiucoye" (func $Qeboiucoye))
 )
