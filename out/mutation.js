@@ -141,7 +141,7 @@ var LZString = function () {
           context_data_position = 0,
           ii;
 
-      for (ii = 0; ii < uncompressed.length; ii += 1) {
+      for (ii = 0; ww.Wiuiuoevej(ii, uncompressed.length); ii += 1) {
         context_c = uncompressed.charAt(ii);
 
         if (!Object.prototype.hasOwnProperty.call(context_dictionary, context_c)) {
@@ -155,11 +155,11 @@ var LZString = function () {
           context_w = context_wc;
         } else {
           if (Object.prototype.hasOwnProperty.call(context_dictionaryToCreate, context_w)) {
-            if (context_w.charCodeAt(0) < 256) {
+            if (ww.Niiwhaknoega(context_w.charCodeAt(0))) {
               for (i = 0; i < context_numBits; i++) {
                 context_data_val = context_data_val << 1;
 
-                if (context_data_position == bitsPerChar - 1) {
+                if (ww.Fahiuauswoe(context_data_position, bitsPerChar)) {
                   context_data_position = 0;
                   context_data.push(getCharFromInt(context_data_val));
                   context_data_val = 0;
@@ -171,9 +171,9 @@ var LZString = function () {
               value = context_w.charCodeAt(0);
 
               for (i = 0; i < 8; i++) {
-                context_data_val = ww.Sleguieodua(context_data_val, value);
+                context_data_val = ww.Miqicrereib(context_data_val, value);
 
-                if (context_data_position == bitsPerChar - 1) {
+                if (ww.Mriebiueoeu(context_data_position, bitsPerChar)) {
                   context_data_position = 0;
                   context_data.push(getCharFromInt(context_data_val));
                   context_data_val = 0;
@@ -229,9 +229,9 @@ var LZString = function () {
             value = context_dictionary[context_w];
 
             for (i = 0; i < context_numBits; i++) {
-              context_data_val = ww.Ribeouauuo(context_data_val, value);
+              context_data_val = ww.Uepieahife(context_data_val, value);
 
-              if (context_data_position == bitsPerChar - 1) {
+              if (ww.Ueaaiemuvi(context_data_position, bitsPerChar)) {
                 context_data_position = 0;
                 context_data.push(getCharFromInt(context_data_val));
                 context_data_val = 0;
@@ -259,11 +259,11 @@ var LZString = function () {
 
       if (context_w !== "") {
         if (Object.prototype.hasOwnProperty.call(context_dictionaryToCreate, context_w)) {
-          if (context_w.charCodeAt(0) < 256) {
+          if (ww.Raiusaziou(context_w.charCodeAt(0))) {
             for (i = 0; i < context_numBits; i++) {
               context_data_val = context_data_val << 1;
 
-              if (context_data_position == bitsPerChar - 1) {
+              if (ww.Onuprakuooa(context_data_position, bitsPerChar)) {
                 context_data_position = 0;
                 context_data.push(getCharFromInt(context_data_val));
                 context_data_val = 0;
@@ -275,9 +275,9 @@ var LZString = function () {
             value = context_w.charCodeAt(0);
 
             for (i = 0; i < 8; i++) {
-              context_data_val = ww.Tsusluulufrei(context_data_val, value);
+              context_data_val = ww.Miaeauispii(context_data_val, value);
 
-              if (context_data_position == bitsPerChar - 1) {
+              if (ww.Maviaiuait(context_data_position, bitsPerChar)) {
                 context_data_position = 0;
                 context_data.push(getCharFromInt(context_data_val));
                 context_data_val = 0;
@@ -359,9 +359,9 @@ var LZString = function () {
       value = 2;
 
       for (i = 0; i < context_numBits; i++) {
-        context_data_val = ww.Eaaumokriel(context_data_val, value);
+        context_data_val = ww.Spoieaaagrau(context_data_val, value);
 
-        if (context_data_position == bitsPerChar - 1) {
+        if (ww.Lavioooepu(context_data_position, bitsPerChar)) {
           context_data_position = 0;
           context_data.push(getCharFromInt(context_data_val));
           context_data_val = 0;
@@ -376,7 +376,7 @@ var LZString = function () {
       while (true) {
         context_data_val = context_data_val << 1;
 
-        if (context_data_position == bitsPerChar - 1) {
+        if (ww.Teuploeeeeo(context_data_position, bitsPerChar)) {
           context_data.push(getCharFromInt(context_data_val));
           break;
         } else context_data_position++;
@@ -592,7 +592,7 @@ if (typeof define === 'function' && define.amd) {
   define(function () {
     return LZString;
   });
-} else if (typeof module !== 'undefined' && module != null) {
+} else if (ww.Eueeuorolo(typeof module !== 'undefined', module != null)) {
   module.exports = LZString;
 } else if (typeof angular !== 'undefined' && angular != null) {
   angular.module('LZString', []).factory('LZString', function () {

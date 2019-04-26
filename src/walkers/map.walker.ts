@@ -7,6 +7,7 @@ import { ILogger } from '../core/logger';
 import ContextWalker from './context.walker';
 import { sortTypes, ReturningType, NodeTypes } from '../utils/object';
 import { TypesMap, ConvertionMap } from '../impl/emisor';
+import { IAppContext } from '../core/config';
 
 
 /**
@@ -17,6 +18,10 @@ export default class MapWalker extends ContextWalker<BaseNode, BaseNode>{
     
     @inject("ILogger")
     public logger: ILogger;
+
+
+    @inject("IAppContext")
+    public appContext: IAppContext;
 
     walk(obj: BaseNode): BaseNode {
         return this.walkAux(obj, null);
@@ -70,7 +75,7 @@ export default class MapWalker extends ContextWalker<BaseNode, BaseNode>{
 
             if(childType.ntype !== type.ntype){
                 return [{
-                    op: 'conv', val: `${TypesMap[type.ntype]}.${ConvertionMap[type.ntype][childType.ntype]}`, returningType: [type]
+                    op: 'conv', val: `${TypesMap[type.ntype]}.${ConvertionMap[type.ntype][childType.ntype]}`, returningType: new NodeTypes(type)
                 }]
             }
         }
@@ -93,13 +98,31 @@ export default class MapWalker extends ContextWalker<BaseNode, BaseNode>{
     }
 
     isBasicLogicalOperator(operator: string){
-        return operator.match(/>|<|>=|<=/)
+        return operator.match(/>|<|>=|<=|&|&&|\|\||\|\^/)
+    }
+
+    isComparissonOperator(operator: string){
+        return operator.match(/==|===|!=|!==/)
+    }
+
+    generateOpCodes(ast){
+        this.analyzeChild(ast.left, ast.leftRT);
+
+        this.analyzeChild(ast.right, ast.rightRT);
+
+        Object.assign(ast, { opcode: 
+            [
+                ...ast.left.opcode, ...this.getConvertion(ast, ast.left, true) , 
+                ...ast.right.opcode,...this.getConvertion(ast, ast.right, false),
+                { val: ast.operator, op:'ins', returningType: ast.returningType }
+            ] })
     }
 
     public walkAux(ast: any, parent: any | null): BaseNode {
 
 
         if(this.visited.indexOf(ast) !== -1){
+        //|| ast.size < this.appContext.minSize || ast.size > this.appContext.maxSize){
             return ast;
         }
         
@@ -112,60 +135,44 @@ export default class MapWalker extends ContextWalker<BaseNode, BaseNode>{
                 ast.opcode = [{ op: 'const', val: ast.value*1, returningType: ast.returningType }]
                 break;
             
-            case 'LogicalExpression':
-            /*else{
-                    this.logger.warning("Not evaluated, maybe its a shorcut:", bin.repr, ` ${this.context.path} (${ast.loc.start.line}:${ast.loc.start.column})`, '\n')
-                } */
-                
-                const log = ast as any;
-
-                if(log.returningType.hasType("boolean")
-                && log.returningType.isHomogeneus){
-
-                    if(this.isBasicLogicalOperator(log.operator)){
-                        this.analyzeChild(log.left, log.leftRT);
-
-                        this.analyzeChild(log.right, log.rightRT);
-    
-                        Object.assign(ast, { opcode: 
-                            [
-                                ...log.left.opcode, ...this.getConvertion(log, log.left, true) , 
-                                ...log.right.opcode,...this.getConvertion(log, log.right, false),
-                                { val: ast.operator, op:'ins', returningType: log.returningType }
-                            ] })
-                    }
-                    // Convert to parameter if it has no returningType or returningType is not number nor boolean
-                    
-                }
-                break;
-                break;
-
             case 'BinaryExpression':
+            case 'LogicalExpression':
             //case 'LogicalExpression':
-
-
                 const bin = ast as any;
                 
                 this.walkAux(bin.left, bin);
                 this.walkAux(bin.right, bin);
 
-                /*if(bin.returningType.length == 0)
-                    */
-                if(bin.returningType.hasType("number")
-                && bin.returningType.isHomogeneus){
-                    // Convert to parameter if it has no returningType or returningType is not number nor boolean
-
-                    this.analyzeChild(bin.left, bin.leftRT);
-
-                    this.analyzeChild(bin.right, bin.rightRT);
-
-                    Object.assign(ast, { opcode: 
-                        [
-                            ...bin.left.opcode, ...this.getConvertion(bin, bin.left, true) , 
-                            ...bin.right.opcode,...this.getConvertion(bin, bin.right, false),
-                            { val: ast.operator, op:'ins', returningType: bin.returningType }
-                        ] })
+                if(bin.left.returningType.isEmpty && bin.leftRT){
+                    bin.left.returningType = bin.leftRT;
                 }
+
+                if(bin.right.returningType.isEmpty && bin.rightRT){
+                    bin.right.returningType = bin.rightRT;
+                }
+
+                if(bin.returningType.isHomogeneus){
+                    if( bin.left.returningType.isHomogeneus
+                        && bin.right.returningType.isHomogeneus
+                    ){
+                        // Convert to parameter if it has no returningType or returningType is not number nor boolean
+                        this.generateOpCodes(bin)
+                    }
+                    else{
+                        //if(bin.left.returningType.isHomogeneus && )
+                        this.logger.warning("We are not supporting equality comparers between complex types yet: ")
+                        this.logger.debug( bin.repr)
+                        this.logger.warning(` ${this.context.path}:${ast.loc.start.line}:${ast.loc.start.column}`, '\n')
+                    }
+                }
+                else{
+                    this.logger.info("Not evaluated, maybe its a shorcut or it wasn't evaluated in the coverage stage : ")
+                    this.logger.debug(bin.repr)
+                    this.logger.warning(` ${this.context.path}:${ast.loc.start.line}:${ast.loc.start.column}`, '\n')
+                    //this.logger.warning("Operator ", log.operator, '\n')
+                    //this.logger.warning("Returning type ", JSON.stringify(log.returningType.types), '\n')
+                }
+
                 break;
             default:
                 this.genericWalk(ast, parent);

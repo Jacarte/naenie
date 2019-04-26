@@ -96,6 +96,7 @@ export default class TagsWalker implements IWalker<BaseNode, void>{
         this.emisor.declareResult(TypesMap[node.returningType.first().ntype])
 
         for(var ins of node.opcode){
+            //console.log(ins.returningType)
             const mostRepresentative = ins.returningType.first();
             
             // TODO implement architecture over this operations

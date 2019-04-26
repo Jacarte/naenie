@@ -39,12 +39,13 @@ export function getType(value):ReturningType{
 
     }
 
-    if(type === 'boolean'){
-        type = 'number'
-    }
-
     result.ntype = type;
 
+
+    if(type === 'boolean'){
+        result.ntype = 'number'
+        result.base = 'number'
+    }
     return result;
 }
 
@@ -107,10 +108,17 @@ export class NodeTypes {
     basicDict: {
         [id:string]: number
     };
+    baseDict: {
+        [id:string]: number
+    };
 
     constructor(...types: ReturningType[]){
         this.types = [];
         this.basicDict = {
+
+        };
+
+        this.baseDict = {
 
         };
 
@@ -120,8 +128,13 @@ export class NodeTypes {
 
 
 
-    hasType(type: string): boolean{
+    hasSpecificType(type: string): boolean{
         return type in this.basicDict
+    }
+
+
+    hasBaseType(type: string): boolean{
+        return type in this.baseDict
     }
 
     first(): ReturningType{
@@ -133,12 +146,16 @@ export class NodeTypes {
     }
 
     get isHomogeneus(): boolean{ // Check if all returning types are numbers
-        return this.types.map(t => t.base == 'number').reduce((n, c) => n && c);
+        return this.types.map(t => t.base == 'number').reduce((n, c) => n && c, this.types.length > 0);
     }
 
+    get isEmpty(){
+        return this.types.length == 0
+    }
     insertType(type: ReturningType): void{
 
         this.basicDict[type.ntype] = 1;
+        this.baseDict[type.base] = 1;
         if(this.types.length == 0 || this.types[0].priority < type.priority){
             this.types.unshift(type);
         }

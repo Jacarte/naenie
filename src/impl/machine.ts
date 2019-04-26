@@ -83,7 +83,7 @@ export default class DMachine{
 
         eval(generate(copy).code + context.cvCode);
 
-        //fs.writeFileSync(`${outDir}/${this.appContext.instrumnetationName}`, generate(copy).code)
+        fs.writeFileSync(`${outDir}/${this.appContext.instrumnetationName}`, generate(copy).code)
 
         const totalNodes = Object.keys(this.runtimeInstrumentation.nodes_hash).length
         const visitedNodes = 
