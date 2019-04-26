@@ -84,19 +84,19 @@ export default class TagsWalker implements IWalker<BaseNode, void>{
         }
         this.emisor.openFunction(functionName);
         for(var k in parameters){
-            const mostRepresentative = sortTypes(parameters[k].type);
+            const mostRepresentative = parameters[k].type;
 
             if(mostRepresentative.length > 0)
-                this.emisor.declareParameter(``, TypesMap[mostRepresentative[0].ntype] )
+                this.emisor.declareParameter(``, TypesMap[mostRepresentative.first().ntype] )
             else
                 this.emisor.declareParameter(``, 'i64')
             
         }
 
-        this.emisor.declareResult(TypesMap[sortTypes(node.returningType)[0].ntype])
+        this.emisor.declareResult(TypesMap[node.returningType.first().ntype])
 
         for(var ins of node.opcode){
-            const mostRepresentative = sortTypes(ins.returningType);
+            const mostRepresentative = ins.returningType.first();
             
             // TODO implement architecture over this operations
             
@@ -109,11 +109,11 @@ export default class TagsWalker implements IWalker<BaseNode, void>{
                     break;
                 case 'const':
                     //out += `i32.const ${ins.val}`
-                    this.emisor.writeInstruction(`${TypesMap[mostRepresentative[0].ntype]}.const`, ins.val)
+                    this.emisor.writeInstruction(`${TypesMap[mostRepresentative.ntype]}.const`, ins.val)
                     break;
 
                 case 'ins':
-                    this.emisor.writeInstruction(`${TypesMap[mostRepresentative[0].ntype]}.${OpsMap[ins.val]}`)
+                    this.emisor.writeInstruction(`${TypesMap[mostRepresentative.ntype]}.${OpsMap[ins.val]}`)
                     break;
                 case 'conv':
                     this.emisor.writeInstruction(ins.val)

@@ -4,7 +4,7 @@ import { inject, injectable } from 'inversify';
 import 'reflect-metadata';
 import generate from '@babel/generator';
 import ContextWalker from './context.walker';
-import { getType } from '../utils/object';
+import { getType, NodeTypes } from '../utils/object';
 import { Context } from './context.walker';
 
 /**
@@ -31,7 +31,7 @@ export default class GenericWalker extends ContextWalker<BaseNode, BaseNode>{
             size: 1,
             parent: null,
             repr: this.context.code.substr(ast.start, ast.end - ast.start),
-            returningType: []
+            returningType: null
         }
 
         if(this.visited.indexOf(ast) !== -1)
@@ -58,42 +58,39 @@ export default class GenericWalker extends ContextWalker<BaseNode, BaseNode>{
             }
         }
 
-        result.returningType = this.getReturningType(ast, parent);
+        result.returningType = this.getReturningType(ast);
 
         Object.assign(ast, result);
 
         return ast
     }
 
-    getReturningType(ast: BaseNode, parent: BaseNode): {base: string, ntype: string}[]{
+    getReturningType(ast: BaseNode): NodeTypes{
 
         switch(ast.type){
             case 'BooleanLiteral':
-                return [
-                    {
-                        base: 'boolean', 
-                        ntype: 'number'
-                    }
-                ];
             case 'NumericLiteral':
                 const value = (ast as any).value;
-                return [getType(value)];
+                return new NodeTypes(getType(value));
 
             case 'StringLiteral':
-                return [{
-                    base:"string",
-                    ntype:"string"
-                }];
+
+                return new NodeTypes({
+                    base: 'string',
+                    ntype: 'string',
+                    priority: -2
+                });
 
             case 'UpdateExpression':
-                return [{
-                    base: 'number',
-                    ntype: 'number'
-                }];
-
+                
+                return new NodeTypes({
+                    base: 'numer',
+                    ntype: 'number',
+                    priority: 0
+                });
 
             default: 
-                return [];
+                return new NodeTypes();
         }
 
     }

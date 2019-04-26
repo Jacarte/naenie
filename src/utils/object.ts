@@ -100,3 +100,56 @@ export default function deepCopy(obj: any, exclude?: (prop: string) => boolean) 
 
     return result;
 }
+
+export class NodeTypes {
+
+    types: ReturningType[];
+    basicDict: {
+        [id:string]: number
+    };
+
+    constructor(...types: ReturningType[]){
+        this.types = [];
+        this.basicDict = {
+
+        };
+
+        for(var type of types)
+            this.insertType(type);
+    }
+
+
+
+    hasType(type: string): boolean{
+        return type in this.basicDict
+    }
+
+    first(): ReturningType{
+        return this.types[0]
+    }
+
+    get length(){
+        return this.types.length;
+    }
+
+    insertType(type: ReturningType): void{
+
+        this.basicDict[type.base] = 1;
+        if(this.types.length == 0 || this.types[0].priority < type.priority){
+            this.types.unshift(type);
+        }
+        else{
+            let i = 0;
+
+            for(i = 0 ; i< this.types.length; i++){
+                if(this.types[i].priority < type.priority){
+                    break;
+                }
+            }
+            
+            const last = this.types.splice(i, 0, type);
+
+            this.types = [...this.types, ...last];
+        }
+    }
+}

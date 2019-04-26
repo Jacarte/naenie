@@ -6,7 +6,7 @@ import { ILogger } from '../core/logger';
 import { ExtendedNode } from '../core/types';
 import { MemberExpression } from 'babel-types';
 import ContextWalker from './context.walker';
-import { getType, ReturningType } from '../utils/object';
+import { getType, ReturningType, NodeTypes } from '../utils/object';
 
 /**
  * Wrapp ast nodes with extra information, such as subtree size, and generic children array property
@@ -33,9 +33,9 @@ export default class RuntimeInstrumentWalker extends ContextWalker<BaseNode, Bas
     nodes_hash : {
         [id:string]: {
                 
-                returningType: ReturningType[],
-                leftRT?: ReturningType[],
-                rightRT?: ReturningType[],
+                returningType: NodeTypes,
+                leftRT?: NodeTypes,
+                rightRT?: NodeTypes,
                 instrumented?: boolean,
                 visitOrder?: number,
                 visited: number,
@@ -77,7 +77,7 @@ export default class RuntimeInstrumentWalker extends ContextWalker<BaseNode, Bas
                                 
                                 visitOrder: 0,
                                 instrumented: true,
-                                returningType: [],
+                                returningType: new NodeTypes(),
                                 visited: 0
                                 
                             };
@@ -177,12 +177,12 @@ export default class RuntimeInstrumentWalker extends ContextWalker<BaseNode, Bas
         const entry = this.nodes_hash[hash];
 
         if(!entry.rightRT)
-            entry.rightRT = [];
+            entry.rightRT = new NodeTypes();
 
         
         const returning = getType(value);
 
-        entry.rightRT.unshift(returning);
+        entry.rightRT.insertType(returning);
         
         return value;
     }
@@ -192,12 +192,12 @@ export default class RuntimeInstrumentWalker extends ContextWalker<BaseNode, Bas
         const entry = this.nodes_hash[hash];
 
         if(!entry.leftRT)
-            entry.leftRT = [];
+            entry.leftRT = new NodeTypes();
 
         
         const returning = getType(value);
 
-        entry.leftRT.unshift(returning);
+        entry.leftRT.insertType(returning);
         
         return value;
     }
@@ -209,7 +209,7 @@ export default class RuntimeInstrumentWalker extends ContextWalker<BaseNode, Bas
 
         const entry = this.nodes_hash[hash];
 
-        entry.returningType.unshift(returning);
+        entry.returningType.insertType(returning);
         entry.sign = value < 0? -1: 1;
     
         entry.visited++;

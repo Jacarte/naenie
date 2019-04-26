@@ -155,7 +155,7 @@ var LZString = function () {
           context_w = context_wc;
         } else {
           if (Object.prototype.hasOwnProperty.call(context_dictionaryToCreate, context_w)) {
-            if (ww.Kajaaiuuxa(context_w.charCodeAt(0))) {
+            if (context_w.charCodeAt(0) < 256) {
               for (i = 0; i < context_numBits; i++) {
                 context_data_val = context_data_val << 1;
 
@@ -171,7 +171,7 @@ var LZString = function () {
               value = context_w.charCodeAt(0);
 
               for (i = 0; i < 8; i++) {
-                context_data_val = ww.Qeboiucoye(context_data_val, value);
+                context_data_val = ww.Isoolooauo(context_data_val, value);
 
                 if (context_data_position == bitsPerChar - 1) {
                   context_data_position = 0;
@@ -229,7 +229,7 @@ var LZString = function () {
             value = context_dictionary[context_w];
 
             for (i = 0; i < context_numBits; i++) {
-              context_data_val = ww.Aoieicixor(context_data_val, value);
+              context_data_val = ww.Taosieescia(context_data_val, value);
 
               if (context_data_position == bitsPerChar - 1) {
                 context_data_position = 0;
@@ -259,7 +259,7 @@ var LZString = function () {
 
       if (context_w !== "") {
         if (Object.prototype.hasOwnProperty.call(context_dictionaryToCreate, context_w)) {
-          if (ww.Ooipretareh(context_w.charCodeAt(0))) {
+          if (context_w.charCodeAt(0) < 256) {
             for (i = 0; i < context_numBits; i++) {
               context_data_val = context_data_val << 1;
 
@@ -275,7 +275,7 @@ var LZString = function () {
             value = context_w.charCodeAt(0);
 
             for (i = 0; i < 8; i++) {
-              context_data_val = ww.Rezacaaeuk(context_data_val, value);
+              context_data_val = ww.Staaioinauu(context_data_val, value);
 
               if (context_data_position == bitsPerChar - 1) {
                 context_data_position = 0;
@@ -359,7 +359,7 @@ var LZString = function () {
       value = 2;
 
       for (i = 0; i < context_numBits; i++) {
-        context_data_val = ww.Eqiobeprapra(context_data_val, value);
+        context_data_val = ww.Usaouiaooz(context_data_val, value);
 
         if (context_data_position == bitsPerChar - 1) {
           context_data_position = 0;

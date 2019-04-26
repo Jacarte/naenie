@@ -56,14 +56,14 @@ export default class MapWalker extends ContextWalker<BaseNode, BaseNode>{
 
     getConvertion(node, child, isLeft: boolean){
 
-        let type = sortTypes(node.returningType)[0];
-        let childType = sortTypes(child.returningType)[0];
+        let type = node.returningType.first();
+        let childType = child.returningType.first();
 
         if(!childType){ // PATCH
             if(isLeft && node.leftRT)
-                childType = sortTypes(node.leftRT)[0];
+                childType = node.leftRT.first();
             else if(node.rightRT)
-                childType = sortTypes(node.rightRT)[0];
+                childType = node.rightRT.first();
         }
 
         if(!!childType && !!type){
@@ -121,8 +121,7 @@ export default class MapWalker extends ContextWalker<BaseNode, BaseNode>{
                     */
                 
 
-                if(bin.returningType.findIndex(t => t.base == 'number') !== -1 
-                || bin.returningType.findIndex(t => t.base == "boolean") !== -1){
+                if(bin.returningType.hasType("number")){
                     // Convert to parameter if it has no returningType or returningType is not number nor boolean
 
                     this.analyzeChild(bin.left, bin.leftRT);
