@@ -1,11 +1,11 @@
 
 import * as fs from 'fs'
-import { Context } from '../walkers/context.walker';
-import Container from '../impl/startup';
-import DMachine from '../impl/machine';
-import { AppContext, IAppContext } from '../core/config';
-import generateRandomWASMWrapperName from '../utils/generator';
-
+import { Context } from '../src/walkers/context.walker';
+import Container from '../src/impl/startup';
+import DMachine from '../src/impl/machine';
+import { AppContext, IAppContext } from '../src/core/config';
+import generateRandomWASMWrapperName from '../src/utils/generator';
+/*
 console.log("Reading file");
 
 const code = fs.readFileSync(process.argv[2]).toString();
@@ -30,7 +30,7 @@ Container.bind<IAppContext>("IAppContext").toConstantValue(AppContext);
 const machine = Container.resolve(DMachine);
 
 machine.process(context)
-
+*/
 /*
 type ITree = {
     children: ITree[];

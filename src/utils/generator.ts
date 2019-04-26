@@ -1,7 +1,4 @@
 
-const names = ['jon', 'sam', 'cersei', 'lisa', 'arya', 'joffrey', 'ned', 'bran'];
-const lastNames = ['lannister', 'snow', 'stark', 'storm', 'tyrell', 'tully', 'baratheon', 'targaryen'];
-
 function getRandomInt(min, max){
 	return Math.floor(Math.random() * (max - min + 1)) + min;
 }

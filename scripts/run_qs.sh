@@ -1,1 +1,0 @@
-npm run ts scripts/main.ts tests/cases/qs/qs.js tests/cases/qs/qs.cv.js tests/cases/qs/qs.wl.js

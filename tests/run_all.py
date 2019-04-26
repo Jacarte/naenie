@@ -14,7 +14,7 @@ def main():
     ]
 
 
-    mainScript = 'scripts/main.ts'
+    mainScript = 'src/main.ts'
     outDir = 'tests/out'
 
     for case in cases:
