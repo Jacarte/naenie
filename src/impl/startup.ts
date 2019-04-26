@@ -19,7 +19,6 @@ import BrowserSandbox from '../core/sandboxes/browser.sandbox';
 const myContainer = new Container();
 
 myContainer.bind<ILogger>("ILogger").to(Logger).inSingletonScope();
-myContainer.bind<SanboxExecutor>("Sandbox").to(BrowserSandbox).inSingletonScope();
 
 //WebT tools
 myContainer.bind<WebTTools>(WebTTools).toSelf().inSingletonScope();
