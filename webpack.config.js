@@ -2,7 +2,7 @@ module.exports = {
   entry: './src/main.ts',
   target: 'node',
   output: {
-      filename: 'dist/bundle.js',
+      filename: 'dist/naenie.js',
       path: __dirname
   },
   module: {
