@@ -204,8 +204,13 @@ export default class DMachine{
         this.server.listen(8081, "127.0.0.1", () => {
             this.logger.debug("Executed instrumented code...")
             var exec = require('child_process').exec;
-            exec(`node instrumentation/main.js`, function callback(error, stdout, stderr){
-                
+            exec(`node instrumentation/main.js`,  (error, stdout, stderr) => {
+                this.logger.debug("\n", stdout, "\n")
+
+                console.log(error, stderr)
+                if(error){
+                    this.logger.error("\n", error, "\n")
+                }
             });
         });
 
@@ -220,6 +225,7 @@ export default class DMachine{
 
 
             this.logger.debug("Parsing event queue...")
+            console.log(JSON.stringify(runtimeInfo))
             const data: {method:string, args: any[]}[] = runtimeInfo.args[0];
 
             for(var event of data){

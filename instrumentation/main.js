@@ -1,6 +1,6 @@
 const Qeakaouoeois = require("./instrumentation_api.js");
 
-const LZString = require('./zip.js');
+const sha256 = require("./sha256.js");
 
-console.log(LZString.compress("mediuma"));
+sha256('asdwrrasdf');
 Qeakaouoeois.close()

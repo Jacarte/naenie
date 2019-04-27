@@ -1,602 +1,101 @@
-// Copyright (c) 2013 Pieroxy <pieroxy@pieroxy.net>
-// This work is free. You can redistribute it and/or modify it
-// under the terms of the WTFPL, Version 2
-// For more information see LICENSE.txt or http://www.wtfpl.net/
-//
-// For more information, the home page:
-// http://pieroxy.net/blog/pages/lz-string/testing.html
-//
-// LZ-based compression algorithm, version 1.4.4
-var LZString = function () {
-  // private property
-  var f = String.fromCharCode;
-  var keyStrBase64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-  var keyStrUriSafe = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$";
-  var baseReverseDic = {};
-
-  function getBaseValue(alphabet, character) {
-    if (!baseReverseDic[alphabet]) {
-      baseReverseDic[alphabet] = {};
-
-      for (var i = 0; i < alphabet.length; i++) {
-        baseReverseDic[alphabet][alphabet.charAt(i)] = i;
-      }
-    }
-
-    return baseReverseDic[alphabet][character];
+const sha256 = function sha256(ascii) {
+  function rightRotate(value, amount) {
+    return ww.Eaapruuiyio(value, amount);
   }
 
-  var LZString = {
-    compressToBase64: function (input) {
-      if (input == null) return "";
+  ;
+  var mathPow = Math.pow;
+  var maxWord = mathPow(2, 32);
+  var lengthProperty = 'length';
+  var i, j; // Used as a counter across the whole file
 
-      var res = LZString._compress(input, 6, function (a) {
-        return keyStrBase64.charAt(a);
-      });
+  var result = '';
+  var words = [];
+  var asciiBitLength = ww.Dagroisoeub(ascii[lengthProperty]); //* caching results is optional - remove/add slash from front of this line to toggle
+  // Initial hash value: first 32 bits of the fractional parts of the square roots of the first 8 primes
+  // (we actually calculate the first 64, but extra values are just ignored)
 
-      switch (res.length % 4) {
-        // To produce valid Base64
-        default: // When could this happen ?
+  var hash = sha256.h = sha256.h || []; // Round constants: first 32 bits of the fractional parts of the cube roots of the first 64 primes
 
-        case 0:
-          return res;
+  var k = sha256.k = sha256.k || [];
+  var primeCounter = k[lengthProperty];
+  /*/
+  var hash = [], k = [];
+  var primeCounter = 0;
+  //*/
 
-        case 1:
-          return res + "===";
+  var isComposite = {};
 
-        case 2:
-          return res + "==";
-
-        case 3:
-          return res + "=";
-      }
-    },
-    decompressFromBase64: function (input) {
-      if (input == null) return "";
-      if (input == "") return null;
-      return LZString._decompress(input.length, 32, function (index) {
-        return getBaseValue(keyStrBase64, input.charAt(index));
-      });
-    },
-    compressToUTF16: function (input) {
-      if (input == null) return "";
-      console.log(input);
-      return LZString._compress(input, 15, function (a) {
-        return f(a + 32);
-      }) + " ";
-    },
-    decompressFromUTF16: function (compressed) {
-      if (compressed == null) return "";
-      if (compressed == "") return null;
-      return LZString._decompress(compressed.length, 16384, function (index) {
-        return compressed.charCodeAt(index) - 32;
-      });
-    },
-    //compress into uint8array (UCS-2 big endian format)
-    compressToUint8Array: function (uncompressed) {
-      var compressed = LZString.compress(uncompressed);
-      var buf = new Uint8Array(compressed.length * 2); // 2 bytes per character
-
-      for (var i = 0, TotalLen = compressed.length; i < TotalLen; i++) {
-        var current_value = compressed.charCodeAt(i);
-        buf[i * 2] = current_value >>> 8;
-        buf[i * 2 + 1] = current_value % 256;
+  for (var candidate = 2; primeCounter < 64; candidate++) {
+    if (!isComposite[candidate]) {
+      for (i = 0; i < 313; i += candidate) {
+        isComposite[i] = candidate;
       }
 
-      return buf;
-    },
-    //decompress from uint8array (UCS-2 big endian format)
-    decompressFromUint8Array: function (compressed) {
-      if (compressed === null || compressed === undefined) {
-        return LZString.decompress(compressed);
-      } else {
-        var buf = new Array(compressed.length / 2); // 2 bytes per character
-
-        for (var i = 0, TotalLen = buf.length; i < TotalLen; i++) {
-          buf[i] = compressed[i * 2] * 256 + compressed[i * 2 + 1];
-        }
-
-        var result = [];
-        buf.forEach(function (c) {
-          result.push(f(c));
-        });
-        return LZString.decompress(result.join(''));
-      }
-    },
-    //compress into a string that is already URI encoded
-    compressToEncodedURIComponent: function (input) {
-      if (input == null) return "";
-      return LZString._compress(input, 6, function (a) {
-        return keyStrUriSafe.charAt(a);
-      });
-    },
-    //decompress from an output of compressToEncodedURIComponent
-    decompressFromEncodedURIComponent: function (input) {
-      if (input == null) return "";
-      if (input == "") return null;
-      input = input.replace(/ /g, "+");
-      return LZString._decompress(input.length, 32, function (index) {
-        return getBaseValue(keyStrUriSafe, input.charAt(index));
-      });
-    },
-    compress: function (uncompressed) {
-      return LZString._compress(uncompressed, 16, function (a) {
-        return f(a);
-      });
-    },
-    _compress: function (uncompressed, bitsPerChar, getCharFromInt) {
-      if (uncompressed == null) return "";
-      var i,
-          value,
-          context_dictionary = {},
-          context_dictionaryToCreate = {},
-          context_c = "",
-          context_wc = "",
-          context_w = "",
-          context_enlargeIn = 2,
-          // Compensate for the first entry which should not count
-      context_dictSize = 3,
-          context_numBits = 2,
-          context_data = [],
-          context_data_val = 0,
-          context_data_position = 0,
-          ii;
-
-      for (ii = 0; ww.Showeaxaclap(ii, uncompressed.length); ii += 1) {
-        context_c = uncompressed.charAt(ii);
-
-        if (!Object.prototype.hasOwnProperty.call(context_dictionary, context_c)) {
-          context_dictionary[context_c] = context_dictSize++;
-          context_dictionaryToCreate[context_c] = true;
-        }
-
-        context_wc = context_w + context_c;
-
-        if (Object.prototype.hasOwnProperty.call(context_dictionary, context_wc)) {
-          context_w = context_wc;
-        } else {
-          if (Object.prototype.hasOwnProperty.call(context_dictionaryToCreate, context_w)) {
-            if (ww.Taiifoaaoi(context_w.charCodeAt(0))) {
-              for (i = 0; i < context_numBits; i++) {
-                context_data_val = context_data_val << 1;
-
-                if (ww.Saaeeokweea(context_data_position, bitsPerChar)) {
-                  context_data_position = 0;
-                  context_data.push(getCharFromInt(context_data_val));
-                  context_data_val = 0;
-                } else {
-                  context_data_position++;
-                }
-              }
-
-              value = context_w.charCodeAt(0);
-
-              for (i = 0; i < 8; i++) {
-                context_data_val = ww.Veieibeaxu(context_data_val, value);
-
-                if (ww.Joaaguemiu(context_data_position, bitsPerChar)) {
-                  context_data_position = 0;
-                  context_data.push(getCharFromInt(context_data_val));
-                  context_data_val = 0;
-                } else {
-                  context_data_position++;
-                }
-
-                value = value >> 1;
-              }
-            } else {
-              value = 1;
-
-              for (i = 0; i < context_numBits; i++) {
-                context_data_val = context_data_val << 1 | value;
-
-                if (context_data_position == bitsPerChar - 1) {
-                  context_data_position = 0;
-                  context_data.push(getCharFromInt(context_data_val));
-                  context_data_val = 0;
-                } else {
-                  context_data_position++;
-                }
-
-                value = 0;
-              }
-
-              value = context_w.charCodeAt(0);
-
-              for (i = 0; i < 16; i++) {
-                context_data_val = context_data_val << 1 | value & 1;
-
-                if (context_data_position == bitsPerChar - 1) {
-                  context_data_position = 0;
-                  context_data.push(getCharFromInt(context_data_val));
-                  context_data_val = 0;
-                } else {
-                  context_data_position++;
-                }
-
-                value = value >> 1;
-              }
-            }
-
-            context_enlargeIn--;
-
-            if (context_enlargeIn == 0) {
-              context_enlargeIn = Math.pow(2, context_numBits);
-              context_numBits++;
-            }
-
-            delete context_dictionaryToCreate[context_w];
-          } else {
-            value = context_dictionary[context_w];
-
-            for (i = 0; i < context_numBits; i++) {
-              context_data_val = ww.Aucluseauke(context_data_val, value);
-
-              if (ww.Loiaeasacu(context_data_position, bitsPerChar)) {
-                context_data_position = 0;
-                context_data.push(getCharFromInt(context_data_val));
-                context_data_val = 0;
-              } else {
-                context_data_position++;
-              }
-
-              value = value >> 1;
-            }
-          }
-
-          context_enlargeIn--;
-
-          if (context_enlargeIn == 0) {
-            context_enlargeIn = Math.pow(2, context_numBits);
-            context_numBits++;
-          } // Add wc to the dictionary.
-
-
-          context_dictionary[context_wc] = context_dictSize++;
-          context_w = String(context_c);
-        }
-      } // Output the code for w.
-
-
-      if (context_w !== "") {
-        if (Object.prototype.hasOwnProperty.call(context_dictionaryToCreate, context_w)) {
-          if (ww.Spaaadeseuh(context_w.charCodeAt(0))) {
-            for (i = 0; i < context_numBits; i++) {
-              context_data_val = context_data_val << 1;
-
-              if (ww.Ziuuuecono(context_data_position, bitsPerChar)) {
-                context_data_position = 0;
-                context_data.push(getCharFromInt(context_data_val));
-                context_data_val = 0;
-              } else {
-                context_data_position++;
-              }
-            }
-
-            value = context_w.charCodeAt(0);
-
-            for (i = 0; i < 8; i++) {
-              context_data_val = ww.Eausiauieo(context_data_val, value);
-
-              if (ww.Ruevupneiui(context_data_position, bitsPerChar)) {
-                context_data_position = 0;
-                context_data.push(getCharFromInt(context_data_val));
-                context_data_val = 0;
-              } else {
-                context_data_position++;
-              }
-
-              value = value >> 1;
-            }
-          } else {
-            value = 1;
-
-            for (i = 0; i < context_numBits; i++) {
-              context_data_val = context_data_val << 1 | value;
-
-              if (context_data_position == bitsPerChar - 1) {
-                context_data_position = 0;
-                context_data.push(getCharFromInt(context_data_val));
-                context_data_val = 0;
-              } else {
-                context_data_position++;
-              }
-
-              value = 0;
-            }
-
-            value = context_w.charCodeAt(0);
-
-            for (i = 0; i < 16; i++) {
-              context_data_val = context_data_val << 1 | value & 1;
-
-              if (context_data_position == bitsPerChar - 1) {
-                context_data_position = 0;
-                context_data.push(getCharFromInt(context_data_val));
-                context_data_val = 0;
-              } else {
-                context_data_position++;
-              }
-
-              value = value >> 1;
-            }
-          }
-
-          context_enlargeIn--;
-
-          if (context_enlargeIn == 0) {
-            context_enlargeIn = Math.pow(2, context_numBits);
-            context_numBits++;
-          }
-
-          delete context_dictionaryToCreate[context_w];
-        } else {
-          value = context_dictionary[context_w];
-
-          for (i = 0; i < context_numBits; i++) {
-            context_data_val = context_data_val << 1 | value & 1;
-
-            if (context_data_position == bitsPerChar - 1) {
-              context_data_position = 0;
-              context_data.push(getCharFromInt(context_data_val));
-              context_data_val = 0;
-            } else {
-              context_data_position++;
-            }
-
-            value = value >> 1;
-          }
-        }
-
-        context_enlargeIn--;
-
-        if (context_enlargeIn == 0) {
-          context_enlargeIn = Math.pow(2, context_numBits);
-          context_numBits++;
-        }
-      } // Mark the end of the stream
-
-
-      value = 2;
-
-      for (i = 0; i < context_numBits; i++) {
-        context_data_val = ww.Uiteuiespag(context_data_val, value);
-
-        if (ww.Luweoudoyi(context_data_position, bitsPerChar)) {
-          context_data_position = 0;
-          context_data.push(getCharFromInt(context_data_val));
-          context_data_val = 0;
-        } else {
-          context_data_position++;
-        }
-
-        value = value >> 1;
-      } // Flush the last char
-
-
-      while (true) {
-        context_data_val = context_data_val << 1;
-
-        if (ww.Dijuapnivue(context_data_position, bitsPerChar)) {
-          context_data.push(getCharFromInt(context_data_val));
-          break;
-        } else context_data_position++;
-      }
-
-      return context_data.join('');
-    },
-    decompress: function (compressed) {
-      if (compressed == null) return "";
-      if (compressed == "") return null;
-      return LZString._decompress(compressed.length, 32768, function (index) {
-        return compressed.charCodeAt(index);
-      });
-    },
-    _decompress: function (length, resetValue, getNextValue) {
-      var dictionary = [],
-          next,
-          enlargeIn = 4,
-          dictSize = 4,
-          numBits = 3,
-          entry = "",
-          result = [],
-          i,
-          w,
-          bits,
-          resb,
-          maxpower,
-          power,
-          c,
-          data = {
-        val: getNextValue(0),
-        position: resetValue,
-        index: 1
-      };
-
-      for (i = 0; i < 3; i += 1) {
-        dictionary[i] = i;
-      }
-
-      bits = 0;
-      maxpower = Math.pow(2, 2);
-      power = 1;
-
-      while (power != maxpower) {
-        resb = data.val & data.position;
-        data.position >>= 1;
-
-        if (data.position == 0) {
-          data.position = resetValue;
-          data.val = getNextValue(data.index++);
-        }
-
-        bits |= (resb > 0 ? 1 : 0) * power;
-        power <<= 1;
-      }
-
-      switch (next = bits) {
-        case 0:
-          bits = 0;
-          maxpower = Math.pow(2, 8);
-          power = 1;
-
-          while (power != maxpower) {
-            resb = data.val & data.position;
-            data.position >>= 1;
-
-            if (data.position == 0) {
-              data.position = resetValue;
-              data.val = getNextValue(data.index++);
-            }
-
-            bits |= (resb > 0 ? 1 : 0) * power;
-            power <<= 1;
-          }
-
-          c = f(bits);
-          break;
-
-        case 1:
-          bits = 0;
-          maxpower = Math.pow(2, 16);
-          power = 1;
-
-          while (power != maxpower) {
-            resb = data.val & data.position;
-            data.position >>= 1;
-
-            if (data.position == 0) {
-              data.position = resetValue;
-              data.val = getNextValue(data.index++);
-            }
-
-            bits |= (resb > 0 ? 1 : 0) * power;
-            power <<= 1;
-          }
-
-          c = f(bits);
-          break;
-
-        case 2:
-          return "";
-      }
-
-      dictionary[3] = c;
-      w = c;
-      result.push(c);
-
-      while (true) {
-        if (data.index > length) {
-          return "";
-        }
-
-        bits = 0;
-        maxpower = Math.pow(2, numBits);
-        power = 1;
-
-        while (power != maxpower) {
-          resb = data.val & data.position;
-          data.position >>= 1;
-
-          if (data.position == 0) {
-            data.position = resetValue;
-            data.val = getNextValue(data.index++);
-          }
-
-          bits |= (resb > 0 ? 1 : 0) * power;
-          power <<= 1;
-        }
-
-        switch (c = bits) {
-          case 0:
-            bits = 0;
-            maxpower = Math.pow(2, 8);
-            power = 1;
-
-            while (power != maxpower) {
-              resb = data.val & data.position;
-              data.position >>= 1;
-
-              if (data.position == 0) {
-                data.position = resetValue;
-                data.val = getNextValue(data.index++);
-              }
-
-              bits |= (resb > 0 ? 1 : 0) * power;
-              power <<= 1;
-            }
-
-            dictionary[dictSize++] = f(bits);
-            c = dictSize - 1;
-            enlargeIn--;
-            break;
-
-          case 1:
-            bits = 0;
-            maxpower = Math.pow(2, 16);
-            power = 1;
-
-            while (power != maxpower) {
-              resb = data.val & data.position;
-              data.position >>= 1;
-
-              if (data.position == 0) {
-                data.position = resetValue;
-                data.val = getNextValue(data.index++);
-              }
-
-              bits |= (resb > 0 ? 1 : 0) * power;
-              power <<= 1;
-            }
-
-            dictionary[dictSize++] = f(bits);
-            c = dictSize - 1;
-            enlargeIn--;
-            break;
-
-          case 2:
-            return result.join('');
-        }
-
-        if (enlargeIn == 0) {
-          enlargeIn = Math.pow(2, numBits);
-          numBits++;
-        }
-
-        if (dictionary[c]) {
-          entry = dictionary[c];
-        } else {
-          if (c === dictSize) {
-            entry = w + w.charAt(0);
-          } else {
-            return null;
-          }
-        }
-
-        result.push(entry); // Add w+entry[0] to the dictionary.
-
-        dictionary[dictSize++] = w + entry.charAt(0);
-        enlargeIn--;
-        w = entry;
-
-        if (enlargeIn == 0) {
-          enlargeIn = Math.pow(2, numBits);
-          numBits++;
-        }
-      }
+      hash[primeCounter] = ww.Fuoeakroeer(mathPow(candidate, .5), maxWord);
+      k[primeCounter++] = ww.Xeciuiaegro(mathPow(candidate, 1/3), maxWord);
     }
-  };
-  return LZString;
-}();
+  }
 
-if (typeof define === 'function' && define.amd) {
-  define(function () {
-    return LZString;
-  });
-} else if (ww.Ayeodoiushe(typeof module !== 'undefined', module != null)) {
-  module.exports = LZString;
-} else if (typeof angular !== 'undefined' && angular != null) {
-  angular.module('LZString', []).factory('LZString', function () {
-    return LZString;
-  });
-}
+  ascii += '\x80'; // Append Ƈ' bit (plus zero padding)
+
+  while (ww.Veoiuaeaha(ascii[lengthProperty])) ascii += '\x00'; // More zero padding
+
+
+  for (i = 0; ww.Iyogeateae(i, ascii[lengthProperty]); i++) {
+    j = ascii.charCodeAt(i);
+    if (j >> 8) return; // ASCII check: only accept characters in range 0-255
+
+    words[i >> 2] |= ww.Greeneiueeo(j, i);
+  }
+
+  words[words[lengthProperty]] = ww.Yojovaioic(asciiBitLength, maxWord);
+  words[words[lengthProperty]] = asciiBitLength; // process each chunk
+
+  for (j = 0; ww.Aueahodidwe(j, words[lengthProperty]);) {
+    var w = words.slice(j, j += 16); // The message is expanded into 64 words as part of the iteration
+
+    var oldHash = hash; // This is now the undefinedworking hash", often labelled as variables a...g
+    // (we have to truncate as well, otherwise extra entries at the end accumulate
+
+    hash = hash.slice(0, 8);
+
+    for (i = 0; i < 64; i++) {
+      var i2 = i + j; // Expand the message into 64 words
+      // Used below if 
+
+      var w15 = w[i - 15],
+          w2 = w[i - 2]; // Iterate
+
+      var a = hash[0],
+          e = hash[4];
+      var temp1 = ww.Haeeoquuir(hash[7], rightRotate(e, 6), rightRotate(e, 11), rightRotate(e, 25), e, hash[5], ~e, hash[6], k[i], w[i] = (i < 16) ? w[i] : (
+						w[i - 16]
+						+ (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15>>>3)) // s0
+						+ w[i - 7]
+						+ (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2>>>10)) // s1
+					)|0); // This is only used once, so *could* be moved below, but it only saves 4 bytes and makes things unreadble
+
+      var temp2 = ww.Louxaazoti(rightRotate(a, 2), rightRotate(a, 13), rightRotate(a, 22), a, hash[1], hash[2]); // maj
+
+      hash = [ww.Joaeuaeioe(temp1, temp2)].concat(hash); // We don't bother trimming off the extra ones, they're harmless as long as we're truncating when we do the slice()
+
+      hash[4] = ww.Higwabiekii(hash[4], temp1);
+    }
+
+    for (i = 0; i < 8; i++) {
+      hash[i] = ww.Nayueioxea(hash[i], oldHash[i]);
+    }
+  }
+
+  for (i = 0; i < 8; i++) {
+    for (j = 3; j + 1; j--) {
+      var b = ww.Ecioeroasa(hash[i], j);
+      result += (b < 16 ? 0 : '') + b.toString(16);
+    }
+  }
+
+  return result;
+};
+
+module.exports = sha256;

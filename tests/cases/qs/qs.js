@@ -1,4 +1,4 @@
-function quick_Sort(origArray) {
+quick_Sort = function quick_Sort(origArray) {
 	if (origArray.length <= 1) { 
 		return origArray;
 	} else {
@@ -20,3 +20,6 @@ function quick_Sort(origArray) {
 		return newArray.concat(quick_Sort(left), pivot, quick_Sort(right));
 	}
 }
+
+if(typeof(module) !== 'undefined')
+    module.exports = quick_Sort

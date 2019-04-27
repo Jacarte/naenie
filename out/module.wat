@@ -1,254 +1,327 @@
 (module 
 	
-	;;typeof module !== 'undefined' && module != null
+	;;ascii[lengthProperty]%64 - 56
+	
+	;;Subtree size 7
+	
+	(func $Veoiuaeaha (param  i32) (result i32) 
+		
+		;;ascii[lengthProperty]
+		get_local 0
+		i32.const 64
+		i32.rem_s
+		i32.const 56
+		i32.sub
+		
+	)
+	(export "Veoiuaeaha" (func $Veoiuaeaha))
+	;;i < ascii[lengthProperty]
+	
+	;;Subtree size 5
+	
+	(func $Iyogeateae (param  i32) (param  i32) (result i32) 
+		
+		;;i
+		get_local 0
+		
+		;;ascii[lengthProperty]
+		get_local 1
+		i32.lt_u
+		
+	)
+	(export "Iyogeateae" (func $Iyogeateae))
+	;;j < words[lengthProperty]
+	
+	;;Subtree size 5
+	
+	(func $Aueahodidwe (param  i32) (param  i32) (result i32) 
+		
+		;;j
+		get_local 0
+		
+		;;words[lengthProperty]
+		get_local 1
+		i32.lt_u
+		
+	)
+	(export "Aueahodidwe" (func $Aueahodidwe))
+	;;ascii[lengthProperty]*8
+	
+	;;Subtree size 5
+	
+	(func $Dagroisoeub (param  i32) (result i32) 
+		
+		;;ascii[lengthProperty]
+		get_local 0
+		i32.const 8
+		i32.mul
+		
+	)
+	(export "Dagroisoeub" (func $Dagroisoeub))
+	;;(asciiBitLength/maxWord)|0
+	
+	;;Subtree size 5
+	
+	(func $Yojovaioic (param  i32) (param  i32) (result i32) 
+		
+		;;asciiBitLength
+		get_local 0
+		f32.convert_s/i32
+		
+		;;maxWord
+		get_local 1
+		f32.convert_s/i32
+		f32.div
+		i32.trunc_s/f32
+		i32.const 0
+		i32.or
+		
+	)
+	(export "Yojovaioic" (func $Yojovaioic))
+	;;(value>>>amount) | (value<<(32 - amount))
+	
+	;;Subtree size 9
+	
+	(func $Eaapruuiyio (param  i32) (param  i32) (result i32) 
+		
+		;;value
+		get_local 0
+		
+		;;amount
+		get_local 1
+		i32.shr_u
+		
+		;;value
+		get_local 0
+		i32.const 32
+		
+		;;amount
+		get_local 1
+		i32.sub
+		i32.shl
+		i32.or
+		
+	)
+	(export "Eaapruuiyio" (func $Eaapruuiyio))
+	;;j << ((3 - i)%4)*8
+	
+	;;Subtree size 9
+	
+	(func $Greeneiueeo (param  i32) (param  i32) (result i32) 
+		
+		;;j
+		get_local 0
+		i32.const 3
+		
+		;;i
+		get_local 1
+		i32.sub
+		i32.const 4
+		i32.rem_s
+		i32.const 8
+		i32.mul
+		i32.shl
+		
+	)
+	(export "Greeneiueeo" (func $Greeneiueeo))
+	;;(mathPow(candidate, .5)*maxWord)|0
 	
 	;;Subtree size 8
 	
-	(func $Ayeodoiushe (param  i32) (param  i32) (result i32) 
+	(func $Fuoeakroeer (param  f32) (param  i32) (result i32) 
 		
-		;;typeof module !== 'undefined'
+		;;mathPow(candidate, .5)
 		get_local 0
+		f64.promote_f32
 		
-		;;module != null
+		;;maxWord
 		get_local 1
-		i32.and
-		
-	)
-	(export "Ayeodoiushe" (func $Ayeodoiushe))
-	;;ii < uncompressed.length
-	
-	;;Subtree size 5
-	
-	(func $Showeaxaclap (param  i32) (param  i32) (result i32) 
-		
-		;;ii
-		get_local 0
-		
-		;;uncompressed.length
-		get_local 1
-		i32.lt_u
-		
-	)
-	(export "Showeaxaclap" (func $Showeaxaclap))
-	;;context_data_position == bitsPerChar-1
-	
-	;;Subtree size 5
-	
-	(func $Luweoudoyi (param  i32) (param  i32) (result i32) 
-		
-		;;context_data_position
-		get_local 0
-		
-		;;bitsPerChar
-		get_local 1
-		i32.const 1
-		i32.sub
-		i32.eq
-		
-	)
-	(export "Luweoudoyi" (func $Luweoudoyi))
-	;;context_data_position == bitsPerChar-1
-	
-	;;Subtree size 5
-	
-	(func $Dijuapnivue (param  i32) (param  i32) (result i32) 
-		
-		;;context_data_position
-		get_local 0
-		
-		;;bitsPerChar
-		get_local 1
-		i32.const 1
-		i32.sub
-		i32.eq
-		
-	)
-	(export "Dijuapnivue" (func $Dijuapnivue))
-	;;(context_data_val << 1) | (value&1)
-	
-	;;Subtree size 7
-	
-	(func $Uiteuiespag (param  i32) (param  i32) (result i32) 
-		
-		;;context_data_val
-		get_local 0
-		i32.const 1
-		i32.shl
-		
-		;;value
-		get_local 1
-		i32.const 1
-		i32.and
+		f64.convert_s/i32
+		f64.mul
+		i32.trunc_s/f64
+		i32.const 0
 		i32.or
 		
 	)
-	(export "Uiteuiespag" (func $Uiteuiespag))
-	;;context_w.charCodeAt(0)<256
+	(export "Fuoeakroeer" (func $Fuoeakroeer))
+	;;(mathPow(candidate, 1/3)*maxWord)|0
 	
-	;;Subtree size 7
+	;;Subtree size 10
 	
-	(func $Spaaadeseuh (param  i32) (result i32) 
+	(func $Xeciuiaegro (param  f32) (param  i32) (result i32) 
 		
-		;;context_w.charCodeAt(0)
+		;;mathPow(candidate, 1/3)
 		get_local 0
-		i32.const 256
-		i32.lt_u
+		f64.promote_f32
 		
-	)
-	(export "Spaaadeseuh" (func $Spaaadeseuh))
-	;;context_w.charCodeAt(0)<256
-	
-	;;Subtree size 7
-	
-	(func $Taiifoaaoi (param  i32) (result i32) 
-		
-		;;context_w.charCodeAt(0)
-		get_local 0
-		i32.const 256
-		i32.lt_u
-		
-	)
-	(export "Taiifoaaoi" (func $Taiifoaaoi))
-	;;context_data_position == bitsPerChar-1
-	
-	;;Subtree size 5
-	
-	(func $Loiaeasacu (param  i32) (param  i32) (result i32) 
-		
-		;;context_data_position
-		get_local 0
-		
-		;;bitsPerChar
+		;;maxWord
 		get_local 1
-		i32.const 1
-		i32.sub
-		i32.eq
-		
-	)
-	(export "Loiaeasacu" (func $Loiaeasacu))
-	;;context_data_position == bitsPerChar-1
-	
-	;;Subtree size 5
-	
-	(func $Ziuuuecono (param  i32) (param  i32) (result i32) 
-		
-		;;context_data_position
-		get_local 0
-		
-		;;bitsPerChar
-		get_local 1
-		i32.const 1
-		i32.sub
-		i32.eq
-		
-	)
-	(export "Ziuuuecono" (func $Ziuuuecono))
-	;;context_data_position == bitsPerChar-1
-	
-	;;Subtree size 5
-	
-	(func $Ruevupneiui (param  i32) (param  i32) (result i32) 
-		
-		;;context_data_position
-		get_local 0
-		
-		;;bitsPerChar
-		get_local 1
-		i32.const 1
-		i32.sub
-		i32.eq
-		
-	)
-	(export "Ruevupneiui" (func $Ruevupneiui))
-	;;(context_data_val << 1) | (value&1)
-	
-	;;Subtree size 7
-	
-	(func $Aucluseauke (param  i32) (param  i32) (result i32) 
-		
-		;;context_data_val
-		get_local 0
-		i32.const 1
-		i32.shl
-		
-		;;value
-		get_local 1
-		i32.const 1
-		i32.and
+		f64.convert_s/i32
+		f64.mul
+		i32.trunc_s/f64
+		i32.const 0
 		i32.or
 		
 	)
-	(export "Aucluseauke" (func $Aucluseauke))
-	;;(context_data_val << 1) | (value&1)
+	(export "Xeciuiaegro" (func $Xeciuiaegro))
+	;;hash[7] 				+ (rightRotate(e, 6) ^ rightRotate(e, 11) ^ rightRotate(e, 25)) // S1 				+ ((e&hash[5])^((~e)&hash[6])) // ch 				+ k[i] 				// Expand the message schedule if needed 				+ (w[i] = (i < 16) ? w[i] : ( 						w[i - 16] 						+ (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15>>>3)) // s0 						+ w[i - 7] 						+ (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2>>>10)) // s1 					)|0 				)
+	
+	;;Subtree size 88
+	
+	(func $Haeeoquuir (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (result i32) 
+		
+		;;hash[7]
+		get_local 0
+		
+		;;rightRotate(e, 6)
+		get_local 1
+		
+		;;rightRotate(e, 11)
+		get_local 2
+		i32.xor
+		
+		;;rightRotate(e, 25)
+		get_local 3
+		i32.xor
+		i32.add
+		
+		;;e
+		get_local 4
+		
+		;;hash[5]
+		get_local 5
+		i32.and
+		
+		;;~e
+		get_local 6
+		
+		;;hash[6]
+		get_local 7
+		i32.and
+		i32.xor
+		i32.add
+		
+		;;k[i]
+		get_local 8
+		i32.add
+		
+		;;w[i] = (i < 16) ? w[i] : ( 						w[i - 16] 						+ (rightRotate(w15, 7) ^ rightRotate(w15, 18) ^ (w15>>>3)) // s0 						+ w[i - 7] 						+ (rightRotate(w2, 17) ^ rightRotate(w2, 19) ^ (w2>>>10)) // s1 					)|0
+		get_local 9
+		i32.add
+		
+	)
+	(export "Haeeoquuir" (func $Haeeoquuir))
+	;;(rightRotate(a, 2) ^ rightRotate(a, 13) ^ rightRotate(a, 22)) // S0 				+ ((a&hash[1])^(a&hash[2])^(hash[1]&hash[2]))
+	
+	;;Subtree size 34
+	
+	(func $Louxaazoti (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (param  i32) (result i32) 
+		
+		;;rightRotate(a, 2)
+		get_local 0
+		
+		;;rightRotate(a, 13)
+		get_local 1
+		i32.xor
+		
+		;;rightRotate(a, 22)
+		get_local 2
+		i32.xor
+		
+		;;a
+		get_local 3
+		
+		;;hash[1]
+		get_local 4
+		i32.and
+		
+		;;a
+		get_local 3
+		
+		;;hash[2]
+		get_local 5
+		i32.and
+		i32.xor
+		
+		;;hash[1]
+		get_local 4
+		
+		;;hash[2]
+		get_local 5
+		i32.and
+		i32.xor
+		i32.add
+		
+	)
+	(export "Louxaazoti" (func $Louxaazoti))
+	;;(hash[4] + temp1)|0
 	
 	;;Subtree size 7
 	
-	(func $Eausiauieo (param  i32) (param  i32) (result i32) 
+	(func $Higwabiekii (param  i32) (param  i32) (result i32) 
 		
-		;;context_data_val
+		;;hash[4]
 		get_local 0
-		i32.const 1
-		i32.shl
 		
-		;;value
+		;;temp1
 		get_local 1
-		i32.const 1
-		i32.and
+		i32.add
+		i32.const 0
 		i32.or
 		
 	)
-	(export "Eausiauieo" (func $Eausiauieo))
-	;;context_data_position == bitsPerChar-1
+	(export "Higwabiekii" (func $Higwabiekii))
+	;;(hash[i] + oldHash[i])|0
 	
-	;;Subtree size 5
+	;;Subtree size 9
 	
-	(func $Saaeeokweea (param  i32) (param  i32) (result i32) 
+	(func $Nayueioxea (param  i32) (param  i32) (result i32) 
 		
-		;;context_data_position
+		;;hash[i]
 		get_local 0
 		
-		;;bitsPerChar
+		;;oldHash[i]
 		get_local 1
-		i32.const 1
-		i32.sub
-		i32.eq
-		
-	)
-	(export "Saaeeokweea" (func $Saaeeokweea))
-	;;context_data_position == bitsPerChar-1
-	
-	;;Subtree size 5
-	
-	(func $Joaaguemiu (param  i32) (param  i32) (result i32) 
-		
-		;;context_data_position
-		get_local 0
-		
-		;;bitsPerChar
-		get_local 1
-		i32.const 1
-		i32.sub
-		i32.eq
-		
-	)
-	(export "Joaaguemiu" (func $Joaaguemiu))
-	;;(context_data_val << 1) | (value&1)
-	
-	;;Subtree size 7
-	
-	(func $Veieibeaxu (param  i32) (param  i32) (result i32) 
-		
-		;;context_data_val
-		get_local 0
-		i32.const 1
-		i32.shl
-		
-		;;value
-		get_local 1
-		i32.const 1
-		i32.and
+		i32.add
+		i32.const 0
 		i32.or
 		
 	)
-	(export "Veieibeaxu" (func $Veieibeaxu))
+	(export "Nayueioxea" (func $Nayueioxea))
+	;;(hash[i]>>(j*8))&255
+	
+	;;Subtree size 9
+	
+	(func $Ecioeroasa (param  i32) (param  i32) (result i32) 
+		
+		;;hash[i]
+		get_local 0
+		
+		;;j
+		get_local 1
+		i32.const 8
+		i32.mul
+		i32.shr_u
+		i32.const 255
+		i32.and
+		
+	)
+	(export "Ecioeroasa" (func $Ecioeroasa))
+	;;(temp1 + temp2)|0
+	
+	;;Subtree size 5
+	
+	(func $Joaeuaeioe (param  i32) (param  i32) (result i32) 
+		
+		;;temp1
+		get_local 0
+		
+		;;temp2
+		get_local 1
+		i32.add
+		i32.const 0
+		i32.or
+		
+	)
+	(export "Joaeuaeioe" (func $Joaeuaeioe))
 )
