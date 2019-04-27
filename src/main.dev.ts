@@ -35,6 +35,6 @@ Container.bind<IAppContext>("IAppContext").toConstantValue(AppContext);
 
 const machine = Container.resolve(DMachine);
 
-machine.process(context)
+machine.process()
 
 

@@ -21,7 +21,8 @@
     "commander": "^2.20.0",
     "inversify": "^5.0.1",
     "mustache": "^3.0.1",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^2.6.3"
   },
   "devDependencies": {
     "@types/babel-traverse": "^6.25.5",

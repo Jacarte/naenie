@@ -12,6 +12,9 @@ export type IAppContext = {
     maxSize: number;
     mutationThreshold: number;
     returnWASMCallbackName:string;
+
+
+    instrumentationPort: number;
 }
 
 export const AppContext: IAppContext = {
@@ -23,5 +26,6 @@ export const AppContext: IAppContext = {
     returnWASMCallbackName: 'Fuxuhuuooi',
     minSize: 3,
     maxSize: 10000, // +oo
-    mutationThreshold: 1
+    mutationThreshold: 1,
+    instrumentationPort: 8081
 }

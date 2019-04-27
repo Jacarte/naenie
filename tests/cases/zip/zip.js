@@ -46,6 +46,7 @@ var LZString = (function() {
     
       compressToUTF16 : function (input) {
         if (input == null) return "";
+        console.log(input)
         return LZString._compress(input, 15, function(a){return f(a+32);}) + " ";
       },
     

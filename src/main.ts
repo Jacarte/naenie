@@ -89,6 +89,6 @@ const machine = Container.resolve(DMachine);
 
 console.log("Analysing...", program.target)
 
-machine.process(context)
+machine.process()
 
 

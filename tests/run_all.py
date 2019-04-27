@@ -9,12 +9,13 @@ def main():
 
 
     cases = [
-        'sudoku',
-        'zip',
-        'mandelbrot',
-        'nested',
-        'qs',
-        'sha256'
+        'md5',
+        #'sudoku',
+        #'zip',
+        #'mandelbrot',
+        #'nested',
+        #'qs',
+        #'sha256'
     ]
 
 
