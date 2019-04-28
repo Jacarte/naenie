@@ -77,7 +77,7 @@ def main():
         'mandelbrot',
         'nested',
         'qs',
-        #'sha256'
+        'sha256'
     ]
 
 

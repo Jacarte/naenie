@@ -24,7 +24,7 @@ const url = process.argv[2];
   await client.on('Page.loadEventFired', async _ => {
     // on load we'll start profiling, kick off the test, and finish
     await Profiler.start();
-    await Runtime.evaluate({expression: 'startTest();'});
+    //await Runtime.evaluate({expression: 'startTest();'});
     await sleep(10000);
     const data = await Profiler.stop();
     saveProfile(data);
@@ -34,7 +34,7 @@ const url = process.argv[2];
     // data.profile described here: https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#type-Profile
     // Process the data however you wish… or,
     // Use the JSON file, open Chrome DevTools, Menu, More Tools, JavaScript Profiler, `load`, view in the UI
-    const filename = `${process.argv[3]}/profile-${process.argv[4]}.cpuprofile.json`;
+    const filename = `${process.argv[3]}/profile-${process.argv[4]}.cpuprofile`;
     const string = JSON.stringify(data.profile, null, 2);
     fs.writeFileSync(filename, string);
     console.log('Done! Profile data saved to:', filename);
