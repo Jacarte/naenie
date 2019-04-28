@@ -1,4 +1,4 @@
-function sha256(ascii) {
+const sha256 = function sha256(ascii) {
 	function rightRotate(value, amount) {
 		return (value>>>amount) | (value<<(32 - amount));
 	};
@@ -94,3 +94,6 @@ function sha256(ascii) {
 	}
 	return result;
 };
+
+if(typeof(module) !== 'undefined')
+    module.exports = sha256

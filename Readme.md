@@ -21,45 +21,50 @@ And two outputs:
 
 ![Example](docs/imgs/result2.png)
 
+## Target subtrees
 
-## Stones on the road
+The objective of this tool is to find subtrees in the script AST and then substitute them for a equivalent call to WASM code. Due to JavaScript dynamic behavior, we are focusing to arithmetic expression up to date.
 
-- TODO: Write about javascript hard to analyse, mention core javascript semantic paper
-- //https://github.com/dcodeIO/webassembly/issues/26 Javascript does not support int64 function signature for wasm
-- Shortcuts
-- Statical analysis
-- Runtime analysis
+## Parametrization
 
+We defined three principal parameters: min-size (min subtree size to replace), max-size (max subtree size to replace) and probability-threshold ( [0, 1] probability to translate the subtree ).
 
-## Concrete objectives
-- Arithmetic expressions
+The preliminary analysis of the tools testing shows a overhead invocating WASM functions.
 
-## Future work lines
-- Function calls from WASM to JS
-- 
+## Why is coverage script needed?
 
-### Type inferring
+The main reason is to ensure that the arithmetic subtree return numeric values indeed (boolean values are mapped as int32 values, 0 and 1), watching for "large" integers and "large" floats in runtime evaluation to create a correct mapping between them and the WASM numeric types.
 
-### How to extend it ?
+If one operator in the arithmetic subtree (always binary subtree) cannot be accessed from the WASM context then this subtree is passed to the translated subtree as a function parameter, for example:
 
-- TODO : Implement a walker example
+```js
+var a  = 1 + a[0]
+```
 
-## How to use it ?
+Is translated to 
 
-- TODO write about dependency injection and how it works in this tool, pipeline explanation
-- AppContext (Tool execution configuration)
-- Context (Input configuration)
+```js
+var a = ww.Wrapper(1, a[0])
+```
 
-### Parametrization
-- TODO: min tree size
-- TODO: max tree size
-- TODO: threshold to translate nodes
+```
+(function $Wrapper(param i32, param i32)
+    get_local 0
+    get_local 1
+    i32.add)
+```
+
+*We need to care about boolean operations shortcut too*
+*//https://github.com/dcodeIO/webassembly/issues/26 Javascript does not support int64 function signature for WASM up to date*
+
+This tool its extending right now, to cover calls from WASM code to the JavaScript one. Trying to cover a complete JavaScript translation.
+
 
 # How to use it?
 
 You can use two options to run the mutator:
 1. Using ts-node: ```npm run ts src/main.dev.ts <target> <coverage> <workload>```
-2. Compile the complete library to a ES6 JavaScript library: ```node dist/naenie.js```
+2. Compile the complete library to a ES6 JavaScript library ```npm run compile``` and then execute the compiled code ```node dist/naenie.js```
 
 **Help output**
 
@@ -76,6 +81,7 @@ You can use two options to run the mutator:
 ```
 
 
+<!--
 
 ### Translation
 
@@ -98,19 +104,77 @@ You can use two options to run the mutator:
   
 - Node with perf in linux
 
+-->
+
 ## Results
+
+Run ```python tests/run_all.py``` to execute the complete pipeline to mutate and profile target test scripts.
+
+### Automated testing with Chrome
+
+We open and profile the both, mutated and original codes, with the workload script. This process is done in an automated way using the 'chrome-remote-interface' and the 'chrome-launcher' node packages. The profiling output file protocol is showed below:
+
+```ts
+{
+    nodes: {
+        id: number,
+        callFrame: {
+            "functionName": string,
+            scriptId: string,
+            url: string,
+            lineNumber: number,
+            columnNumber: number
+        },
+        hitCount: number,
+        children: number[],
+        positionTicks?: {
+            line: number,
+            ticks: number
+        }[]
+    }[],
+
+    startTime: number,
+    endTime: number,
+    samples: number[],
+    timeDeltas: number[]
+}
+```
+From **https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#type-Profile**
+
+![https://chromedevtools.github.io/devtools-protocol/tot/Profiler/#type-Profile](docs/imgs/profiling_data.png)
+
+
+## Mandelbrot call graph example
+
+Mutated call graph
+
+![Mutated](docs/imgs/mutated1.png)
+
+Original call graph
+
+![Original](docs/imgs/original1.png)
+
+<!--
+## Finding execution trace
+
+1. Find target function
+2. Start at the first index with the function id just after one lesser value
+3. Stop at the next one value less than function id
+
+-->
+
 - Test subjects
   - quicksort (DONE)
   - zip  (DONE)
-  - sudoku (DONE)
-  - md5
-  - rsa
-  - rc4
-  - canny
-  - lcs
-  - laguerre
-  - linreg
-  - mandelbrot
+  - sudoku (In process)
+  - md5 (In process)
+  - rsa (In process)
+  - rc4 (In process)
+  - canny (In process)
+  - lcs (In process)
+  - laguerre (In process)
+  - linreg (In process)
+  - mandelbrot (DONE)
   - sha256 (DONE)
   
 - Mutation output

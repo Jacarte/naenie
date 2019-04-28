@@ -13,6 +13,14 @@ export function isInt(n) {
     return n % 1 === 0;
 }
 
+export function getFileName(name: string){
+
+    var chunks = name.split("/");
+
+    return chunks[chunks.length - 1];
+}
+
+
 export function getType(value):ReturningType{
     let type: any = typeof(value);
 

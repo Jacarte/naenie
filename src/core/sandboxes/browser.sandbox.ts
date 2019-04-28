@@ -36,13 +36,21 @@ export default class BrowserSandbox extends SanboxExecutor{
     <title>Original</title>
 </head>
 <body>  
-    <script>
-        {{{original}}}
+<script>
+    fetch('{{{wasmfile}}}').then(response =>
+        response.arrayBuffer()
+    ).then(bytes =>
+        WebAssembly.instantiate(bytes)
+    ).then(function {{{wasmCBName}}}(results){
 
+        const ww = results.instance.exports;
+
+        {{{original}}}
 
         console.profile("Original")
         {{{wlcode}}}
         console.profileEnd("Original")
+    });
     </script>
 </body>
 </html>

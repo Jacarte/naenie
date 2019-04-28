@@ -30,6 +30,7 @@ export default class RuntimeInstrumentWalker extends ContextWalker<BaseNode, Bas
     static visitOrder = 0;
 
     visited = [];
+    
     nodes_hash : {
         [id:string]: {
                 
@@ -161,61 +162,6 @@ export default class RuntimeInstrumentWalker extends ContextWalker<BaseNode, Bas
 
     getRegistryName():string{
         return this.registryName;
-    }
-
-    _wrapUpdateExpression(hash: string, value, repr){
-        return this.genericRecord(hash, value, repr)
-    }
-
-
-    _wrapFunCall(hash: string, value, repr){
-        return this.genericRecord(hash, value, repr)
-    }
-
-
-    rightOperator(hash, value){
-        const entry = this.nodes_hash[hash];
-
-        if(!entry.rightRT)
-            entry.rightRT = new NodeTypes();
-
-        
-        const returning = getType(value);
-
-        entry.rightRT.insertType(returning);
-        
-        return value;
-    }
-
-    leftOperator(hash, value){
-
-        const entry = this.nodes_hash[hash];
-
-        if(!entry.leftRT)
-            entry.leftRT = new NodeTypes();
-
-        
-        const returning = getType(value);
-
-        entry.leftRT.insertType(returning);
-        
-        return value;
-    }
-
-
-    genericRecord(hash, value, repr){
-
-        const returning = getType(value);
-
-        const entry = this.nodes_hash[hash];
-
-        entry.returningType.insertType(returning);
-        entry.sign = value < 0? -1: 1;
-    
-        entry.visited++;
-        entry.visitOrder = RuntimeInstrumentWalker.visitOrder++;   
-
-        return value;
     }
 
     dehash(hash: string): {  start: number, end: number, startColumn: number, startLine: number, endColumn: number, endLine: number }{

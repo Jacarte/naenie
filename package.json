@@ -8,6 +8,7 @@
     "test-wt": "ts-node tests/treewalker.test.ts",
     "ts": "ts-node",
     "clean": "rm -rf _bundles lib lib-esm",
+    "chrome": "node tests/get-cpu-profile.js",
     "compile": "npm run clean && tsc && tsc -m es6 --outDir lib-esm && webpack"
   },
   "author": "",
@@ -18,10 +19,13 @@
     "@babel/template": "^7.4.0",
     "@babel/traverse": "^7.4.3",
     "@babel/types": "^7.4.0",
+    "chrome-launcher": "^0.10.5",
+    "chrome-remote-interface": "^0.27.1",
     "commander": "^2.20.0",
     "inversify": "^5.0.1",
     "mustache": "^3.0.1",
-    "reflect-metadata": "^0.1.13"
+    "reflect-metadata": "^0.1.13",
+    "rimraf": "^2.6.3"
   },
   "devDependencies": {
     "@types/babel-traverse": "^6.25.5",

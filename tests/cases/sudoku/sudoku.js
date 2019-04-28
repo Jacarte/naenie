@@ -5,10 +5,6 @@
     Please see the README for more details.
 */
 
-const main = {
-
-};
-
 (function(root){
     var sudoku = root.sudoku = {};  // Global reference to the sudoku library
 
@@ -806,5 +802,5 @@ const main = {
     initialize();
 
 // Pass whatever the root object is, lsike 'window' in browsers
-})(main);
+})(this);
 

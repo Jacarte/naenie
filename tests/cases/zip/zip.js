@@ -46,6 +46,7 @@ var LZString = (function() {
     
       compressToUTF16 : function (input) {
         if (input == null) return "";
+        console.log(input)
         return LZString._compress(input, 15, function(a){return f(a+32);}) + " ";
       },
     
@@ -494,13 +495,5 @@ var LZString = (function() {
       return LZString;
     })();
     
-    if (typeof define === 'function' && define.amd) {
-      define(function () { return LZString; });
-    } else if( typeof module !== 'undefined' && module != null ) {
+    if(typeof(module) !== 'undefined')
       module.exports = LZString
-    } else if( typeof angular !== 'undefined' && angular != null ) {
-      angular.module('LZString', [])
-      .factory('LZString', function () {
-        return LZString;
-      });
-    }

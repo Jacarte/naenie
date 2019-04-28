@@ -1,4 +1,4 @@
-function mandelbrot(size) {
+const mandelbrot = function(size) {
   let sum = 0;
   let byte_acc = 0;
   let bit_num  = 0;
@@ -49,3 +49,6 @@ function mandelbrot(size) {
   return sum;
 }
 
+
+if(typeof(module) !== 'undefined')
+    module.exports = mandelbrot
