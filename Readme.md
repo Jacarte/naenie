@@ -1,6 +1,6 @@
 # JS to WASM diversification machine (Naenie proof of concept)
 
-Naenie (*Many* in high valyrian words) tries to generate valid code mutations for JavaScript code using calls between WASM and JS as the mutation operator.
+Naenie (*Many* in high valyrian words) tries to generate valid code mutations for JavaScript code using calls between WASM and JS as the mutation operator. This tool is a proof of concept yet, and it is growing right now.
 
 ![Workflow](docs/imgs/workflow.png)
 
@@ -8,7 +8,7 @@ Taking a JavaScript input file we can obtain the abstract syntax tree (AST) for 
 
 The final output is a JavaScript file with its WASM complement.
 
-Also, we implement a "sandbox" wrapper to test the generated code in a browser or node with some workload with the two implementations: the original one and the mutated one.
+Also, we implement a "sandbox" wrapper to test the generated code in a **Browser** or **NodeJS** with some workload with the two implementations: the original one and the mutated one.
 
 Basically, we have three inputs for the tool:
 1. The file to be mutated
@@ -55,10 +55,8 @@ var a = ww.Wrapper(1, a[0])
 ```
 
 *We need to care about boolean operations shortcut too*
-*//https://github.com/dcodeIO/webassembly/issues/26 Javascript does not support int64 function signature for WASM up to date*
 
-This tool its extending right now, to cover calls from WASM code to the JavaScript one. Trying to cover a complete JavaScript translation.
-
+*Javascript does not support int64 function signature for WASM up to date https://github.com/dcodeIO/webassembly/issues/26*
 
 # How to use it?
 
