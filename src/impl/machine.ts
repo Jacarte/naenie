@@ -225,7 +225,7 @@ export default class DMachine{
 
 
             this.logger.debug("Parsing event queue...")
-            console.log(JSON.stringify(runtimeInfo))
+            //console.log(JSON.stringify(runtimeInfo))
             const data: {method:string, args: any[]}[] = runtimeInfo.args[0];
 
             for(var event of data){
