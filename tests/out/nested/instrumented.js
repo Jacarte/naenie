@@ -1,0 +1,13 @@
+const Qeakaouoeois = require("./instrumentation_api.js");
+
+const main = function () {
+  var a = 12;
+  var b = Qeakaouoeois.genericRecord("55:63:12:5:20:5", Qeakaouoeois.leftOperator("55:63:12:5:20:5", Qeakaouoeois.genericRecord("55:59:12:5:16:5", Qeakaouoeois.leftOperator("55:59:12:5:16:5", 2) * Qeakaouoeois.rightOperator("55:59:12:5:16:5", 32))) + Qeakaouoeois.rightOperator("55:63:12:5:20:5", 2));
+  var d = Qeakaouoeois.genericRecord("77:90:12:6:25:6", Qeakaouoeois.leftOperator("77:90:12:6:25:6", false) || Qeakaouoeois.rightOperator("77:90:12:6:25:6", true));
+  var e = Qeakaouoeois.genericRecord("103:109:12:7:18:7", Qeakaouoeois.leftOperator("103:109:12:7:18:7", 1) || Qeakaouoeois.rightOperator("103:109:12:7:18:7", 2)); // Boolean operators
+
+  var f = Qeakaouoeois.genericRecord("145:161:12:9:28:9", Qeakaouoeois.leftOperator("145:161:12:9:28:9", 2) ^ Qeakaouoeois.rightOperator("145:161:12:9:28:9", Qeakaouoeois.genericRecord("147:161:14:9:28:9", Qeakaouoeois.leftOperator("147:161:14:9:28:9", Qeakaouoeois.genericRecord("147:155:14:9:22:9", Qeakaouoeois.leftOperator("147:155:14:9:22:9", 5) < Qeakaouoeois.rightOperator("147:155:14:9:22:9", 23.3))) == Qeakaouoeois.rightOperator("147:161:14:9:28:9", 12))));
+  var c = Qeakaouoeois.genericRecord("175:224:12:11:61:11", Qeakaouoeois.leftOperator("175:224:12:11:61:11", Qeakaouoeois.genericRecord("175:220:12:11:57:11", Qeakaouoeois.leftOperator("175:220:12:11:57:11", Qeakaouoeois.genericRecord("175:216:12:11:53:11", Qeakaouoeois.leftOperator("175:216:12:11:53:11", Qeakaouoeois.genericRecord("175:200:12:11:37:11", Qeakaouoeois.leftOperator("175:200:12:11:37:11", Qeakaouoeois.genericRecord("175:192:12:11:29:11", Qeakaouoeois.leftOperator("175:192:12:11:29:11", Qeakaouoeois.genericRecord("175:188:12:11:25:11", Qeakaouoeois.leftOperator("175:188:12:11:25:11", a) + Qeakaouoeois.rightOperator("175:188:12:11:25:11", Qeakaouoeois.genericRecord("179:188:16:11:25:11", Qeakaouoeois.leftOperator("179:188:16:11:25:11", b) * Qeakaouoeois.rightOperator("179:188:16:11:25:11", 129.45))))) - Qeakaouoeois.rightOperator("175:192:12:11:29:11", a))) + Qeakaouoeois.rightOperator("175:200:12:11:37:11", 100.5))) + Qeakaouoeois.rightOperator("175:216:12:11:53:11", Math.random()))) + Qeakaouoeois.rightOperator("175:220:12:11:57:11", b))) + Qeakaouoeois.rightOperator("175:224:12:11:61:11", a));
+};
+
+if (Qeakaouoeois.genericRecord("233:263:3:15:33:15", Qeakaouoeois.leftOperator("233:263:3:15:33:15", typeof module) !== Qeakaouoeois.rightOperator("233:263:3:15:33:15", 'undefined'))) module.exports = main;

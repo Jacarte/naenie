@@ -1,6 +1,5 @@
 node_modules
 py
-tests/out
 
 lib
 lib-esm

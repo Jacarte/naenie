@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Mutation</title>
+</head>
+<body>  
+    <script>
+        fetch('module.wasm').then(response =>
+            response.arrayBuffer()
+        ).then(bytes =>
+            WebAssembly.instantiate(bytes)
+        ).then(function Fuxuhuuooi(results){
+
+            const ww = results.instance.exports;
+
+            const main = function () {
+  var a = 12;
+  var b = ww.Saiueguplui();
+  var d = false || true;
+  var e = 1 || 2; // Boolean operators
+
+  var f = ww.Vukoonoeae();
+  var c = ww.Ixaaiuouij(a, b, Math.random());
+};
+
+if (typeof module !== 'undefined') module.exports = main;
+
+            console.profile("Mutation")
+            nested()
+            console.profileEnd("Mutation")
+        });
+    </script>
+</body>
+</html>
+        
