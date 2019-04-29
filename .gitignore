@@ -7,3 +7,6 @@ lib-esm
 instrumentation
 
 out
+
+Readme.html
+bundle.js
