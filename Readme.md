@@ -55,10 +55,10 @@ var a = ww.Wrapper(1, a[0])
 ```
 
 ```
-(function $Wrapper (param i32) (param i32) (return i32)
+(function $Wrapper (param i32) (return i32)
 
+    i32.const 1
     get_local 0
-    get_local 1
     i32.add
 )
 ```
