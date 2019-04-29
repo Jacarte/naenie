@@ -11,7 +11,7 @@ First, we analyze the static information from the JavaScript code like literal n
 
 The final output is a JavaScript file with its WASM complement.
 
-Also, we implement a "sandbox" wrapper to test the generated code in a **Browser** or **NodeJS** with some workload using the both implementations: the original one and the mutated one.
+Also, we implement a "sandbox" wrapper to test the generated code in **Browser** or **NodeJS** environments with some workload using the both implementations: the original one and the mutated one.
 
 Basically, we have three inputs for the tool:
 1. The file to be mutated
@@ -26,7 +26,7 @@ And two outputs:
 
 ## Target subtrees
 
-The objective of this tool is to find subtrees in the script AST and then substitute them for a equivalent call to WASM code. Due to JavaScript dynamic behavior, we are focusing to arithmetic expression up to date.
+The objective of this tool is to find subtrees in the script AST and then substitute them for an equivalent call to WASM code. Due to JavaScript dynamic behavior, we are focusing to arithmetic expression up to date.
 
 ![Translatable](docs/imgs/tree.png)
 
