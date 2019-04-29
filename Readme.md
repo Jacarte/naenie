@@ -42,7 +42,7 @@ The preliminary analysis of the tools testing shows a overhead invocating WASM f
 
 The main reason is to ensure the arithmetic subtree returns numeric values indeed (boolean values are mapped as int32 values, 0 and 1), watching for "large" integers and floats in runtime evaluation to create a correct mapping between them and the WASM numeric types.
 
-If one operator in the arithmetic subtree (always binary subtree) cannot be accessed from the WASM context then this subtree is passed to the translated subtree as a function argument, for example:
+If one child in the arithmetic subtree (always binary subtree) cannot be accessed from the WASM context then this subtree is passed to the translated subtree as a function argument, for example:
 
 ```js
 var a  = 1 + a[0]
