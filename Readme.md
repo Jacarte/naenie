@@ -51,7 +51,7 @@ var a  = 1 + a[0]
 Is translated to 
 
 ```js
-var a = ww.Wrapper(1, a[0])
+var a = ww.Wrapper(a[0])
 ```
 
 ```
