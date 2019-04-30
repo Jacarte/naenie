@@ -12,6 +12,9 @@ import RuntimeInstrumentWalker from "../walkers/runtime.instrument.walker";
 import { BaseEmisor, FileEmisor } from './emisor';
 import WebTTools from '../core/wabt.tools';
 import BrowserSandbox from '../core/sandboxes/browser.sandbox';
+import PopulationGenerator from './population_generator/populator.generator';
+import OneByOneGenerator from './population_generator/one-by-one.generator';
+import AllGenerator from './population_generator/all.generator';
 
 // Initialize dependency injector
 // Register all services here
@@ -26,6 +29,10 @@ myContainer.bind<WebTTools>(WebTTools).toSelf().inSingletonScope();
 
 // Emisor
 myContainer.bind<BaseEmisor>("Emisor").to(FileEmisor).inSingletonScope();
+
+
+// Populator
+//myContainer.bind<PopulationGenerator>("Populator").to(AllGenerator).inSingletonScope();
 
 
 // Walkers

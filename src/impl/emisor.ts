@@ -68,6 +68,10 @@ export abstract class BaseEmisor{
 
     abstract write(instruction: string);
 
+    abstract reset(...args:any[]);
+
+    abstract close(): void;
+
     indent = 0;
 
     i(){
@@ -98,6 +102,8 @@ export abstract class BaseEmisor{
 
     closeModule(){
         this.write(`${this.d()})`)
+
+        this.close()
     }
 
     writeExportFunction(functionName){
@@ -137,6 +143,12 @@ export abstract class BaseEmisor{
 
 @injectable()
 export class FileEmisor extends BaseEmisor{
+
+    reset(...args: any[]) {
+        const path = args[0];
+
+        this.fd = fs.openSync(`${path}/${this.context.watName}`, 'w');
+    }
     
     fd;
 
@@ -150,6 +162,11 @@ export class FileEmisor extends BaseEmisor{
             this.fd = fs.openSync(`${this.context.outDir}/${this.context.watName}`, 'w');
 
         fs.writeSync(this.fd, instruction)
+    }
+
+    close(){
+        if(this.fd)
+            fs.closeSync(this.fd)
     }
 
 }

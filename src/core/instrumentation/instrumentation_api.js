@@ -24,7 +24,7 @@ class Wrapper{
             req.end()
         }
         catch(e){
-            console.error(e)
+            //console.error(e)
         }
     }
 

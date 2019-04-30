@@ -22,6 +22,7 @@ import generateRandomWASMWrapperName from "../utils/generator";
 import * as http from 'http';
 import { getFileName, NodeTypes, getType } from '../utils/object';
 import { Socket } from 'net';
+import PopulationGenerator from './population_generator/populator.generator';
 
 
 
@@ -62,11 +63,25 @@ export default class DMachine{
     @inject("Emisor")
     public emisor: BaseEmisor;
 
+    @inject("Populator")
+    public populator: PopulationGenerator;
+
     public secondStage(){
 
-        const outDir = this.appContext.outDir;
+        let outDir = `${this.appContext.outDir}/${getFileName(this.context.path)}`;
         const original = this.original;
         const copy = this.copy;
+
+        if(fs.existsSync(this.appContext.outDir))
+            require("rimraf").sync(this.appContext.outDir)
+
+
+        fs.mkdirSync(this.appContext.outDir)
+
+        if(fs.existsSync(outDir))
+            require("rimraf").sync(outDir)
+
+        fs.mkdirSync(outDir)
 
         fs.writeFileSync(`${outDir}/${this.appContext.instrumnetationName}`, generate(copy).code)
 
@@ -90,25 +105,26 @@ export default class DMachine{
         this.mapWalker.walk(original);
 
         this.logger.info("Catching translatable subtrees\n");
-        
-        this.emisor.openModule();
 
+        
         this.tagsWalker.walk(original);
 
-        this.emisor.closeModule();
+        this.logger.debug("Candidates nodes count...",this.tagsWalker.candidates.length, "\n")
 
-        this.tools.compileWat(
-            `${outDir}/${this.appContext.watName}`,
-            `${outDir}/${this.appContext.wasmName}`)
+        // Generate mutations
 
-
-        this.tools.validateWasm(`${outDir}/${this.appContext.wasmName}`)
-        
-        this.sandbox.instrument(
-            generate(original).code,
-            `${outDir}/${this.appContext.sandBoxName}`,
-            `${outDir}/${this.appContext.wasmName}`
-            )
+        this.populator.generate(
+            this.tagsWalker.candidates,
+            outDir,
+            this.logger,
+            this.emisor,
+            this.tagsWalker,
+            this.tools,
+            this.appContext,
+            this.context,
+            this.sandbox,
+            original
+        )
     }
 
     original: any;
@@ -205,9 +221,9 @@ export default class DMachine{
             this.logger.debug("Executed instrumented code...")
             var exec = require('child_process').exec;
             exec(`node instrumentation/main.js`,  (error, stdout, stderr) => {
-                this.logger.debug("\n", stdout, "\n")
+                //this.logger.debug("\n", stdout, "\n")
 
-                console.log(error, stderr)
+                //console.log(error, stderr)
                 if(error){
                     this.logger.error("\n", error, "\n")
                 }

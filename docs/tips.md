@@ -15,6 +15,12 @@
   - Generating large random name for registry variable name in instrumentation execution
 
 
+- Two strategies:
+    - One and one only expression mutation
+    - More than one expression mutation
+
+    - Is there a difference between parent translations and its children?
+    - Is there a difference between wrapper function names?
 
 - Profilers
   - NodeJS (TODO)

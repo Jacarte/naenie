@@ -56,7 +56,7 @@ export default class BrowserSandbox extends SanboxExecutor{
 </html>
             `, view);
 
-        fs.writeFileSync(`${this.appContext.outDir}/original.html`, original);
+        fs.writeFileSync(`${outPath}/original.html`, original);
 
 
         const prime = render(`
@@ -90,9 +90,9 @@ export default class BrowserSandbox extends SanboxExecutor{
         `, view);
 
 
-        fs.writeFileSync(`${this.appContext.outDir}/mutation.html`, prime);
+        fs.writeFileSync(`${outPath}/mutation.html`, prime);
     
-        fs.writeFileSync(`${this.appContext.outDir}/mutation.js`, view.mutatedCode);
+        fs.writeFileSync(`${outPath}/mutation.js`, view.mutatedCode);
 
     }
     
