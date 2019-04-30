@@ -10,9 +10,19 @@ import { BaseEmisor, TypesMap, OpsMap } from '../impl/emisor';
 import { ReturningType, sortTypes } from '../utils/object';
 import { IAppContext } from '../core/config';
 
+
+export type TranslationCandidate = {
+    node: any,
+    parent: any,
+    key: string,
+    index: number,
+    isArray: boolean
+}
+
 /**
  * Wrapp ast nodes with extra information, such as subtree size, and generic children array property
  */
+
 @injectable()
 export default class TagsWalker implements IWalker<BaseNode, void>{
     
@@ -36,6 +46,9 @@ export default class TagsWalker implements IWalker<BaseNode, void>{
     @inject("Emisor")
     public emisor: BaseEmisor;
 
+    constructor(){
+        this.candidates = [];
+    }
 
     replaceIn(parent: any, isArray: boolean, key: string, value: any, indexOf: number){
 
@@ -132,6 +145,8 @@ export default class TagsWalker implements IWalker<BaseNode, void>{
         return callExpression(identifier(`ww.${functionName}`),nodes);
     }
 
+    candidates: TranslationCandidate[];
+
     public walkAux(ast: any, parent: BaseNode | null): void {
 
         let visited = [];
@@ -165,31 +180,38 @@ export default class TagsWalker implements IWalker<BaseNode, void>{
                     if(!!simple && this.isNode(simple)){
                         if((simple.type as any) !== 'CommentLine'){
                             const simpleAny = simple as any;
-                            if(!!simpleAny.opcode && simpleAny.opcode.length > 0)
+                            if(!!simpleAny.opcode && simpleAny.opcode.length > 0)// This node is translatable
                             {
                                 simpleAny.translatable = true;
 
-                                if(simpleAny.size > this.appContext.minSize && simpleAny.size < this.appContext.maxSize)// Between sizes: Avoid single nodes or huge ones
+                                if(simpleAny.size >= this.appContext.minSize && simpleAny.size <= this.appContext.maxSize)// Between sizes: Avoid single nodes or huge ones
                                 {
-                                    if(this.getRandomize()){ // Randomization threshold
+                                    this.candidates.push({
+                                        node: simpleAny,
+                                        parent: current,
+                                        isArray,
+                                        key: k,
+                                        index: i
+                                    });
 
+                                    /*
                                         const replacement = this.generateWASM(simpleAny)
                                         this.replaceIn(current, isArray, k, replacement, i);
-                                    }
+                                    */
                                 }
 
 
-                                continue;
+                                if(!this.appContext.childrensAllowed)
+                                    continue;
                             }
-                            else{
-                                queue.push(simple)
-                            }
+
+                            queue.push(simple)
                         }
                     }
                 }
             }
 
-            this.logger.debug(`\r${visited.length}`)
+            //this.logger.debug(`\r${visited.length}`)
         }
 
         visited = null;

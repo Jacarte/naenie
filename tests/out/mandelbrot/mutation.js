@@ -5,7 +5,7 @@ const mandelbrot = function (size) {
   let y = 0;
 
   while (y < size) {
-    let ci = ww.Aaieiahixu(y, size);
+    let ci = ww.Skeatsiiehogw(y, size);
     let x = 0;
 
     while (x < size) {
@@ -13,20 +13,20 @@ const mandelbrot = function (size) {
       let zrzr = 0.0;
       let zi = 0.0;
       let zizi = 0.0;
-      let cr = ww.Svuienoquswe(x, size);
+      let cr = ww.Uigouaknufe(x, size);
       let z = 0;
       let escape = 1;
 
       while (z < 50) {
-        let tr = ww.Fiuioomephi(zrzr, zizi, cr);
-        let ti = ww.Rasluailaup(zr, zi, ci);
+        let tr = ww.Weaeuasliou(zrzr, zizi, cr);
+        let ti = ww.Reeioigooi(zr, zi, ci);
         zr = tr;
         zi = ti; // preserve recalculation
 
         zrzr = zr * zr;
         zizi = zi * zi;
 
-        if (ww.Ifeeuaukeo(zrzr, zizi)) {
+        if (ww.Tsiaakaosii(zrzr, zizi)) {
           escape = 0;
           break;
         }
@@ -34,7 +34,7 @@ const mandelbrot = function (size) {
         z += 1;
       }
 
-      byte_acc = ww.Ceaouoigoi(byte_acc, escape);
+      byte_acc = ww.Meoeuoofoa(byte_acc, escape);
       bit_num += 1; // Code is very similar for these cases, but using separate blocks
       // ensures we skip the shifting when it's unnecessary, which is most cases.
 
@@ -42,7 +42,7 @@ const mandelbrot = function (size) {
         sum ^= byte_acc;
         byte_acc = 0;
         bit_num = 0;
-      } else if (ww.Hoeioetsawu(x, size)) {
+      } else if (ww.Teieeqawee(x, size)) {
         byte_acc <<= 8 - bit_num;
         sum ^= byte_acc;
         byte_acc = 0;

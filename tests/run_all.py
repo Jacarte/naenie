@@ -75,9 +75,9 @@ def main():
         #'sudoku',
         #'zip',
         'mandelbrot',
-        'nested',
-        'qs',
-        'sha256'
+        #'nested',
+        #'qs',
+        #'sha256'
     ]
 
 
@@ -97,7 +97,7 @@ def main():
          "-w","%s/%s.wl.js"%(caseFolder,case)])
 
         # Deleting previous out folder for this case
-        if os.path.exists("%s/%s"%(outDir,case)):
+        '''if os.path.exists("%s/%s"%(outDir,case)):
             shutil.rmtree('%s/%s'%(outDir,case))
 
         if result != 0:
@@ -146,7 +146,7 @@ def main():
         server.stop_server()
 
         print(previous)
-        os.chdir(previous)
+        os.chdir(previous)'''
 
 if __name__ == "__main__":
     main()

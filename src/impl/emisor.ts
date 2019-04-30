@@ -68,6 +68,8 @@ export abstract class BaseEmisor{
 
     abstract write(instruction: string);
 
+    abstract reset(...args:any[]);
+
     indent = 0;
 
     i(){
@@ -137,6 +139,12 @@ export abstract class BaseEmisor{
 
 @injectable()
 export class FileEmisor extends BaseEmisor{
+
+    reset(...args: any[]) {
+        const path = args[0];
+
+        this.fd = fs.openSync(`${path}/${this.context.watName}`, 'w');
+    }
     
     fd;
 

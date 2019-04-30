@@ -4,7 +4,7 @@
 	
 	;;Subtree size 7
 	
-	(func $Aaieiahixu (param  i32) (param  i32) (result f32) 
+	(func $Skeatsiiehogw (param  i32) (param  i32) (result f32) 
 		i32.const 2
 		
 		;;y
@@ -21,12 +21,12 @@
 		f32.sub
 		
 	)
-	(export "Aaieiahixu" (func $Aaieiahixu))
+	(export "Skeatsiiehogw" (func $Skeatsiiehogw))
 	;;(2.0 * x / size) - 1.5
 	
 	;;Subtree size 7
 	
-	(func $Svuienoquswe (param  i32) (param  i32) (result f32) 
+	(func $Uigouaknufe (param  i32) (param  i32) (result f32) 
 		i32.const 2
 		
 		;;x
@@ -42,12 +42,12 @@
 		f32.sub
 		
 	)
-	(export "Svuienoquswe" (func $Svuienoquswe))
+	(export "Uigouaknufe" (func $Uigouaknufe))
 	;;(byte_acc << 1) | escape
 	
 	;;Subtree size 5
 	
-	(func $Ceaouoigoi (param  i32) (param  i32) (result i32) 
+	(func $Meoeuoofoa (param  i32) (param  i32) (result i32) 
 		
 		;;byte_acc
 		get_local 0
@@ -59,12 +59,12 @@
 		i32.or
 		
 	)
-	(export "Ceaouoigoi" (func $Ceaouoigoi))
+	(export "Meoeuoofoa" (func $Meoeuoofoa))
 	;;x == size - 1
 	
 	;;Subtree size 5
 	
-	(func $Hoeioetsawu (param  i32) (param  i32) (result i32) 
+	(func $Teieeqawee (param  i32) (param  i32) (result i32) 
 		
 		;;x
 		get_local 0
@@ -76,12 +76,12 @@
 		i32.eq
 		
 	)
-	(export "Hoeioetsawu" (func $Hoeioetsawu))
+	(export "Teieeqawee" (func $Teieeqawee))
 	;;zrzr + zizi > 4.0
 	
 	;;Subtree size 5
 	
-	(func $Ifeeuaukeo (param  f32) (param  f32) (result i32) 
+	(func $Tsiaakaosii (param  f32) (param  f32) (result i32) 
 		
 		;;zrzr
 		get_local 0
@@ -94,12 +94,12 @@
 		i32.gt_u
 		
 	)
-	(export "Ifeeuaukeo" (func $Ifeeuaukeo))
+	(export "Tsiaakaosii" (func $Tsiaakaosii))
 	;;zrzr - zizi + cr
 	
 	;;Subtree size 5
 	
-	(func $Fiuioomephi (param  f32) (param  f32) (param  f32) (result f32) 
+	(func $Weaeuasliou (param  f32) (param  f32) (param  f32) (result f32) 
 		
 		;;zrzr
 		get_local 0
@@ -113,12 +113,12 @@
 		f32.add
 		
 	)
-	(export "Fiuioomephi" (func $Fiuioomephi))
+	(export "Weaeuasliou" (func $Weaeuasliou))
 	;;2.0 * zr * zi + ci
 	
 	;;Subtree size 7
 	
-	(func $Rasluailaup (param  f32) (param  f32) (param  f32) (result f32) 
+	(func $Reeioigooi (param  f32) (param  f32) (param  f32) (result f32) 
 		i32.const 2
 		f32.convert_s/i32
 		
@@ -135,5 +135,5 @@
 		f32.add
 		
 	)
-	(export "Rasluailaup" (func $Rasluailaup))
+	(export "Reeioigooi" (func $Reeioigooi))
 )
