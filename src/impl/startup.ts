@@ -32,7 +32,7 @@ myContainer.bind<BaseEmisor>("Emisor").to(FileEmisor).inSingletonScope();
 
 
 // Populator
-myContainer.bind<PopulationGenerator>("Populator").to(AllGenerator).inSingletonScope();
+//myContainer.bind<PopulationGenerator>("Populator").to(AllGenerator).inSingletonScope();
 
 
 // Walkers
