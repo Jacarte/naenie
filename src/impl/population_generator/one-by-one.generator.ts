@@ -41,6 +41,18 @@ export default class OneByOneGenerator extends PopulationGenerator{
             logger.info("Generating version for... ")
             logger.debug(node.node.repr, "\n");
 
+
+            fs.writeFileSync(`${newOutDir}/translation-info.json`
+            , JSON.stringify(
+                {
+                    repr: node.node.repr,
+                    loc: node.node.loc,
+                    size: node.node.size,
+                    hitCount: node.node.visited,
+                    mutationName: `mutated${index}`
+                }
+            ))
+
             emisor.reset(newOutDir);
 
             emisor.openModule();

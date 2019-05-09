@@ -22,6 +22,9 @@
     - Is there a difference between parent translations and its children?
     - Is there a difference between wrapper function names?
 
+- call graph
+    - js-to-wasm calls are casting operations
+
 - Profilers
   - NodeJS (TODO)
   - Browser profilers (DONE)

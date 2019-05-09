@@ -30,5 +30,5 @@ export const AppContext: IAppContext = {
     maxSize: 10000, // +oo
     mutationThreshold: 1,
     instrumentationPort: 8081,
-    childrensAllowed: false
+    childrensAllowed: true
 }
