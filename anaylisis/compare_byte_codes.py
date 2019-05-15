@@ -44,6 +44,7 @@ def processFolder(path):
             print "Taking original"
             original = files[files.index('original.bytecode.txt')]
             originalTr = updateBag('%s/%s'%(root, original), bag)
+            info.append(dict(mutationName = 'original'))
         
         if 'mutation.bytecode.txt' in files:
             mutation = files[files.index('mutation.bytecode.txt')]
