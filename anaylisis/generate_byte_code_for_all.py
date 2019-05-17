@@ -163,6 +163,9 @@ def processByteCode(code):
     
     return "\n".join(newLines)
 
+def cleanDirectory():
+    pass
+
 def main():
 
 
@@ -219,7 +222,7 @@ def main():
             print "Launching chrome..."
 
             mutProcess = subprocess.Popen([
-                "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --no-default-browser-check -user-data-dir=. --js-flags='--print-bytecode' http://localhost:8010/mutation.html & sleep 20;kill $!"
+                "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --no-default-browser-check --no-sandbox -user-data-dir=../../../browser_tmp --js-flags='--print-bytecode --prof --ll-prof --log-timer-events --logfile=mutation.traces --no-logfile-per-isolate ' http://localhost:8010/mutation.html & sleep 20;kill $!"
             ],shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
             out, err = mutProcess.communicate()
@@ -228,9 +231,13 @@ def main():
                 
             open('mutation.bytecode.txt', 'w').write(processByteCode(out))
 
+            ## Save isolated files
+
+
+
             
             mutProcess = subprocess.Popen([
-                "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --no-default-browser-check -user-data-dir=. --js-flags='--print-bytecode' http://localhost:8010/original.html & sleep 20;kill $!"
+                "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --no-default-browser-check --no-sandbox -user-data-dir=../../../browser_tmp --js-flags='--print-bytecode --prof --ll-prof --log-timer-events --logfile=original.traces --no-logfile-per-isolate ' http://localhost:8010/original.html & sleep 20;kill $!"
             ],shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 
