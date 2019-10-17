@@ -33,14 +33,12 @@ function absolute(dir){
 
 program
   .version('0.0.1', '-v', '--version')
-  .usage('[options] <files...>')
-  .option('-t --target <target>', 'Target script path')
-  .option('-c --coverage <coverage>', 'Coverage script path')
-  .option('-w --workload <workload>', 'Workload script path')
+  .usage('[options] <project path>')
+  .option('-t --target <target>', 'Target application path')
+  .option('-c --coverage <coverage>', 'Coverage script path (i.e. bash script for server workload, etc)')
   .option('-m --minumum <minimum>', 'Minimum tree size to translate')
   .option('-m --maximum <maximum>', 'Maximum tree size to translate')
-  .option('-u --threshold <threshold>', 'Probability to translate subtree')
-  .option('-p --populator <populator>', 'Populator generator for hybrids: "all" for a complete translation and "one2one" one node mutations')
+  .option('-p --policy <policy>', 'Translation policy, simple for only onle random subtree, middle for translating the 50% of found trees and paranoic for the 100% of foudn trees')
   .option('-s --sandbox <sandbox>', 'Sandbox wrapper: Node or Browser')
   .parse(process.argv);
  
@@ -81,19 +79,13 @@ else{
     Container.bind<PopulationGenerator>("Populator").to(OneByOneGenerator).inSingletonScope();
 }
 
-const code = fs.readFileSync(absolute(program.target)).toString();
-const cv = fs.readFileSync(absolute(program.coverage)).toString();
-const wl = fs.readFileSync(absolute(program.workload)).toString();
+
 
 // arguments minimum, maximum and threshold 
 
 
 const context: Context = {
     path: program.target,
-    code,
-    wlPath: program.workload,
-    wlCode: wl,
-    cvCode: cv,
     cvPath: program.coverage
 }
 

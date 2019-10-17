@@ -30,7 +30,7 @@ export default class GenericWalker extends ContextWalker<BaseNode, BaseNode>{
             children: [],
             size: 1,
             parent: null,
-            repr: this.context.code.substr(ast.start, ast.end - ast.start),
+            repr: '',//this.context.code.substr(ast.start, ast.end - ast.start),
             returningType: null
         }
 

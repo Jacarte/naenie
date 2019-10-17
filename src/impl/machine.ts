@@ -63,12 +63,12 @@ export default class DMachine{
     @inject("Emisor")
     public emisor: BaseEmisor;
 
-    @inject("Populator")
-    public populator: PopulationGenerator;
+    //@inject("Populator")
+    //public populator: PopulationGenerator;
 
     public secondStage(){
 
-        let outDir = `${this.appContext.outDir}/${getFileName(this.context.path)}`;
+        /*let outDir = `${this.appContext.outDir}/${getFileName(this.context.path)}`;
         const original = this.original;
         const copy = this.copy;
 
@@ -124,44 +124,93 @@ export default class DMachine{
             this.context,
             this.sandbox,
             original
-        )
+        )*/
     }
-
-    original: any;
-    copy: any;
 
     server: http.Server;
     socket: Socket;
 
     public process(){
-
         
-        this.logger.info("Parsing file 1/2\n")
+        const registryName = 'Qeakaouoeois'; 
 
-        let original = parser.parse(this.context.code);
-        this.original = original;
+        this.logger.debug(`Walking ${this.context.path}\n`)
 
-        this.logger.info("Parsing file 2/2\n")
+        // Clean out dir
 
-        let copy = parser.parse(this.context.code);
-        this.copy = copy;
+        this.logger.debug(`Cleaning out dir...`)
 
-        this.logger.info("Walking generic and static analysis\n");
+        if(fs.existsSync("instrumentation"))
+            require("rimraf").sync("instrumentation")
 
-        this.genericWalker.walk(original);
+        fs.mkdirSync("instrumentation")
 
-        this.logger.info("Walking instrumentation\n");
+        fs.copyFileSync("src/core/instrumentation/instrumentation_api.js", "instrumentation/instrumentation_core.js")
 
-        const registryName = 'Qeakaouoeois'; // hard to collison name in runtime instrumentation
-        
+        function walk(path, dir, cb: (root: string, absolute:string, file: string) => void){
+
+            const contents = fs.readdirSync(path)
+
+            for(var content of contents){
+                if(fs.statSync(`${path}/${content}`).isDirectory()){
+
+                    if(!fs.existsSync(`instrumentation/${dir}/${content}`))
+                        fs.mkdirSync(`instrumentation/${dir}/${content}`)
+
+                    walk(`${path}/${content}`, `${dir}/${content}`, cb)
+                }
+                else{
+                    cb(dir, path, content)
+                }
+            }
+
+        }
+
+        walk(this.context.path, '.', (root, absolute, file) => {
+            
+            // Instrument code ...
+
+
+            try{
+                const content = fs.readFileSync(`${absolute}/${file}`).toString()
+
+                if(file.endsWith(".js")){
+
+                    // Instrumenting code
+                    this.runtimeInstrumentation.setRegistryName(registryName)
+                    const instrumentation = this.processSingle(content, `instrumentation/${root}/${file}`)
+
+                    instrumentation[1].program.body.unshift(
+                        variableDeclaration("const", 
+                        [variableDeclarator(identifier(registryName) as any, callExpression(identifier("require") as any, [
+                            stringLiteral("./instrumentation_core.js") as any]
+                        ))])
+                    );
+
+                    fs.writeFileSync(`instrumentation/${root}/${file}`, generate(instrumentation[1]).code)
+                }else
+                    fs.writeFileSync(`instrumentation/${root}/${file}`, content)
+            }
+            catch(e){
+                this.logger.error(e.message)
+            }
+        })
+        /*// hard to collison name in runtime instrumentation
+        let startingPath = this.context.path;
+
         this.runtimeInstrumentation.setRegistryName(`${registryName}`);
-        this.runtimeInstrumentation.walk(copy);
+
+        
+            this.logger.info("Evaluating instrumentation\n");
+            
+            this.runtimeInstrumentation.walk(copy);
 
 
         this.logger.info("Evaluating instrumentation on runtime\n");
 
         this.logger.debug(`Starting local server on https://127.0.0.1:${this.appContext.instrumentationPort}\n`);
 
+        // Create instrumentation for node
         if(fs.existsSync("instrumentation"))
             require("rimraf").sync("instrumentation")
 
@@ -176,6 +225,7 @@ export default class DMachine{
 
         fs.writeFileSync(`instrumentation/${getFileName(this.context.path)}`, generate(this.copy).code)
         
+        // Adding insntrumenntation api to coverage code
         const coverageAST = parser.parse(this.context.cvCode);
         
         coverageAST.program.body.unshift(
@@ -220,16 +270,38 @@ export default class DMachine{
         this.server.listen(8081, "127.0.0.1", () => {
             this.logger.debug("Executed instrumented code...")
             var exec = require('child_process').exec;
-            exec(`node instrumentation/main.js`,  (error, stdout, stderr) => {
+
+            // Execute instumented code
+            exec(`npm install && node instrumentation/main.js`,  (error, stdout, stderr) => {
                 //this.logger.debug("\n", stdout, "\n")
 
                 //console.log(error, stderr)
                 if(error){
-                    this.logger.error("\n", error, "\n")
+                    //this.logger.error("\n", error, "\n")
                 }
             });
-        });
+        });*/
+    }
 
+    public processSingle(code, file){
+
+        
+        this.logger.info(`Parsing ${file} 1/2\n`)
+
+        let original = parser.parse(code);
+        
+        this.logger.info(`Parsing ${file} 2/2\n`)
+
+        let copy = parser.parse(code);
+
+        this.logger.info("Walking generic and static analysis\n");
+
+        this.genericWalker.walk(original)
+        
+        this.runtimeInstrumentation.setNamespaceName(file)
+        this.runtimeInstrumentation.walk(copy)
+
+        return [original, copy];
     }
 
 

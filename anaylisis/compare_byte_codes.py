@@ -51,9 +51,9 @@ def processFolder(path):
             overall.append(updateBag('%s/%s'%(root, mutation), bag))
             info.append(loads(open('%s/%s'%(root, 'translation-info.json'), 'r').read()))
             print '\r', root,
-    return dict(seqs = [originalTr] + overall, info = info)
+    return dict(seqs = [originalTr] + overall, info = info, max=len(bag.keys()))
 
 if __name__ == "__main__":
    
-    open("result.json", 'w').write(dumps(processFolder("/Users/javiercabrera/Documents/Develop/WJMachine/out/sha256.js")))
+    open("result.json", 'w').write(dumps(processFolder("out/sha256.old.js")))
     

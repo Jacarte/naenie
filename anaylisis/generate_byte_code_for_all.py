@@ -222,7 +222,7 @@ def main():
             print "Launching chrome..."
 
             mutProcess = subprocess.Popen([
-                "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --no-default-browser-check --no-sandbox -user-data-dir=../../../browser_tmp --js-flags='--print-bytecode --prof --ll-prof --log-timer-events --logfile=mutation.traces --no-logfile-per-isolate ' http://localhost:8010/mutation.html & sleep 20;kill $!"
+                "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --no-default-browser-check --no-sandbox -user-data-dir=. --js-flags='--print-bytecode --prof --ll-prof --log-timer-events --logfile=mutation.traces --no-logfile-per-isolate ' http://localhost:8010/mutation.html & sleep 30;kill $!"
             ],shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
             out, err = mutProcess.communicate()
@@ -237,7 +237,7 @@ def main():
 
             
             mutProcess = subprocess.Popen([
-                "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --no-default-browser-check --no-sandbox -user-data-dir=../../../browser_tmp --js-flags='--print-bytecode --prof --ll-prof --log-timer-events --logfile=original.traces --no-logfile-per-isolate ' http://localhost:8010/original.html & sleep 20;kill $!"
+                "/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome --no-default-browser-check --no-sandbox -user-data-dir=. --js-flags='--print-bytecode --prof --ll-prof --log-timer-events --logfile=original.traces --no-logfile-per-isolate ' http://localhost:8010/original.html & sleep 30;kill $!"
             ],shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 
 

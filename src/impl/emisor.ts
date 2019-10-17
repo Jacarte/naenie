@@ -158,10 +158,11 @@ export class FileEmisor extends BaseEmisor{
 
     
     write(instruction: string) {
-        if(!this.fd)
+        // TODO
+        /*if(!this.fd)
             this.fd = fs.openSync(`${this.context.outDir}/${this.context.watName}`, 'w');
 
-        fs.writeSync(this.fd, instruction)
+        fs.writeSync(this.fd, instruction)*/
     }
 
     close(){

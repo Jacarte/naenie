@@ -14,8 +14,8 @@ export default class WebTTools{
         const self = this;
         exec(`./wabt/wat2wasm ${inPath} -o ${outPath}`, function callback(error, stdout, stderr){
             
-            if(error)
-                self.logger.error(error);
+            //if(error)
+            //    self.logger.error(error);
             if(stdout)
                 self.logger.debug(stdout);
         })
@@ -25,8 +25,8 @@ export default class WebTTools{
         const self = this;
         exec(`./wabt/wasm-validate ${path}`, function callback(error, stdout, stderr){
             
-            if(error)
-                self.logger.error(error);
+            //f(error)
+             //   self.logger.error(error);
             if(stdout)
                 self.logger.debug(stdout);
         })

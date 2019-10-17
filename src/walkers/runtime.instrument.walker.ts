@@ -135,7 +135,14 @@ export default class RuntimeInstrumentWalker extends ContextWalker<BaseNode, Bas
                     callExpression(identifier(`${this.getRegistryName()}.leftOperator`) as any, [stringLiteral(hash),(ast as any).left]),
                     callExpression(identifier(`${this.getRegistryName()}.rightOperator`) as any, [stringLiteral(hash),(ast as any).right]))]);
                 
-                
+            
+            case 'BooleanLiteral':
+            case 'StringLiteral':
+            case 'NumericLiteral':
+                return null;
+            default:
+                this.logger.warning(`Hadler not implemented -> ${ast.type}\n`)
+                //this.logger.warning(`Example -> ${this.context.codePath.substr(ast.start, ast.end - ast.start)}\n`)
                 //return ;
 
            /* case 'MemberExpression':
@@ -155,13 +162,18 @@ export default class RuntimeInstrumentWalker extends ContextWalker<BaseNode, Bas
     }
 
     registryName: string = ''
+    namespaceName: string = ''
 
     setRegistryName(name: string){
         this.registryName = name;
     }
 
+    setNamespaceName(name: string){
+        this.namespaceName = name;
+    }
+
     getRegistryName():string{
-        return this.registryName;
+        return `${this.registryName}`;
     }
 
     dehash(hash: string): {  start: number, end: number, startColumn: number, startLine: number, endColumn: number, endLine: number }{

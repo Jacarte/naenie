@@ -1,3 +1,3 @@
 [submodule "nodejs-app-boilerplate"]
-	path = nodejs-app-boilerplate
+	path = tests/apps/nodejs-app-boilerplate
 	url = https://github.com/branneman/nodejs-app-boilerplate.git

@@ -3,15 +3,8 @@ import { injectable, inject } from 'inversify';
 
 
 export type Context = {
-    path: string;
-    code: string;
-
     cvPath: string;
-    cvCode: string;
-
-    wlPath: string;
-    wlCode: string;
-    
+    path: string;
 }
 
 @injectable()
