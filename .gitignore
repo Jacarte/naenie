@@ -5,6 +5,7 @@ lib
 lib-esm
 
 instrumentation
+coverage
 
 out
 
