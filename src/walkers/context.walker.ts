@@ -3,8 +3,11 @@ import { injectable, inject } from 'inversify';
 
 
 export type Context = {
-    cvPath: string;
+    cvScript: string;
     path: string;
+    exclude?: RegExp;
+    instrumentationFolder: string;
+    timeout: number;
 }
 
 @injectable()

@@ -7,26 +7,54 @@ import { AppContext, IAppContext } from '../src/core/config';
 import SanboxExecutor from '../src/core/sandbox.executor';
 import NodeSandbox from '../src/core/sandboxes/browser.sandbox';
 
-const context: Context = {
-  path: './tests/apps/nodejs-app-boilerplate',
-  cvPath: '/tests/apps/nodejs-app-boilerplate'
-}
-
-
-Container.bind<Context>("Context")
-.toConstantValue(context);
-
-
 
 Container.bind<SanboxExecutor>("Sandbox").to(NodeSandbox).inSingletonScope();
 Container.bind<IAppContext>("IAppContext").toConstantValue(AppContext);
 
 
 
-describe('machine', function() {
+/*describe('machine', function() {
   it('walking directory', function() {
     
 
+      const context: Context = {
+        path: './tests/apps/hackathon-starter',
+        cvPath: '/tests/apps/hackathon-starter',
+        exclude: /node_modules/
+      }
+      
+      
+      Container.bind<Context>("Context")
+      .toConstantValue(context);
+      
+    
+    const machine = Container.resolve(DMachine);
+
+    machine.process()
+  });
+
+});*/
+
+
+
+describe('machine', function() {
+  it('walking directory 2', function() {
+    
+
+      
+    const context: Context = {
+      path: './tests/apps/time-attack',
+      cvScript: 'node server.js',
+      instrumentationFolder: 'instrumentation',
+      timeout: 10
+    }
+
+      
+      
+      Container.bind<Context>("Context")
+      .toConstantValue(context);
+      
+    
     const machine = Container.resolve(DMachine);
 
     machine.process()

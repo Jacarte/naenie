@@ -44,9 +44,11 @@ const passportConfig = require('./config/passport');
  */
 const app = express();
 
+
 /**
  * Connect to MongoDB.
  */
+
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 mongoose.set('useNewUrlParser', true);

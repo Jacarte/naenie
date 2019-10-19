@@ -102,7 +102,7 @@ export default class RuntimeInstrumentWalker extends ContextWalker<BaseNode, Bas
         if(!child.start)
             return undefined;
 
-        return `${child.start}:${child.end}:${child.loc.start.column}:${child.loc.start.line}:${child.loc.end.column}:${child.loc.end.line}`;
+        return `${this.namespace}:${child.start}:${child.end}:${child.loc.start.column}:${child.loc.start.line}:${child.loc.end.column}:${child.loc.end.line}`;
     }
 
     wrap(ast, hash){
@@ -162,14 +162,14 @@ export default class RuntimeInstrumentWalker extends ContextWalker<BaseNode, Bas
     }
 
     registryName: string = ''
-    namespaceName: string = ''
+    namespace: string = ''
 
     setRegistryName(name: string){
         this.registryName = name;
     }
 
-    setNamespaceName(name: string){
-        this.namespaceName = name;
+    setNamespace(name: string){
+        this.namespace = name;
     }
 
     getRegistryName():string{

@@ -23,8 +23,12 @@ import * as http from 'http';
 import { getFileName, NodeTypes, getType } from '../utils/object';
 import { Socket } from 'net';
 import PopulationGenerator from './population_generator/populator.generator';
+import { POINT_CONVERSION_COMPRESSED } from 'constants';
 
 
+const PROCESS =  process;
+
+type RUNTIME_CALL = {method: string, args: any[]};
 
 @injectable()
 export default class DMachine{
@@ -67,6 +71,7 @@ export default class DMachine{
     //public populator: PopulationGenerator;
 
     public secondStage(){
+        this.logger.info("Second stage")
 
         /*let outDir = `${this.appContext.outDir}/${getFileName(this.context.path)}`;
         const original = this.original;
@@ -133,6 +138,7 @@ export default class DMachine{
     public process(){
         
         const registryName = 'Qeakaouoeois'; 
+        const self = this;
 
         this.logger.debug(`Walking ${this.context.path}\n`)
 
@@ -140,22 +146,26 @@ export default class DMachine{
 
         this.logger.debug(`Cleaning out dir...`)
 
-        if(fs.existsSync("instrumentation"))
-            require("rimraf").sync("instrumentation")
+        if(self.context.instrumentationFolder)
+            require("rimraf").sync(self.context.instrumentationFolder)
 
-        fs.mkdirSync("instrumentation")
+        fs.mkdirSync(self.context.instrumentationFolder)
 
-        fs.copyFileSync("src/core/instrumentation/instrumentation_api.js", "instrumentation/instrumentation_core.js")
+        fs.copyFileSync(`src/core/instrumentation/instrumentation_api.js`, `${self.context.instrumentationFolder}/instrumentation_core.js`)
 
-        function walk(path, dir, cb: (root: string, absolute:string, file: string) => void){
+        function walk(path: string, dir, cb: (root: string, absolute:string, file: string) => void){
+
+            if(self.context.exclude && self.context.exclude.test(path)){
+                return
+            }
 
             const contents = fs.readdirSync(path)
 
             for(var content of contents){
                 if(fs.statSync(`${path}/${content}`).isDirectory()){
 
-                    if(!fs.existsSync(`instrumentation/${dir}/${content}`))
-                        fs.mkdirSync(`instrumentation/${dir}/${content}`)
+                    if(!fs.existsSync(`${self.context.instrumentationFolder}/${dir}/${content}`))
+                        fs.mkdirSync(`${self.context.instrumentationFolder}/${dir}/${content}`)
 
                     walk(`${path}/${content}`, `${dir}/${content}`, cb)
                 }
@@ -178,7 +188,7 @@ export default class DMachine{
 
                     // Instrumenting code
                     this.runtimeInstrumentation.setRegistryName(registryName)
-                    const instrumentation = this.processSingle(content, `instrumentation/${root}/${file}`)
+                    const instrumentation = this.processSingle(content, `${self.context.instrumentationFolder}/${root}/${file}`)
 
                     instrumentation[1].program.body.unshift(
                         variableDeclaration("const", 
@@ -187,64 +197,20 @@ export default class DMachine{
                         ))])
                     );
 
-                    fs.writeFileSync(`instrumentation/${root}/${file}`, generate(instrumentation[1]).code)
+
+                    this.forest[`${self.context.instrumentationFolder}/${root}/${file}`] = instrumentation[1]
+
+                    fs.writeFileSync(`${self.context.instrumentationFolder}/${root}/${file}`, generate(instrumentation[1]).code)
                 }else
-                    fs.writeFileSync(`instrumentation/${root}/${file}`, content)
+                    fs.writeFileSync(`${self.context.instrumentationFolder}/${root}/${file}`, content)
             }
             catch(e){
                 this.logger.error(e.message)
             }
         })
-        /*// hard to collison name in runtime instrumentation
-        let startingPath = this.context.path;
 
-        this.runtimeInstrumentation.setRegistryName(`${registryName}`);
-
+        this.logger.debug("Opening coverage listener server")
         
-            this.logger.info("Evaluating instrumentation\n");
-            
-            this.runtimeInstrumentation.walk(copy);
-
-
-        this.logger.info("Evaluating instrumentation on runtime\n");
-
-        this.logger.debug(`Starting local server on https://127.0.0.1:${this.appContext.instrumentationPort}\n`);
-
-        // Create instrumentation for node
-        if(fs.existsSync("instrumentation"))
-            require("rimraf").sync("instrumentation")
-
-        fs.mkdirSync("instrumentation")
-        
-        copy.program.body.unshift(
-            variableDeclaration("const", 
-            [variableDeclarator(identifier(registryName) as any, callExpression(identifier("require") as any, [
-                stringLiteral("./instrumentation_api.js") as any]
-            ))])
-        );
-
-        fs.writeFileSync(`instrumentation/${getFileName(this.context.path)}`, generate(this.copy).code)
-        
-        // Adding insntrumenntation api to coverage code
-        const coverageAST = parser.parse(this.context.cvCode);
-        
-        coverageAST.program.body.unshift(
-            variableDeclaration("const", 
-            [variableDeclarator(identifier(registryName) as any, callExpression(identifier("require") as any, [
-                stringLiteral("./instrumentation_api.js") as any]
-            ))])
-        );
-
-        coverageAST.program.body.push(
-            callExpression(identifier(`${registryName}.close`) as any, []) as any
-        )        
-
-        fs.writeFileSync(`instrumentation/main.js`, generate(coverageAST).code)
-
-
-        fs.copyFileSync("src/core/instrumentation/instrumentation_api.js", "instrumentation/instrumentation_api.js")
-
-        const self = this;
         this.server = http.createServer((request, res) => {
             if (request.method == 'POST') {
                 var body = ''
@@ -252,7 +218,12 @@ export default class DMachine{
                   body += data
                 })
                 request.on('end', function() {
-                    self.processData(JSON.parse(body))
+
+                    const data: RUNTIME_CALL = JSON.parse(body)
+
+                    console.log(data)
+
+                    self[data.method](...data.args)
                 })
               }
         });
@@ -263,25 +234,41 @@ export default class DMachine{
             this.socker = socket;
         
             // Extend socket lifetime for demo purposes
-            socket.setTimeout(4000);
+            //socket.setTimeout(4000);
         });
   
 
-        this.server.listen(8081, "127.0.0.1", () => {
-            this.logger.debug("Executed instrumented code...")
+        this.server.listen(8082, "127.0.0.1", () => {
+            this.logger.debug(`Listening in feedback server, port ${8082}...`)
             var exec = require('child_process').exec;
 
             // Execute instumented code
-            exec(`npm install && node instrumentation/main.js`,  (error, stdout, stderr) => {
-                //this.logger.debug("\n", stdout, "\n")
+            
+            
+            const currDir = PROCESS.cwd()
+
+            PROCESS.chdir(this.context.instrumentationFolder)
+
+            exec(`${this.context.cvScript}`,  (error, stdout, stderr) => {
+                
+                this.logger.debug("Listening in feedback server...")
+
+                this.logger.debug("\n", stdout, "\n")
 
                 //console.log(error, stderr)
                 if(error){
-                    //this.logger.error("\n", error, "\n")
+                    this.logger.error("\n", error, "\n")
                 }
             });
-        });*/
+
+            PROCESS.chdir(currDir)
+
+
+            setTimeout(this.processData.bind(this), Math.max(3,this.context.timeout)*1000);
+        });
     }
+
+    forest: { [key:string]: BaseNode} = { }
 
     public processSingle(code, file){
 
@@ -298,7 +285,8 @@ export default class DMachine{
 
         this.genericWalker.walk(original)
         
-        this.runtimeInstrumentation.setNamespaceName(file)
+        this.runtimeInstrumentation.setNamespace(file)
+
         this.runtimeInstrumentation.walk(copy)
 
         return [original, copy];
@@ -306,35 +294,25 @@ export default class DMachine{
 
 
 
-    processData(runtimeInfo: {method: string, args: any[]}){
+    processData(){
 
+        this.logger.debug(`Closing feedback server after ${this.context.timeout} seconds...`)
         
-        if(runtimeInfo.method === "close"){
+        this.server.close(cb => {
 
+            console.log(cb)
 
-            this.logger.debug("Parsing event queue...")
-            //console.log(JSON.stringify(runtimeInfo))
-            const data: {method:string, args: any[]}[] = runtimeInfo.args[0];
+            if(this.socket)
+                this.socket.destroy()
 
-            for(var event of data){
-                this[event.method](...event.args)
-            }
+            
+            this.logger.debug("Server closed...",'\n')
 
-            this.server.close(cb => {
-
-                if(this.socket)
-                    this.socket.destroy()
-
-                
-                this.logger.debug("Server closed...",'\n')
-
-                this.secondStage()
-            })
-
-            return;
-        }
-
+            this.secondStage()
+        })
     }
+
+    // FEDBACK PROCESSING
 
     rightOperator(hash, value){
         const entry = this.runtimeInstrumentation.nodes_hash[hash];
