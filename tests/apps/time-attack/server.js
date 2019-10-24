@@ -10,3 +10,5 @@ var c = 10 - 9 + b - 12;
 const x = require("./assets/r.js")
 
 console.log(x.func(120), c)
+
+console.log(a(1203))

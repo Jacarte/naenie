@@ -68,9 +68,6 @@ export default class ProbabilityPopulator extends PopulationGenerator {
             }
 
             this.emisor.closeModule();
-            
-            console.log(`${newOutDir}/${meta.fileName}.wast`,
-            `${newOutDir}/${meta.fileName}.wasm`)
 
             this.tools.compileWat(
                 `${newOutDir}/${meta.fileName}.wast`,
