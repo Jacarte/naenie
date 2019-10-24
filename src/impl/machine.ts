@@ -346,7 +346,7 @@ export default class DMachine{
        
         //this.child.kill("SIGINT")
 
-        //this.secondStage()
+        this.secondStage()
     }
 
     // FEDBACK PROCESSING

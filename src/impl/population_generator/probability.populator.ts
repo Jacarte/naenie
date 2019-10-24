@@ -69,17 +69,20 @@ export default class ProbabilityPopulator extends PopulationGenerator {
 
             this.emisor.closeModule();
             
+            console.log(`${newOutDir}/${meta.fileName}.wast`,
+            `${newOutDir}/${meta.fileName}.wasm`)
+
             this.tools.compileWat(
-                `${newOutDir}/${meta.relativePath}.wast`,
-                `${newOutDir}/${meta.relativePath}.wasm`)
+                `${newOutDir}/${meta.fileName}.wast`,
+                `${newOutDir}/${meta.fileName}.wasm`)
 
 
-            this.tools.validateWasm(`${newOutDir}/${meta.relativePath}.wasm`)
+            this.tools.validateWasm(`${newOutDir}/${meta.src}.wasm`)
 
             this.sandbox.instrument(
                 generate(meta.trees[0]).code,
-                `${newOutDir}/${meta.relativePath}`,
-                `${newOutDir}/${meta.relativePath}.wasm`
+                `${newOutDir}/${meta.fileName}`,
+                `./${meta.fileName}.wasm`
                 )
         }
         else{
