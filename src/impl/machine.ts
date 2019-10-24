@@ -216,7 +216,7 @@ export default class DMachine{
             try{
                 const content = fs.readFileSync(`${absolute}/${file}`).toString()
 
-                if(file.endsWith(".js")){
+                if(file.endsWith(".js")){ // TODO add validation with parsing not with file extension
 
                     // Instrumenting code
                     this.runtimeInstrumentation.setRegistryName(registryName)
@@ -242,8 +242,10 @@ export default class DMachine{
                     }
 
                     fs.writeFileSync(`${self.context.instrumentationFolder}/${root}/${file}`, generate(instrumentation[1]).code)
-                }else
+                }else{
                     fs.writeFileSync(`${self.context.instrumentationFolder}/${root}/${file}`, content)
+                    fs.writeFileSync(`${self.appContext.outDir}/${root}/${file}`, content)
+                }
             }
             catch(e){
                 this.logger.error(e.message)
@@ -280,84 +282,6 @@ export default class DMachine{
         PROCESS.chdir(currDir)
         setTimeout(this.processData.bind(this), Math.max(3,this.context.timeout)*1000);
 
-        /*
-        this.server = net.createServer((sock) => {
-
-
-            this.logger.debug(` <- Client connected\n`)
-
-            this.socket = sock;
-
-            
-            sock.on("data", (body) => {
-
-                console.log(body + '')
-                const data: RUNTIME_CALL = JSON.parse(body + '')
-                self[data.method](...data.args)
-            })
-
-            sock.on("close", (d) => {
-                self.logger.info(" <- Client closed !\n")
-            })
-
-            
-        });
-        
-        this.server.listen(8083, '127.0.0.1')
-
-        this.logger.debug(` -> Listening in feedback socket, port ${8083}...\n`)
-
-
-        const currDir = PROCESS.cwd()
-
-        PROCESS.chdir(this.context.instrumentationFolder)
-        var exec = require('child_process').exec;
-
-        exec(`npm install && ${this.context.cvScript}`,  (error, stdout, stderr) => {
-            
-            this.logger.debug(" <- Executing script...")
-
-            this.logger.debug("\n <- ", stdout, "\n")
-
-            //console.log(error, stderr)
-            if(error){
-                //this.logger.error("\n", error, "\n")
-            }
-        });
-
-
-
-        /*this.server = http.createServer((request, res) => {
-            if (request.method == 'POST') {
-                var body = ''
-                request.on('data', function(data) {
-                  body += data
-                })
-                request.on('end', function() {
-
-                    
-                })
-              }
-        });
-        
-        this.server.on('connection', function (socket) {
-            // Add a newly connected socket
-            
-            this.socker = socket;
-        
-            // Extend socket lifetime for demo purposes
-            //socket.setTimeout(4000);
-        });
-  
-
-        this.server.listen(8082, "127.0.0.1", () => {
-            this.logger.debug(`Listening in feedback server, port ${8082}...`)
-            
-            // Execute instumented code
-            
-            
-            
-        });*/
     }
 
     public processSingle(code, file){

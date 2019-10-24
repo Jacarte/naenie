@@ -78,7 +78,7 @@ export default class ProbabilityPopulator extends PopulationGenerator {
 
             this.sandbox.instrument(
                 generate(meta.trees[0]).code,
-                `${newOutDir}/${meta.containerFolder}`,
+                `${newOutDir}/${meta.relativePath}`,
                 `${newOutDir}/${meta.relativePath}.wasm`
                 )
         }

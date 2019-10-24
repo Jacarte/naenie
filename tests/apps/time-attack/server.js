@@ -6,3 +6,7 @@ function a(c){
 
 var b = 20;
 var c = 10 - 9 + b - 12;
+
+const x = require("./assets/r.js")
+
+console.log(x(120), c)
