@@ -103,11 +103,12 @@ export default class DMachine{
         Object.keys(this.runtimeInstrumentation.nodes_hash).map(t => this.runtimeInstrumentation.nodes_hash[t])
         .filter(t => t.visited).length;
 
+        this.logger.debug("Project trees count: ", Object.keys(this.forest).length, "\n")
         this.logger.debug("Instrumented nodes: ", totalNodes, "\n")
         this.logger.debug("Instrumented nodes coverage: ", visitedNodes, "\n")
         this.logger.debug("Instrumented nodes coverage percent: ", 1.0*visitedNodes/totalNodes * 100, "%", "\n")
-        //this.logger.debug("Root nodes count: ", (original as any).size, "\n")
-
+        
+        
         this.logger.info("Merging runtime and static analysis\n");
         this.mergeRuntime.node_hash = this.runtimeInstrumentation.nodes_hash;
 
@@ -119,6 +120,8 @@ export default class DMachine{
             // file == metaTree.instSrc
             const metaTree = this.forest[file];
             const [original, copy] = metaTree.trees;
+
+            this.logger.debug("Root nodes count: ", (original as any).size, "\n")
 
             this.mergeRuntime.setNamespace(file)
             this.mergeRuntime.walk(original)
@@ -145,6 +148,15 @@ export default class DMachine{
 
     }
 
+    private getRelativePath(level){
+
+        let relative = '.';
+
+        for(let l = 0; l < level; l++)
+            relative += '/..';
+
+        return `${relative}/instrumentation_core.js`;
+    }
 
     public process(){
         
@@ -172,7 +184,7 @@ export default class DMachine{
 
         fs.copyFileSync(`src/core/instrumentation/instrumentation_api.js`, `${self.context.instrumentationFolder}/instrumentation_core.js`)
 
-        function walk(path: string, dir, cb: (root: string, absolute:string, file: string) => void){
+        function walk(path: string, dir, level: number, cb: (root: string, absolute:string, file: string, level: number) => void){
 
             if(self.context.exclude && self.context.exclude.test(path)){
                 return
@@ -189,16 +201,16 @@ export default class DMachine{
                     if(!fs.existsSync(`${self.appContext.outDir}/${dir}/${content}`))
                         fs.mkdirSync(`${self.appContext.outDir}/${dir}/${content}`)
 
-                    walk(`${path}/${content}`, `${dir}/${content}`, cb)
+                    walk(`${path}/${content}`, `${dir}/${content}`, level + 1, cb)
                 }
                 else{
-                    cb(dir, path, content)
+                    cb(dir, path, content, level)
                 }
             }
 
         }
 
-        walk(this.context.path, '.', (root, absolute, file) => {
+        walk(this.context.path, '.', 0, (root, absolute, file, level) => {
             
             // Instrument code ...
 
@@ -216,7 +228,7 @@ export default class DMachine{
                     instrumentation[1].program.body.unshift(
                         variableDeclaration("const", 
                         [variableDeclarator(identifier(registryName) as any, callExpression(identifier("require") as any, [
-                            stringLiteral("./instrumentation_core.js") as any]
+                            stringLiteral(this.getRelativePath(level)) as any]
                         ))])
                     );
 
@@ -258,7 +270,35 @@ export default class DMachine{
         };
 
 
-        const child = fork(program, parameters, options);
+        //const child = fork(program, parameters, options);
+        const child = spawn(this.context.cvScript, this.context.cvScriptArgs, options);
+        
+        const timeout = setTimeout(() => {
+
+            PROCESS.chdir(currDir)
+
+            this.processData()
+
+        }, Math.max(3,this.context.timeout)*1000);
+
+        this.logger.info("========================================\n")
+
+        child.stdout.on('data', (data) => {
+            this.logger.warning(`stdout: ${data}`);
+          });
+          
+        child.stderr.on('data', (data) => {
+            this.logger.error(`stderr: ${data}`);
+        });
+          
+        child.on('close', (code) => {
+
+            PROCESS.chdir(currDir)
+
+            clearTimeout(timeout)
+
+            this.processData()
+        });
 
         child.on('message', message => {
 
@@ -270,8 +310,6 @@ export default class DMachine{
 
         //this.child = child;
 
-        PROCESS.chdir(currDir)
-        setTimeout(this.processData.bind(this), Math.max(3,this.context.timeout)*1000);
 
     }
 
@@ -301,12 +339,14 @@ export default class DMachine{
 
 
     processData(){
-
-        this.logger.debug(`Closing child...`, '\n')
+        
+        this.logger.info("========================================\n")
+        
+        this.logger.debug(`Processing data`, '\n')
        
         //this.child.kill("SIGINT")
 
-        this.secondStage()
+        //this.secondStage()
     }
 
     // FEDBACK PROCESSING

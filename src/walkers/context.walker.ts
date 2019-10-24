@@ -4,6 +4,7 @@ import { injectable, inject } from 'inversify';
 
 export type Context = {
     cvScript: string;
+    cvScriptArgs: string[];
     path: string;
     exclude?: RegExp;
     instrumentationFolder: string;

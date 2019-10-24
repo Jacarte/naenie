@@ -1,8 +1,8 @@
 
 console.log(10 + 120)
 
-function b(f){
+function func(f){
     return f*80
 }
 
-module.exports = b;
+module.exports.func = func;

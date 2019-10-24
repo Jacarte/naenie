@@ -47,9 +47,10 @@ describe('machine', function() {
       
     const context: Context = {
       path: './tests/apps/time-attack',
-      cvScript: 'server.js',
+      cvScript: 'node',
+      cvScriptArgs: ['server.js'],
       instrumentationFolder: 'instrumentation',
-      timeout: 2,
+      timeout: 10,
       policy: 'simple'
     }
 
