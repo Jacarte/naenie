@@ -90,26 +90,13 @@ export default class DMachine{
 
     public secondStage(){
         
-        let outDir = `${this.appContext.outDir}/${getFileName(this.context.path)}`;
+        let outDir = `${this.appContext.outDir}`;
         //const original = this.original;
         //const copy = this.copy;
 
         // Removing instrumentation folder
         if(fs.existsSync(this.context.instrumentationFolder))
             require("rimraf").sync(this.context.instrumentationFolder)
-
-
-        if(fs.existsSync(this.appContext.outDir))
-            require("rimraf").sync(this.appContext.outDir)
-
-        fs.mkdirSync(this.appContext.outDir)
-
-        if(fs.existsSync(outDir))
-            require("rimraf").sync(outDir)
-
-        fs.mkdirSync(outDir)
-
-//        fs.writeFileSync(`${outDir}/${this.appContext.instrumnetationName}`, generate(copy).code)
 
         const totalNodes = Object.keys(this.runtimeInstrumentation.nodes_hash).length
         const visitedNodes = 
@@ -199,6 +186,9 @@ export default class DMachine{
                     if(!fs.existsSync(`${self.context.instrumentationFolder}/${dir}/${content}`))
                         fs.mkdirSync(`${self.context.instrumentationFolder}/${dir}/${content}`)
 
+                    if(!fs.existsSync(`${self.appContext.outDir}/${dir}/${content}`))
+                        fs.mkdirSync(`${self.appContext.outDir}/${dir}/${content}`)
+
                     walk(`${path}/${content}`, `${dir}/${content}`, cb)
                 }
                 else{
@@ -244,6 +234,7 @@ export default class DMachine{
                     fs.writeFileSync(`${self.context.instrumentationFolder}/${root}/${file}`, generate(instrumentation[1]).code)
                 }else{
                     fs.writeFileSync(`${self.context.instrumentationFolder}/${root}/${file}`, content)
+
                     fs.writeFileSync(`${self.appContext.outDir}/${root}/${file}`, content)
                 }
             }
