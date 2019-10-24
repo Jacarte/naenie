@@ -26,6 +26,12 @@ export default class MergeRuntime implements IWalker<BaseNode, BaseNode>{
         return tbd.type != null
     }
 
+    public setNamespace(namespace: string){
+        this.namespace = namespace;
+    }
+
+    namespace:string;
+
 
     visited = [];
     
@@ -53,7 +59,7 @@ export default class MergeRuntime implements IWalker<BaseNode, BaseNode>{
             }
         }
 
-        const hash = `${ast.start}:${ast.end}:${ast.loc.start.column}:${ast.loc.start.line}:${ast.loc.end.column}:${ast.loc.end.line}`;
+        const hash = `${this.namespace}:${ast.start}:${ast.end}:${ast.loc.start.column}:${ast.loc.start.line}:${ast.loc.end.column}:${ast.loc.end.line}`;
         //console.log(this.node_hash)
         if(!!this.node_hash[hash]){
 

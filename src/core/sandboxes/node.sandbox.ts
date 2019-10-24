@@ -13,9 +13,11 @@ export default class NodeSandbox extends SanboxExecutor{
 
     instrument(mutatedCode: string, outPath: string, wasmPath: any) {
 
+        console.log(mutatedCode, outPath, wasmPath)
+        
         const view = {
             wasmfile:wasmPath,
-            wlcode: this.context.wlCode,
+            wlcode: '1',
             mutatedCode
         }
 

@@ -13,8 +13,9 @@ import { BaseEmisor, FileEmisor } from './emisor';
 import WebTTools from '../core/wabt.tools';
 import BrowserSandbox from '../core/sandboxes/browser.sandbox';
 import PopulationGenerator from './population_generator/populator.generator';
-import OneByOneGenerator from './population_generator/one-by-one.generator';
-import AllGenerator from './population_generator/all.generator';
+
+// import OneByOneGenerator from './population_generator/one-by-one.generator';
+// import AllGenerator from './population_generator/all.generator';
 
 // Initialize dependency injector
 // Register all services here

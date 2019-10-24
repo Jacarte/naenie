@@ -1,4 +1,4 @@
-import PopulationGenerator from './populator.generator';
+/*import PopulationGenerator from './populator.generator';
 import { injectable } from 'inversify';
 import { ILogger } from '../../core/logger';
 import * as fs from 'fs'
@@ -10,12 +10,14 @@ import { Context } from '../../walkers/context.walker';
 import BrowserSandbox from '../../core/sandboxes/browser.sandbox';
 import SanboxExecutor from '../../core/sandbox.executor';
 import generate from '@babel/generator';
+import { MetaTree } from '../machine';
 
 @injectable()
 export default class AllGenerator extends PopulationGenerator{
 
     generate(candidates: import("../../walkers/emit.walker").TranslationCandidate[], 
     outDir: string, 
+    meta: MetaTree,
     logger: ILogger, 
     emisor: BaseEmisor, 
     tagsWalker: TagsWalker,
@@ -69,4 +71,4 @@ export default class AllGenerator extends PopulationGenerator{
     }
 
 
-}
+}*/

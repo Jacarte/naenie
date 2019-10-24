@@ -1,27 +1,14 @@
-const http = require("http")
 
 class Wrapper{
 
+
+
     post(data){
+        
+
+        
         try{
-            const postData = JSON.stringify(data);
-            
-            const options = {
-                port: 8082,
-                method: 'POST',
-                path: '/',
-                hostName: '127.0.0.1',
-                headers: {
-                    'Content-Length': Buffer.byteLength(postData)
-                }
-            };
-            
-            const req = http.request(options, (res) => {
-
-            });
-
-            req.write(postData)
-            req.end()
+            process.send(JSON.stringify(data))
         }
         catch(e){
             //console.error(e)

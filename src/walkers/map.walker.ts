@@ -31,6 +31,11 @@ export default class MapWalker extends ContextWalker<BaseNode, BaseNode>{
         return tbd.type != null
     }
 
+    namespace: string;
+
+    public setNamespace(namespace: string){
+        this.namespace = namespace;
+    }
 
     visited = [];
     
@@ -162,13 +167,13 @@ export default class MapWalker extends ContextWalker<BaseNode, BaseNode>{
                         //if(bin.left.returningType.isHomogeneus && )
                         this.logger.warning("We are not supporting equality comparers between complex types yet: ")
                         this.logger.debug( bin.repr)
-                        this.logger.warning(` ${this.context.path}:${ast.loc.start.line}:${ast.loc.start.column}`, '\n')
+                        this.logger.warning(`${this.namespace}:${ast.loc.start.line}:${ast.loc.start.column}`, '\n')
                     }
                 }
                 else{
                     this.logger.info("Not evaluated, maybe its a shorcut or it wasn't evaluated in the coverage stage : ")
                     this.logger.debug(bin.repr)
-                    this.logger.warning(` ${this.context.path}:${ast.loc.start.line}:${ast.loc.start.column}`, '\n')
+                    this.logger.warning(`${this.namespace}:${ast.loc.start.line}:${ast.loc.start.column}`, '\n')
                     //this.logger.warning("Operator ", log.operator, '\n')
                     //this.logger.warning("Returning type ", JSON.stringify(log.returningType.types), '\n')
                 }

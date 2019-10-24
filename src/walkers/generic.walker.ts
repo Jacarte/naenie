@@ -24,13 +24,19 @@ export default class GenericWalker extends ContextWalker<BaseNode, BaseNode>{
 
     visited = [];
     
+    content: string;
+
+    public setContent(content: string){
+        this.content = content;
+    }
+
     public walkAux(ast: BaseNode, parent: BaseNode | null): BaseNode {
 
         const result = {
             children: [],
             size: 1,
             parent: null,
-            repr: '',//this.context.code.substr(ast.start, ast.end - ast.start),
+            repr: this.content.substr(ast.start, ast.end - ast.start),
             returningType: null
         }
 

@@ -9,6 +9,7 @@ import { Context } from './context.walker';
 import { BaseEmisor, TypesMap, OpsMap } from '../impl/emisor';
 import { ReturningType, sortTypes } from '../utils/object';
 import { IAppContext } from '../core/config';
+import { MetaTree } from '../impl/machine';
 
 
 export type TranslationCandidate = {
@@ -36,6 +37,7 @@ export default class TagsWalker implements IWalker<BaseNode, void>{
     
 
     walk(obj: BaseNode): void {
+        this.candidates = [] // Clean candidates in every calls
         return this.walkAux(obj, null);
     }
 
@@ -66,7 +68,7 @@ export default class TagsWalker implements IWalker<BaseNode, void>{
         return next < this.appContext.mutationThreshold;
     }
 
-    generateWASM(node): any{
+    generateWASM(node, meta: MetaTree): any{
 
         let parameterCount = 0;
         let parameters = {};
@@ -74,7 +76,8 @@ export default class TagsWalker implements IWalker<BaseNode, void>{
 
         const functionName = generateRandomWASMWrapperName();
         this.emisor.writeComment(node.repr.replace(/\r?\n|\r/g, " "));
-        this.emisor.writeComment(`Subtree size ${node.size}`);
+        this.emisor.writeComment(`Subtree size ${node.size}, ${meta.src}`);
+        this.emisor.writeComment(`Subtree ${node.repr}`);
         
 
         // Writing parameters, TODO improve this code

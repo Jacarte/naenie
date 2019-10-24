@@ -6,19 +6,14 @@ import { IAppContext } from '../../core/config';
 import { Context } from 'vm';
 import SanboxExecutor from '../../core/sandbox.executor';
 import { injectable } from 'inversify';
+import { MetaTree } from '../machine';
 
 @injectable()
 export default abstract class PopulationGenerator{
     abstract generate(
         candidates: TranslationCandidate[], 
         outDir: string, 
-        logger: ILogger, 
-        emisor: BaseEmisor, 
-        tagsWalker: TagsWalker,
-        tools: WebTTools,
-        appContext: IAppContext,
-        context: Context,
-        sandbox: SanboxExecutor,
-        original: any
+        meta: MetaTree, 
+        tagsWalker: TagsWalker
         ):void;
 }

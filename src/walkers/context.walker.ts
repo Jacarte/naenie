@@ -8,6 +8,8 @@ export type Context = {
     exclude?: RegExp;
     instrumentationFolder: string;
     timeout: number;
+
+    policy: 'simple' | 'paranoic' | 'insane';
 }
 
 @injectable()

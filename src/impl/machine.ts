@@ -24,11 +24,27 @@ import { getFileName, NodeTypes, getType } from '../utils/object';
 import { Socket } from 'net';
 import PopulationGenerator from './population_generator/populator.generator';
 import { POINT_CONVERSION_COMPRESSED } from 'constants';
+import * as net from "net";
 
+import { fork, ForkOptions, ChildProcess, spawn } from 'child_process';
+import * as path from 'path';
 
 const PROCESS =  process;
 
 type RUNTIME_CALL = {method: string, args: any[]};
+
+export type MetaTree = {
+    trees: BaseNode[],
+    src: string;
+    containerFolder: string;
+    fileName: string;
+    instSrc: string;
+    relativePath: string;
+};
+
+export type Forest = {
+    [key:string]: MetaTree
+}
 
 @injectable()
 export default class DMachine{
@@ -61,25 +77,30 @@ export default class DMachine{
     @inject("Context")
     public context: Context
 
-    @inject(WebTTools)
-    tools: WebTTools;
+    forest: Forest = { }
 
-    @inject("Emisor")
-    public emisor: BaseEmisor;
+    @inject("Populator")
+    public populator: PopulationGenerator;
 
-    //@inject("Populator")
-    //public populator: PopulationGenerator;
+    private getFileName(name:string){
+        const chunks = name.split("/")
+
+        return chunks[chunks.length - 1]
+    }
 
     public secondStage(){
-        this.logger.info("Second stage")
+        
+        let outDir = `${this.appContext.outDir}/${getFileName(this.context.path)}`;
+        //const original = this.original;
+        //const copy = this.copy;
 
-        /*let outDir = `${this.appContext.outDir}/${getFileName(this.context.path)}`;
-        const original = this.original;
-        const copy = this.copy;
+        // Removing instrumentation folder
+        if(fs.existsSync(this.context.instrumentationFolder))
+            require("rimraf").sync(this.context.instrumentationFolder)
+
 
         if(fs.existsSync(this.appContext.outDir))
             require("rimraf").sync(this.appContext.outDir)
-
 
         fs.mkdirSync(this.appContext.outDir)
 
@@ -88,7 +109,7 @@ export default class DMachine{
 
         fs.mkdirSync(outDir)
 
-        fs.writeFileSync(`${outDir}/${this.appContext.instrumnetationName}`, generate(copy).code)
+//        fs.writeFileSync(`${outDir}/${this.appContext.instrumnetationName}`, generate(copy).code)
 
         const totalNodes = Object.keys(this.runtimeInstrumentation.nodes_hash).length
         const visitedNodes = 
@@ -98,53 +119,64 @@ export default class DMachine{
         this.logger.debug("Instrumented nodes: ", totalNodes, "\n")
         this.logger.debug("Instrumented nodes coverage: ", visitedNodes, "\n")
         this.logger.debug("Instrumented nodes coverage percent: ", 1.0*visitedNodes/totalNodes * 100, "%", "\n")
-        this.logger.debug("Root nodes count: ", (original as any).size, "\n")
+        //this.logger.debug("Root nodes count: ", (original as any).size, "\n")
 
         this.logger.info("Merging runtime and static analysis\n");
         this.mergeRuntime.node_hash = this.runtimeInstrumentation.nodes_hash;
 
-        this.mergeRuntime.walk(original)
 
-        this.logger.info("Translating JS to WASM...\n");
+        // Merge every AST
 
-        this.mapWalker.walk(original);
+        for(let file in this.forest){
 
-        this.logger.info("Catching translatable subtrees\n");
+            // file == metaTree.instSrc
+            const metaTree = this.forest[file];
+            const [original, copy] = metaTree.trees;
 
-        
-        this.tagsWalker.walk(original);
+            this.mergeRuntime.setNamespace(file)
+            this.mergeRuntime.walk(original)
 
-        this.logger.debug("Candidates nodes count...",this.tagsWalker.candidates.length, "\n")
+            this.logger.info("Translating JS to WASM...", file, '\n');
 
-        // Generate mutations
+            this.mapWalker.setNamespace(metaTree.src)
+            this.mapWalker.walk(original);
 
-        this.populator.generate(
-            this.tagsWalker.candidates,
-            outDir,
-            this.logger,
-            this.emisor,
-            this.tagsWalker,
-            this.tools,
-            this.appContext,
-            this.context,
-            this.sandbox,
-            original
-        )*/
+            this.logger.info("Catching translatable subtrees...\n");
+
+            this.tagsWalker.walk(original);
+
+
+            this.logger.debug("Candidates nodes count...", metaTree.src, " ", this.tagsWalker.candidates.length, "\n")
+    
+            this.populator.generate(
+                this.tagsWalker.candidates,
+                outDir,
+                metaTree,
+                this.tagsWalker
+            )
+        }
+
     }
 
-    server: http.Server;
-    socket: Socket;
 
     public process(){
         
-        const registryName = 'Qeakaouoeois'; 
         const self = this;
+        // Cleaning out dir
+        this.logger.debug(`Cleaning out dir...`)
+
+        if(self.appContext.outDir)
+            require("rimraf").sync(self.appContext.outDir)
+
+        fs.mkdirSync(self.appContext.outDir)
+
+        const registryName = 'Qeakaouoeois'; 
 
         this.logger.debug(`Walking ${this.context.path}\n`)
 
         // Clean out dir
 
-        this.logger.debug(`Cleaning out dir...`)
+        this.logger.debug(`Cleaning inst dir...`)
 
         if(self.context.instrumentationFolder)
             require("rimraf").sync(self.context.instrumentationFolder)
@@ -188,6 +220,7 @@ export default class DMachine{
 
                     // Instrumenting code
                     this.runtimeInstrumentation.setRegistryName(registryName)
+
                     const instrumentation = this.processSingle(content, `${self.context.instrumentationFolder}/${root}/${file}`)
 
                     instrumentation[1].program.body.unshift(
@@ -198,7 +231,15 @@ export default class DMachine{
                     );
 
 
-                    this.forest[`${self.context.instrumentationFolder}/${root}/${file}`] = instrumentation[1]
+                    // [original, copy]
+                    this.forest[`${self.context.instrumentationFolder}/${root}/${file}`] = {
+                        trees: instrumentation,
+                        src: `${absolute}/${file}`,
+                        containerFolder: root.replace("./", ""),
+                        relativePath: `${root.replace("./", "")}/${file}`,
+                        fileName: file,
+                        instSrc: `${self.context.instrumentationFolder}/${root}/${file}`
+                    }
 
                     fs.writeFileSync(`${self.context.instrumentationFolder}/${root}/${file}`, generate(instrumentation[1]).code)
                 }else
@@ -209,9 +250,84 @@ export default class DMachine{
             }
         })
 
-        this.logger.debug("Opening coverage listener server")
+        this.logger.debug("Creating fork child\n")
+
+
+        const currDir = PROCESS.cwd()
+
+        PROCESS.chdir(this.context.instrumentationFolder)
+
+        const program = path.resolve(this.context.cvScript);
+
+        const parameters = [];
+        const options: ForkOptions = {
+            stdio: [ 'pipe', 'pipe', 'pipe', 'ipc' ]
+        };
+
+
+        const child = fork(program, parameters, options);
+
+        child.on('message', message => {
+
+            const data: RUNTIME_CALL = JSON.parse(message)
+
+            this[data.method](...data.args)
+            //child.send('Hi');
+        });
+
+        //this.child = child;
+
+        PROCESS.chdir(currDir)
+        setTimeout(this.processData.bind(this), Math.max(3,this.context.timeout)*1000);
+
+        /*
+        this.server = net.createServer((sock) => {
+
+
+            this.logger.debug(` <- Client connected\n`)
+
+            this.socket = sock;
+
+            
+            sock.on("data", (body) => {
+
+                console.log(body + '')
+                const data: RUNTIME_CALL = JSON.parse(body + '')
+                self[data.method](...data.args)
+            })
+
+            sock.on("close", (d) => {
+                self.logger.info(" <- Client closed !\n")
+            })
+
+            
+        });
         
-        this.server = http.createServer((request, res) => {
+        this.server.listen(8083, '127.0.0.1')
+
+        this.logger.debug(` -> Listening in feedback socket, port ${8083}...\n`)
+
+
+        const currDir = PROCESS.cwd()
+
+        PROCESS.chdir(this.context.instrumentationFolder)
+        var exec = require('child_process').exec;
+
+        exec(`npm install && ${this.context.cvScript}`,  (error, stdout, stderr) => {
+            
+            this.logger.debug(" <- Executing script...")
+
+            this.logger.debug("\n <- ", stdout, "\n")
+
+            //console.log(error, stderr)
+            if(error){
+                //this.logger.error("\n", error, "\n")
+            }
+        });
+
+
+
+        /*this.server = http.createServer((request, res) => {
             if (request.method == 'POST') {
                 var body = ''
                 request.on('data', function(data) {
@@ -219,11 +335,7 @@ export default class DMachine{
                 })
                 request.on('end', function() {
 
-                    const data: RUNTIME_CALL = JSON.parse(body)
-
-                    console.log(data)
-
-                    self[data.method](...data.args)
+                    
                 })
               }
         });
@@ -240,35 +352,13 @@ export default class DMachine{
 
         this.server.listen(8082, "127.0.0.1", () => {
             this.logger.debug(`Listening in feedback server, port ${8082}...`)
-            var exec = require('child_process').exec;
-
+            
             // Execute instumented code
             
             
-            const currDir = PROCESS.cwd()
-
-            PROCESS.chdir(this.context.instrumentationFolder)
-
-            exec(`${this.context.cvScript}`,  (error, stdout, stderr) => {
-                
-                this.logger.debug("Listening in feedback server...")
-
-                this.logger.debug("\n", stdout, "\n")
-
-                //console.log(error, stderr)
-                if(error){
-                    this.logger.error("\n", error, "\n")
-                }
-            });
-
-            PROCESS.chdir(currDir)
-
-
-            setTimeout(this.processData.bind(this), Math.max(3,this.context.timeout)*1000);
-        });
+            
+        });*/
     }
-
-    forest: { [key:string]: BaseNode} = { }
 
     public processSingle(code, file){
 
@@ -283,6 +373,7 @@ export default class DMachine{
 
         this.logger.info("Walking generic and static analysis\n");
 
+        this.genericWalker.setContent(code)
         this.genericWalker.walk(original)
         
         this.runtimeInstrumentation.setNamespace(file)
@@ -296,20 +387,11 @@ export default class DMachine{
 
     processData(){
 
-        this.logger.debug(`Closing feedback server after ${this.context.timeout} seconds...`)
-        
-        this.server.close(cb => {
+        this.logger.debug(`Closing child...`, '\n')
+       
+        //this.child.kill("SIGINT")
 
-            console.log(cb)
-
-            if(this.socket)
-                this.socket.destroy()
-
-            
-            this.logger.debug("Server closed...",'\n')
-
-            this.secondStage()
-        })
+        this.secondStage()
     }
 
     // FEDBACK PROCESSING
@@ -320,7 +402,6 @@ export default class DMachine{
         if(!entry.rightRT)
             entry.rightRT = new NodeTypes();
 
-        
         const returning = getType(value);
 
         entry.rightRT.insertType(returning);
