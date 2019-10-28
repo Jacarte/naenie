@@ -18,7 +18,7 @@ const url = process.argv[2];
   await Profiler.enable();
 
   // Set JS profiler sampling resolution to 100 microsecond (default is 1000)
-  await Profiler.setSamplingInterval({interval: 10});
+  await Profiler.setSamplingInterval({interval: 100});
 
   await Page.navigate({url});
   await client.on('Page.loadEventFired', async _ => {

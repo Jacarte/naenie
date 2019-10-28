@@ -145,9 +145,10 @@ export abstract class BaseEmisor{
 export class FileEmisor extends BaseEmisor{
 
     reset(...args: any[]) {
+        // args[0] == path, args[1] == wat name
         const path = args[0];
 
-        this.fd = fs.openSync(`${path}/${this.context.watName}`, 'w');
+        this.fd = fs.openSync(`${path}/${args[1]}.wast`, 'w');
     }
     
     fd;
@@ -158,8 +159,9 @@ export class FileEmisor extends BaseEmisor{
 
     
     write(instruction: string) {
+        
         if(!this.fd)
-            this.fd = fs.openSync(`${this.context.outDir}/${this.context.watName}`, 'w');
+            return
 
         fs.writeSync(this.fd, instruction)
     }

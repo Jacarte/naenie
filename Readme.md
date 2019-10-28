@@ -114,6 +114,9 @@ You can use two options to run the mutator:
 
 -->
 
+## Mutated population
+
+
 ## Results
 
 We provide a minimal tool to mutate JavaScript code to an hybrid between JS and WASM languages.

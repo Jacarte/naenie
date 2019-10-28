@@ -19,9 +19,9 @@ export default class BrowserSandbox extends SanboxExecutor{
 
         const view = {
             wasmfile:this.appContext.wasmName,
-            wlcode: this.context.wlCode,
+            //wlcode: this.context.wlCode,
             mutatedCode,
-            original: this.context.code,
+            //original: this.context.code,
             wasmCBName: this.appContext.returnWASMCallbackName
         }
 

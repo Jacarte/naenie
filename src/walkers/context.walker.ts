@@ -3,15 +3,14 @@ import { injectable, inject } from 'inversify';
 
 
 export type Context = {
+    cvScript: string;
+    cvScriptArgs: string[];
     path: string;
-    code: string;
+    exclude?: RegExp;
+    instrumentationFolder: string;
+    timeout: number;
 
-    cvPath: string;
-    cvCode: string;
-
-    wlPath: string;
-    wlCode: string;
-    
+    policy: 'simple' | 'paranoic' | 'insane';
 }
 
 @injectable()

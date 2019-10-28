@@ -1,0 +1,3 @@
+- Hashing algorithm based on maximum sentece types
+- Look for executin in the same folder, it seems chrome make some kind of optimization based on profile data
+- What do we need intermediate code to evaluate performance comparison

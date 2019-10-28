@@ -1,4 +1,4 @@
-import PopulationGenerator from './populator.generator';
+/*import PopulationGenerator from './populator.generator';
 import { injectable } from 'inversify';
 import { ILogger } from '../../core/logger';
 import * as fs from 'fs'
@@ -10,12 +10,14 @@ import { Context } from '../../walkers/context.walker';
 import BrowserSandbox from '../../core/sandboxes/browser.sandbox';
 import SanboxExecutor from '../../core/sandbox.executor';
 import generate from '@babel/generator';
+import { MetaTree } from '../machine';
 
 @injectable()
 export default class OneByOneGenerator extends PopulationGenerator{
 
     generate(candidates: import("../../walkers/emit.walker").TranslationCandidate[], 
     outDir: string, 
+    meta: MetaTree,
     logger: ILogger, 
     emisor: BaseEmisor, 
     tagsWalker: TagsWalker,
@@ -40,6 +42,18 @@ export default class OneByOneGenerator extends PopulationGenerator{
 
             logger.info("Generating version for... ")
             logger.debug(node.node.repr, "\n");
+
+
+            fs.writeFileSync(`${newOutDir}/translation-info.json`
+            , JSON.stringify(
+                {
+                    repr: node.node.repr,
+                    loc: node.node.loc,
+                    size: node.node.size,
+                    hitCount: node.node.visited,
+                    mutationName: `mutated${index}`
+                }
+            ))
 
             emisor.reset(newOutDir);
 
@@ -71,4 +85,4 @@ export default class OneByOneGenerator extends PopulationGenerator{
     }
 
 
-}
+}*/

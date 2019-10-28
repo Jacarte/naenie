@@ -5,8 +5,12 @@ lib
 lib-esm
 
 instrumentation
+coverage
 
 out
 
 Readme.html
 bundle.js
+
+
+browser_tmp

@@ -23,8 +23,28 @@ import * as http from 'http';
 import { getFileName, NodeTypes, getType } from '../utils/object';
 import { Socket } from 'net';
 import PopulationGenerator from './population_generator/populator.generator';
+import { POINT_CONVERSION_COMPRESSED } from 'constants';
+import * as net from "net";
 
+import { fork, ForkOptions, ChildProcess, spawn } from 'child_process';
+import * as path from 'path';
 
+const PROCESS =  process;
+
+type RUNTIME_CALL = {method: string, args: any[]};
+
+export type MetaTree = {
+    trees: BaseNode[],
+    src: string;
+    containerFolder: string;
+    fileName: string;
+    instSrc: string;
+    relativePath: string;
+};
+
+export type Forest = {
+    [key:string]: MetaTree
+}
 
 @injectable()
 export default class DMachine{
@@ -57,212 +77,271 @@ export default class DMachine{
     @inject("Context")
     public context: Context
 
-    @inject(WebTTools)
-    tools: WebTTools;
-
-    @inject("Emisor")
-    public emisor: BaseEmisor;
+    forest: Forest = { }
 
     @inject("Populator")
     public populator: PopulationGenerator;
 
+    private getFileName(name:string){
+        const chunks = name.split("/")
+
+        return chunks[chunks.length - 1]
+    }
+
     public secondStage(){
+        
+        let outDir = `${this.appContext.outDir}`;
+        //const original = this.original;
+        //const copy = this.copy;
 
-        let outDir = `${this.appContext.outDir}/${getFileName(this.context.path)}`;
-        const original = this.original;
-        const copy = this.copy;
-
-        if(fs.existsSync(this.appContext.outDir))
-            require("rimraf").sync(this.appContext.outDir)
-
-
-        fs.mkdirSync(this.appContext.outDir)
-
-        if(fs.existsSync(outDir))
-            require("rimraf").sync(outDir)
-
-        fs.mkdirSync(outDir)
-
-        fs.writeFileSync(`${outDir}/${this.appContext.instrumnetationName}`, generate(copy).code)
+        // Removing instrumentation folder
+        if(fs.existsSync(this.context.instrumentationFolder))
+            require("rimraf").sync(this.context.instrumentationFolder)
 
         const totalNodes = Object.keys(this.runtimeInstrumentation.nodes_hash).length
         const visitedNodes = 
         Object.keys(this.runtimeInstrumentation.nodes_hash).map(t => this.runtimeInstrumentation.nodes_hash[t])
         .filter(t => t.visited).length;
 
+        this.logger.debug("Project trees count: ", Object.keys(this.forest).length, "\n")
         this.logger.debug("Instrumented nodes: ", totalNodes, "\n")
         this.logger.debug("Instrumented nodes coverage: ", visitedNodes, "\n")
         this.logger.debug("Instrumented nodes coverage percent: ", 1.0*visitedNodes/totalNodes * 100, "%", "\n")
-        this.logger.debug("Root nodes count: ", (original as any).size, "\n")
-
+        
+        
         this.logger.info("Merging runtime and static analysis\n");
         this.mergeRuntime.node_hash = this.runtimeInstrumentation.nodes_hash;
 
-        this.mergeRuntime.walk(original)
 
-        this.logger.info("Translating JS to WASM...\n");
+        // Merge every AST
 
-        this.mapWalker.walk(original);
+        for(let file in this.forest){
 
-        this.logger.info("Catching translatable subtrees\n");
+            // file == metaTree.instSrc
+            const metaTree = this.forest[file];
+            const [original, copy] = metaTree.trees;
 
-        
-        this.tagsWalker.walk(original);
+            this.logger.debug("Root nodes count: ", (original as any).size, "\n")
 
-        this.logger.debug("Candidates nodes count...",this.tagsWalker.candidates.length, "\n")
+            this.mergeRuntime.setNamespace(file)
+            this.mergeRuntime.walk(original)
 
-        // Generate mutations
+            this.logger.info("Translating JS to WASM...", file, '\n');
 
-        this.populator.generate(
-            this.tagsWalker.candidates,
-            outDir,
-            this.logger,
-            this.emisor,
-            this.tagsWalker,
-            this.tools,
-            this.appContext,
-            this.context,
-            this.sandbox,
-            original
-        )
-    }
+            this.mapWalker.setNamespace(metaTree.src)
+            this.mapWalker.walk(original);
 
-    original: any;
-    copy: any;
+            this.logger.info("Catching translatable subtrees...\n");
 
-    server: http.Server;
-    socket: Socket;
-
-    public process(){
-
-        
-        this.logger.info("Parsing file 1/2\n")
-
-        let original = parser.parse(this.context.code);
-        this.original = original;
-
-        this.logger.info("Parsing file 2/2\n")
-
-        let copy = parser.parse(this.context.code);
-        this.copy = copy;
-
-        this.logger.info("Walking generic and static analysis\n");
-
-        this.genericWalker.walk(original);
-
-        this.logger.info("Walking instrumentation\n");
-
-        const registryName = 'Qeakaouoeois'; // hard to collison name in runtime instrumentation
-        
-        this.runtimeInstrumentation.setRegistryName(`${registryName}`);
-        this.runtimeInstrumentation.walk(copy);
+            this.tagsWalker.walk(original);
 
 
-        this.logger.info("Evaluating instrumentation on runtime\n");
-
-        this.logger.debug(`Starting local server on https://127.0.0.1:${this.appContext.instrumentationPort}\n`);
-
-        if(fs.existsSync("instrumentation"))
-            require("rimraf").sync("instrumentation")
-
-        fs.mkdirSync("instrumentation")
-        
-        copy.program.body.unshift(
-            variableDeclaration("const", 
-            [variableDeclarator(identifier(registryName) as any, callExpression(identifier("require") as any, [
-                stringLiteral("./instrumentation_api.js") as any]
-            ))])
-        );
-
-        fs.writeFileSync(`instrumentation/${getFileName(this.context.path)}`, generate(this.copy).code)
-        
-        const coverageAST = parser.parse(this.context.cvCode);
-        
-        coverageAST.program.body.unshift(
-            variableDeclaration("const", 
-            [variableDeclarator(identifier(registryName) as any, callExpression(identifier("require") as any, [
-                stringLiteral("./instrumentation_api.js") as any]
-            ))])
-        );
-
-        coverageAST.program.body.push(
-            callExpression(identifier(`${registryName}.close`) as any, []) as any
-        )        
-
-        fs.writeFileSync(`instrumentation/main.js`, generate(coverageAST).code)
-
-
-        fs.copyFileSync("src/core/instrumentation/instrumentation_api.js", "instrumentation/instrumentation_api.js")
-
-        const self = this;
-        this.server = http.createServer((request, res) => {
-            if (request.method == 'POST') {
-                var body = ''
-                request.on('data', function(data) {
-                  body += data
-                })
-                request.on('end', function() {
-                    self.processData(JSON.parse(body))
-                })
-              }
-        });
-        
-        this.server.on('connection', function (socket) {
-            // Add a newly connected socket
-            
-            this.socker = socket;
-        
-            // Extend socket lifetime for demo purposes
-            socket.setTimeout(4000);
-        });
-  
-
-        this.server.listen(8081, "127.0.0.1", () => {
-            this.logger.debug("Executed instrumented code...")
-            var exec = require('child_process').exec;
-            exec(`node instrumentation/main.js`,  (error, stdout, stderr) => {
-                //this.logger.debug("\n", stdout, "\n")
-
-                //console.log(error, stderr)
-                if(error){
-                    this.logger.error("\n", error, "\n")
-                }
-            });
-        });
-
-    }
-
-
-
-    processData(runtimeInfo: {method: string, args: any[]}){
-
-        
-        if(runtimeInfo.method === "close"){
-
-
-            this.logger.debug("Parsing event queue...")
-            //console.log(JSON.stringify(runtimeInfo))
-            const data: {method:string, args: any[]}[] = runtimeInfo.args[0];
-
-            for(var event of data){
-                this[event.method](...event.args)
-            }
-
-            this.server.close(cb => {
-
-                if(this.socket)
-                    this.socket.destroy()
-
-                
-                this.logger.debug("Server closed...",'\n')
-
-                this.secondStage()
-            })
-
-            return;
+            this.logger.debug("Candidates nodes count...", metaTree.src, " ", this.tagsWalker.candidates.length, "\n")
+    
+            this.populator.generate(
+                this.tagsWalker.candidates,
+                outDir,
+                metaTree,
+                this.tagsWalker
+            )
         }
 
     }
+
+    private getRelativePath(level){
+
+        let relative = '.';
+
+        for(let l = 0; l < level; l++)
+            relative += '/..';
+
+        return `${relative}/instrumentation_core.js`;
+    }
+
+    public process(){
+        
+        const self = this;
+        // Cleaning out dir
+        this.logger.debug(`Cleaning out dir...`)
+
+        if(self.appContext.outDir)
+            require("rimraf").sync(self.appContext.outDir)
+
+        fs.mkdirSync(self.appContext.outDir)
+
+        const registryName = 'Qeakaouoeois'; 
+
+        this.logger.debug(`Walking ${this.context.path}\n`)
+
+        // Clean out dir
+
+        this.logger.debug(`Cleaning inst dir...`)
+
+        if(self.context.instrumentationFolder)
+            require("rimraf").sync(self.context.instrumentationFolder)
+
+        fs.mkdirSync(self.context.instrumentationFolder)
+
+        fs.copyFileSync(`src/core/instrumentation/instrumentation_api.js`, `${self.context.instrumentationFolder}/instrumentation_core.js`)
+
+        function walk(path: string, dir, level: number, cb: (root: string, absolute:string, file: string, level: number) => void){
+
+            if(self.context.exclude && self.context.exclude.test(path)){
+                return
+            }
+
+            const contents = fs.readdirSync(path)
+
+            for(var content of contents){
+                if(fs.statSync(`${path}/${content}`).isDirectory()){
+
+                    if(!fs.existsSync(`${self.context.instrumentationFolder}/${dir}/${content}`))
+                        fs.mkdirSync(`${self.context.instrumentationFolder}/${dir}/${content}`)
+
+                    if(!fs.existsSync(`${self.appContext.outDir}/${dir}/${content}`))
+                        fs.mkdirSync(`${self.appContext.outDir}/${dir}/${content}`)
+
+                    walk(`${path}/${content}`, `${dir}/${content}`, level + 1, cb)
+                }
+                else{
+                    cb(dir, path, content, level)
+                }
+            }
+
+        }
+
+        walk(this.context.path, '.', 0, (root, absolute, file, level) => {
+            
+            // Instrument code ...
+
+
+            try{
+                const content = fs.readFileSync(`${absolute}/${file}`).toString()
+
+                if(file.endsWith(".js")){ // TODO add validation with parsing not with file extension
+
+                    // Instrumenting code
+                    this.runtimeInstrumentation.setRegistryName(registryName)
+
+                    const instrumentation = this.processSingle(content, `${self.context.instrumentationFolder}/${root}/${file}`)
+
+                    instrumentation[1].program.body.unshift(
+                        variableDeclaration("const", 
+                        [variableDeclarator(identifier(registryName) as any, callExpression(identifier("require") as any, [
+                            stringLiteral(this.getRelativePath(level)) as any]
+                        ))])
+                    );
+
+
+                    // [original, copy]
+                    this.forest[`${self.context.instrumentationFolder}/${root}/${file}`] = {
+                        trees: instrumentation,
+                        src: `${absolute}/${file}`,
+                        containerFolder: root.replace("./", ""),
+                        relativePath: `${root.replace("./", "")}/${file}`,
+                        fileName: file,
+                        instSrc: `${self.context.instrumentationFolder}/${root}/${file}`
+                    }
+
+                    fs.writeFileSync(`${self.context.instrumentationFolder}/${root}/${file}`, generate(instrumentation[1]).code)
+                }else{
+                    fs.writeFileSync(`${self.context.instrumentationFolder}/${root}/${file}`, content)
+
+                    fs.writeFileSync(`${self.appContext.outDir}/${root}/${file}`, content)
+                }
+            }
+            catch(e){
+                this.logger.error(e.message)
+            }
+        })
+
+        this.logger.debug("Creating fork child\n")
+
+
+        const currDir = PROCESS.cwd()
+
+        PROCESS.chdir(this.context.instrumentationFolder)
+
+        const options: ForkOptions = {
+            stdio: [ 'pipe', 'pipe', 'pipe', 'ipc' ]
+        };
+
+        const child = spawn(this.context.cvScript, this.context.cvScriptArgs, options);
+        
+        const timeout = setTimeout(() => {
+
+            child.kill("SIGINT")
+
+        }, Math.max(3,this.context.timeout)*1000);
+
+        this.logger.info("========================================\n")
+
+        child.stdout.on('data', (data) => {
+            this.logger.warning(`stdout: ${data}`);
+          });
+          
+        child.stderr.on('data', (data) => {
+            this.logger.error(`stderr: ${data}`);
+        });
+          
+        child.on('close', (code) => {
+
+            PROCESS.chdir(currDir)
+
+            clearTimeout(timeout)
+
+            this.processData()
+        });
+
+        child.on('message', message => {
+
+            const data: RUNTIME_CALL = JSON.parse(message)
+
+            this[data.method](...data.args)
+            //child.send('Hi');
+        });
+
+        //this.child = child;
+
+
+    }
+
+    public processSingle(code, file){
+
+        
+        this.logger.info(`Parsing ${file} 1/2\n`)
+
+        let original = parser.parse(code);
+        
+        this.logger.info(`Parsing ${file} 2/2\n`)
+
+        let copy = parser.parse(code);
+
+        this.logger.info("Walking generic and static analysis\n");
+
+        this.genericWalker.setContent(code)
+        this.genericWalker.walk(original)
+        
+        this.runtimeInstrumentation.setNamespace(file)
+
+        this.runtimeInstrumentation.walk(copy)
+
+        return [original, copy];
+    }
+
+
+
+    processData(){
+        
+        this.logger.info("========================================\n")
+        
+        this.logger.debug(`Processing data`, '\n')
+       
+
+        this.secondStage()
+    }
+
+    // FEDBACK PROCESSING
 
     rightOperator(hash, value){
         const entry = this.runtimeInstrumentation.nodes_hash[hash];
@@ -270,7 +349,6 @@ export default class DMachine{
         if(!entry.rightRT)
             entry.rightRT = new NodeTypes();
 
-        
         const returning = getType(value);
 
         entry.rightRT.insertType(returning);

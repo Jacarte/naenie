@@ -102,7 +102,7 @@ export default class RuntimeInstrumentWalker extends ContextWalker<BaseNode, Bas
         if(!child.start)
             return undefined;
 
-        return `${child.start}:${child.end}:${child.loc.start.column}:${child.loc.start.line}:${child.loc.end.column}:${child.loc.end.line}`;
+        return `${this.namespace}:${child.start}:${child.end}:${child.loc.start.column}:${child.loc.start.line}:${child.loc.end.column}:${child.loc.end.line}`;
     }
 
     wrap(ast, hash){
@@ -135,7 +135,14 @@ export default class RuntimeInstrumentWalker extends ContextWalker<BaseNode, Bas
                     callExpression(identifier(`${this.getRegistryName()}.leftOperator`) as any, [stringLiteral(hash),(ast as any).left]),
                     callExpression(identifier(`${this.getRegistryName()}.rightOperator`) as any, [stringLiteral(hash),(ast as any).right]))]);
                 
-                
+            
+            case 'BooleanLiteral':
+            case 'StringLiteral':
+            case 'NumericLiteral':
+                return null;
+            default:
+                this.logger.warning(`Hadler not implemented -> ${ast.type}\n`)
+                //this.logger.warning(`Example -> ${this.context.codePath.substr(ast.start, ast.end - ast.start)}\n`)
                 //return ;
 
            /* case 'MemberExpression':
@@ -155,13 +162,18 @@ export default class RuntimeInstrumentWalker extends ContextWalker<BaseNode, Bas
     }
 
     registryName: string = ''
+    namespace: string = ''
 
     setRegistryName(name: string){
         this.registryName = name;
     }
 
+    setNamespace(name: string){
+        this.namespace = name;
+    }
+
     getRegistryName():string{
-        return this.registryName;
+        return `${this.registryName}`;
     }
 
     dehash(hash: string): {  start: number, end: number, startColumn: number, startLine: number, endColumn: number, endLine: number }{
