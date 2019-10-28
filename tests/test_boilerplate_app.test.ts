@@ -50,7 +50,7 @@ describe('machine', function() {
       cvScript: 'node',
       cvScriptArgs: ['server.js'],
       instrumentationFolder: 'instrumentation',
-      timeout: 10,
+      timeout: 70,
       policy: 'simple'
     }
 

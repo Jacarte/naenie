@@ -21,7 +21,7 @@ export default class NodeSandbox extends SanboxExecutor{
 
         const text = render(`
 const fs = require("fs");
-
+  
 function toUint8Array(buf) {
     var u = new Uint8Array(buf.length)
     for (var i = 0; i < buf.length; ++i) {
@@ -30,7 +30,8 @@ function toUint8Array(buf) {
     return u
 }
 
-async function main() {
+
+(async () => {
     // Fetch the file and compile it
     const buffer = toUint8Array(fs.readFileSync('{{{wasmfile}}}'))
 
@@ -40,9 +41,8 @@ async function main() {
     {{{mutatedCode}}}
 
     {{{wlcode}}}
-}
+  })();
 
-main()
             `, view);
 
         fs.writeFileSync(outPath, text);

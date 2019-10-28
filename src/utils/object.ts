@@ -20,6 +20,7 @@ export function getFileName(name: string){
     return chunks[chunks.length - 1];
 }
 
+const MAX_INTEGER = 2**20; 
 
 export function getType(value):ReturningType{
     let type: any = typeof(value);
@@ -40,7 +41,7 @@ export function getType(value):ReturningType{
         }
         
         //https://github.com/dcodeIO/webassembly/issues/26 
-        if(value > 2**32 - 1 && type !== 'number'){
+        if(value > 2**32 - 1 ){
             type = "l" + type;
             result.priority++;
         }

@@ -98,6 +98,17 @@ export default class TagsWalker implements IWalker<BaseNode, void>{
                     break
             }
         }
+
+        //https://github.com/dcodeIO/webassembly/issues/26 
+        for(var param in parameters){
+            const inpt = parameters[param];
+
+            if(inpt.type.types[0].ntype == 'lnumber'){
+                this.logger.warning("This translation involves i64 types...skipping it. ", node.repr, "\n" )
+                return null;
+            }
+        }
+
         this.emisor.openFunction(functionName);
         for(var k in parameters){
             const mostRepresentative = parameters[k].type;

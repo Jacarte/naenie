@@ -22,6 +22,7 @@
     "chrome-launcher": "^0.10.5",
     "chrome-remote-interface": "^0.27.1",
     "commander": "^2.20.0",
+    "deasync": "^0.1.15",
     "express": "^4.17.1",
     "inversify": "^5.0.1",
     "mustache": "^3.0.1",

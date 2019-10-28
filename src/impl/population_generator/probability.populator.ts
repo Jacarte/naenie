@@ -59,12 +59,27 @@ export default class ProbabilityPopulator extends PopulationGenerator {
 
             for(var node of candidates){
 
-                
-                const replacement = tagsWalker.generateWASM(node.node, meta);
 
-                tagsWalker.replaceIn(node.parent, node.isArray, node.key, replacement, node.index);
-                
-                index += 1;
+
+                //https://github.com/dcodeIO/webassembly/issues/26 
+                //console.log(node.node.returningType)
+
+                if(node.node.returningType.first().ntype != 'lnumber'){
+                    const replacement = tagsWalker.generateWASM(node.node, meta);
+
+                    if(!!replacement){
+
+                        tagsWalker.replaceIn(node.parent, node.isArray, node.key, replacement, node.index);
+                        
+                        index += 1;
+
+                        break;
+                    }
+                }
+                else{
+                    this.logger.warning("function signature issue for i64 vlaues, https://github.com/dcodeIO/webassembly/issues/26. Avoiding translation ", node.node.repr, JSON.stringify(node.node.loc), "\n");
+                }
+
             }
 
             this.emisor.closeModule();

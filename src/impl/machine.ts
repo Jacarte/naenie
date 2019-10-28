@@ -262,22 +262,15 @@ export default class DMachine{
 
         PROCESS.chdir(this.context.instrumentationFolder)
 
-        const program = path.resolve(this.context.cvScript);
-
-        const parameters = [];
         const options: ForkOptions = {
             stdio: [ 'pipe', 'pipe', 'pipe', 'ipc' ]
         };
 
-
-        //const child = fork(program, parameters, options);
         const child = spawn(this.context.cvScript, this.context.cvScriptArgs, options);
         
         const timeout = setTimeout(() => {
 
-            PROCESS.chdir(currDir)
-
-            this.processData()
+            child.kill("SIGINT")
 
         }, Math.max(3,this.context.timeout)*1000);
 
@@ -344,7 +337,6 @@ export default class DMachine{
         
         this.logger.debug(`Processing data`, '\n')
        
-        //this.child.kill("SIGINT")
 
         this.secondStage()
     }
